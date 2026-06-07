@@ -17,6 +17,7 @@ import { useAuth } from "../context/AuthContext";
 import clsx from "clsx";
 
 const navItems = [
+
   { name: "Home", href: "/dashboard", icon: Home },
   { name: "Transactions", href: "/transactions", icon: CreditCard },
   { name: "Analytics", href: "/budgets", icon: PieChart },
