@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-primary: #5a4bda;
+  --color-primary-hover: #4a3bc0;
+  --color-secondary: #f0effc;
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+  --color-background: #f8f9fc;
+  --color-surface: #ffffff;
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background-color: var(--color-background);
+  color: #1e293b;
+}
+
+/* Glassmorphism utilities */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}

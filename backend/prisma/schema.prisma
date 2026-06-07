@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  transactions  Transaction[]
+  budgets       Budget[]
+  groupMembers  GroupMember[]
+  paidExpenses  GroupExpense[]
+  expenseSplits ExpenseSplit[]
+  insights      AIInsight[]
+  chatHistory   ChatHistory[]
+}
+
+model Category {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  transactions Transaction[]
+  budgets      Budget[]
+}
+
+model Transaction {
+  id          String   @id @default(cuid())
+  amount      Float
+  description String
+  type        TransactionType
+  createdAt   DateTime @default(now())
+
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  categoryId String
+  category   Category  @relation(fields: [categoryId], references: [id])
+  groupId    String?
+  group      Group?    @relation(fields: [groupId], references: [id])
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+model Budget {
+  id        String   @id @default(cuid())
+  amount    Float
+  month     Int
+  year      Int
+  createdAt DateTime @default(now())
+
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+}
+
+model Group {
+  id         String   @id @default(cuid())
+  name       String
+  inviteCode String   @unique
+  createdAt  DateTime @default(now())
+
+  members      GroupMember[]
+  expenses     GroupExpense[]
+  transactions Transaction[]
+}
+
+model GroupMember {
+  id       String   @id @default(cuid())
+  joinedAt DateTime @default(now())
+
+  userId  String
+  user    User   @relation(fields: [userId], references: [id])
+  groupId String
+  group   Group  @relation(fields: [groupId], references: [id])
+}
+
+model GroupExpense {
+  id        String   @id @default(cuid())
+  title     String
+  amount    Float
+  createdAt DateTime @default(now())
+
+  paidById String
+  paidBy   User   @relation(fields: [paidById], references: [id])
+  groupId  String
+  group    Group  @relation(fields: [groupId], references: [id])
+
+  splits ExpenseSplit[]
+}
+
+model ExpenseSplit {
+  id     String @id @default(cuid())
+  amount Float
+
+  groupExpenseId String
+  groupExpense   GroupExpense @relation(fields: [groupExpenseId], references: [id])
+  userId         String
+  user           User         @relation(fields: [userId], references: [id])
+}
+
+model AIInsight {
+  id        String   @id @default(cuid())
+  summary   String
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model ChatHistory {
+  id        String   @id @default(cuid())
+  role      String
+  message   String
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+
+
+
