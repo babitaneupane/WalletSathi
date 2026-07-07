@@ -81,7 +81,7 @@ export const deleteGroup = async (req: Request, res: Response): Promise<void> =>
         const userId = req.user?.id;
         if (!userId) return;
 
-        const { id } = req.params;
+        const { id } = req.params as { id: string };
 
         const group = await prisma.group.findUnique({
             where: { id },

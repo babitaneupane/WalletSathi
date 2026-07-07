@@ -48,7 +48,7 @@ export const createSavingsGoal = async (req: Request, res: Response): Promise<vo
 export const updateSavingsGoal = async (req: Request, res: Response): Promise<void> => {
     try {
         const userId = req.user?.id;
-        const id = req.params.id;
+        const id = req.params.id as string;
         if (!userId) {
             res.status(401).json({ message: "Not authenticated" });
             return;
@@ -80,7 +80,7 @@ export const updateSavingsGoal = async (req: Request, res: Response): Promise<vo
 export const deleteSavingsGoal = async (req: Request, res: Response): Promise<void> => {
     try {
         const userId = req.user?.id;
-        const id = req.params.id;
+        const id = req.params.id as string;
         if (!userId) {
             res.status(401).json({ message: "Not authenticated" });
             return;
