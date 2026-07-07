@@ -15,6 +15,9 @@ import dashboardRoutes from "./routes/dashboard.routes";
 import aiRoutes from "./routes/ai.routes";
 import rentRoutes from "./routes/rent.routes";
 import splitRoutes from "./routes/split.routes";
+import categoryRoutes from "./routes/category.routes";
+import savingsRoutes from "./routes/savings.routes";
+
 const app = express();
 
 // Middleware
@@ -36,6 +39,8 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/rent", rentRoutes);
 app.use("/api/split", splitRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/savings", savingsRoutes);
 
 // Error handler (must be last)
 app.use(errorHandler);

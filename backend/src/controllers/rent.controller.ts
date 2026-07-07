@@ -81,9 +81,14 @@ export const payBill = async (req: Request, res: Response): Promise<void> => {
 
         // Automatically create an income transaction
         // First find or create 'Rent Income' category
-        let category = await prisma.category.findUnique({ where: { name: 'Rent Income' } });
+        let category = await prisma.category.findFirst({ 
+            where: { 
+                name: 'Rent Income',
+                OR: [{ userId: null }, { userId }]
+            } 
+        });
         if (!category) {
-            category = await prisma.category.create({ data: { name: 'Rent Income' } });
+            category = await prisma.category.create({ data: { name: 'Rent Income', userId } });
         }
 
         await prisma.transaction.create({

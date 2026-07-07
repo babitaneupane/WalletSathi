@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -11,19 +13,22 @@ import {
   HelpCircle,
   BrainCircuit,
   Building,
-  SplitSquareHorizontal
+  SplitSquareHorizontal,
+  Tag,
+  Target,
+  Sparkles,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import clsx from "clsx";
 
 const navItems = [
-
   { name: "Home", href: "/dashboard", icon: Home },
   { name: "Transactions", href: "/transactions", icon: CreditCard },
   { name: "Analytics", href: "/budgets", icon: PieChart },
   { name: "Team", href: "/groups", icon: Users },
   { name: "Rent Dashboard", href: "/rent", icon: Building },
   { name: "Split Expenses", href: "/split", icon: SplitSquareHorizontal },
+  { name: "Categories", href: "/categories", icon: Tag },
   { name: "Settings", href: "/settings", icon: Settings },
 ];
 
@@ -32,18 +37,27 @@ export default function Sidebar() {
   const { logout } = useAuth();
 
   return (
-    <aside className="w-64 border-r border-slate-200 bg-white flex flex-col h-screen shrink-0 sticky top-0">
-      <div className="p-6">
-        <Link href="/dashboard" className="flex items-center gap-2 text-xl font-bold text-slate-900">
-          <div className="rounded-lg bg-primary/10 p-2 text-primary">
-            <Wallet className="h-5 w-5" />
+    <aside className="w-60 flex flex-col h-screen shrink-0 sticky top-0 border-r border-white/5 bg-[#0F172A]">
+      {/* Logo */}
+      <div className="px-5 py-6">
+        <Link href="/dashboard" className="flex items-center gap-3">
+          <div className="rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 p-2 shadow-lg shadow-cyan-500/30">
+            <Wallet className="h-5 w-5 text-white" />
           </div>
-          FinFlow <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full ml-1">AI</span>
+          <div>
+            <span className="text-base font-bold text-white tracking-tight" style={{ fontFamily: "var(--font-outfit)" }}>
+              FinFlow
+            </span>
+            <span className="ml-1 text-xs font-semibold text-cyan-400">AI</span>
+          </div>
         </Link>
-        <p className="mt-2 text-xs text-slate-500 font-medium tracking-wide px-1">PREMIUM PLAN</p>
+        <div className="mt-3 mx-1">
+          <span className="text-[10px] font-semibold tracking-widest text-slate-500 uppercase">Premium Plan</span>
+        </div>
       </div>
 
-      <div className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+      {/* Nav Items */}
+      <div className="flex-1 px-3 py-2 space-y-0.5 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
@@ -52,47 +66,58 @@ export default function Sidebar() {
               key={item.name}
               href={item.href}
               className={clsx(
-                "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors",
+                "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
                 isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-cyan-500/15 text-cyan-400 shadow-sm"
+                  : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
               )}
             >
-              <Icon className="h-5 w-5" />
+              <Icon
+                className={clsx(
+                  "h-4.5 w-4.5 shrink-0 transition-colors",
+                  isActive ? "text-cyan-400" : "text-slate-500 group-hover:text-slate-300"
+                )}
+                size={18}
+              />
               {item.name}
+              {isActive && (
+                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-cyan-400" />
+              )}
             </Link>
           );
         })}
 
-        <div className="mt-8 pt-8 border-t border-slate-100">
+        {/* AI Assistant - highlighted */}
+        <div className="pt-3 mt-3 border-t border-white/5">
           <Link
             href="/ai-assistant"
             className={clsx(
-              "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors",
+              "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-200",
               pathname === "/ai-assistant"
-                ? "bg-primary text-white shadow-md"
-                : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                ? "bg-gradient-to-r from-cyan-500/20 to-purple-600/20 text-cyan-300 shadow-lg shadow-cyan-500/10 border border-cyan-500/20"
+                : "bg-gradient-to-r from-cyan-500/10 to-purple-600/10 text-cyan-400 hover:from-cyan-500/20 hover:to-purple-600/20 border border-cyan-500/10 hover:border-cyan-500/25"
             )}
           >
-            <BrainCircuit className="h-5 w-5" />
+            <Sparkles className="h-4 w-4 shrink-0 text-cyan-400" />
             AI Assistant
           </Link>
         </div>
       </div>
 
-      <div className="p-4 space-y-1">
+      {/* Bottom */}
+      <div className="p-3 space-y-0.5 border-t border-white/5">
         <Link
           href="/help"
-          className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-colors"
+          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-500 hover:bg-white/5 hover:text-slate-300 transition-all"
         >
-          <HelpCircle className="h-5 w-5" />
+          <HelpCircle className="h-4.5 w-4.5" size={18} />
           Help
         </Link>
         <button
           onClick={logout}
-          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-danger hover:bg-danger/10 transition-colors"
+          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-red-500/80 hover:bg-red-500/10 hover:text-red-400 transition-all"
         >
-          <LogOut className="h-5 w-5" />
+          <LogOut className="h-4.5 w-4.5" size={18} />
           Logout
         </button>
       </div>

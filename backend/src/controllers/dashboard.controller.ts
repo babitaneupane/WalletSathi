@@ -11,7 +11,8 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
 
         const transactions = await prisma.transaction.findMany({
             where: { userId },
-            include: { category: true }
+            include: { category: true },
+            orderBy: { createdAt: "desc" }
         });
 
         let totalIncome = 0;
@@ -22,12 +23,17 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
             else totalExpenses += t.amount;
         });
 
+        const savingsGoals = await prisma.savingsGoal.findMany({
+            where: { userId }
+        });
+
         res.json({
             totalIncome,
             totalExpenses,
             totalSavings: totalIncome - totalExpenses,
             recentTransactions: transactions.slice(0, 5),
-            transactions
+            transactions,
+            savingsGoals
         });
     } catch (error: any) {
         res.status(500).json({ message: error.message || "Server error" });

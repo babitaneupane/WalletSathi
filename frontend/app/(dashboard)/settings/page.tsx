@@ -1,116 +1,213 @@
 "use client";
 
-import { useAuth } from "../../../context/AuthContext";
-import { User, Shield, Sliders, Globe, Bell, Smartphone, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { User, Shield, Moon, DollarSign, Bell, Lock, AlertTriangle, Upload, EyeOff, Save } from "lucide-react";
 
 export default function SettingsPage() {
-  const { user } = useAuth();
+  const [profile, setProfile] = useState({
+    name: "Alex Miller",
+    email: "alex.miller@example.com",
+    phone: "+1 (555) 019-2837",
+    location: "New York, USA"
+  });
+
+  const [preferences, setPreferences] = useState({
+    darkMode: true,
+    currency: "USD",
+    smartAlerts: true
+  });
+
+  const [privacy, setPrivacy] = useState({
+    allowAITraining: true,
+    anonymizeData: false
+  });
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Account Settings</h1>
-        <p className="text-sm text-slate-500 mt-1">Manage your profile, security preferences, and global settings</p>
+    <div className="space-y-8 p-6 max-w-4xl mx-auto pb-20">
+      {/* Header */}
+      <div className="border-b border-white/5 pb-6">
+        <h1 className="text-3xl font-bold text-white mb-2" style={{ fontFamily: "var(--font-outfit)" }}>Account Settings</h1>
+        <p className="text-sm text-slate-400">Manage your profile, preferences, and security.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-1">
-          <div className="glass rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col items-center text-center">
-            <div className="h-24 w-24 rounded-full bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center text-white font-bold text-3xl shadow-lg shadow-primary/20 mb-4 border-4 border-white">
-              {user?.name?.charAt(0) || "U"}
-            </div>
-            <h2 className="text-lg font-bold text-slate-900">{user?.name || "User"}</h2>
-            <span className="bg-primary/10 text-primary text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mt-2">
-              Premium AI Member
-            </span>
-            <button className="mt-6 w-full rounded-xl border border-slate-200 bg-white py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition shadow-sm">
-              Update Avatar
-            </button>
+      <div className="space-y-8">
+        {/* Profile Information */}
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <User className="h-5 w-5 text-cyan-400" />
+            <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Profile Information</h2>
           </div>
-        </div>
-
-        <div className="md:col-span-2 space-y-6">
-          <div className="glass rounded-2xl p-6 border border-slate-200 shadow-sm">
-            <h3 className="flex items-center gap-2 text-lg font-bold text-slate-900 mb-6">
-              <User className="h-5 w-5 text-primary" /> Personal Details
-            </h3>
-            <div className="grid grid-cols-2 gap-6 mb-6">
-              <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">Full Name</label>
-                <input type="text" defaultValue={user?.name} className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" />
+          <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-6 shadow-xl">
+            <div className="flex flex-col sm:flex-row gap-8 items-start mb-8 border-b border-white/5 pb-8">
+              <div className="flex flex-col items-center gap-3">
+                <div className="h-24 w-24 rounded-full border border-white/10 bg-[#0F172A] flex items-center justify-center text-3xl font-bold text-white overflow-hidden relative group cursor-pointer">
+                  {profile.name.charAt(0)}
+                  <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                    <Upload className="h-5 w-5 text-white mb-1" />
+                    <span className="text-[10px] text-white font-semibold">Change</span>
+                  </div>
+                </div>
+                <button className="text-xs font-semibold text-cyan-400 hover:text-cyan-300">Remove Photo</button>
               </div>
-              <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">Email Address</label>
-                <input type="email" defaultValue={user?.email} className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" />
+              <div className="flex-1 grid sm:grid-cols-2 gap-6 w-full">
+                <div>
+                  <label className="text-xs font-semibold text-slate-400 mb-2 block uppercase tracking-widest">Full Name</label>
+                  <input type="text" value={profile.name} onChange={e => setProfile({...profile, name: e.target.value})} className="w-full rounded-xl border border-white/5 bg-[#0F172A] px-4 py-3 text-sm text-white focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition shadow-inner" />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-slate-400 mb-2 block uppercase tracking-widest">Email Address</label>
+                  <input type="email" value={profile.email} onChange={e => setProfile({...profile, email: e.target.value})} className="w-full rounded-xl border border-white/5 bg-[#0F172A] px-4 py-3 text-sm text-white focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition shadow-inner" />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-slate-400 mb-2 block uppercase tracking-widest">Phone Number</label>
+                  <input type="tel" value={profile.phone} onChange={e => setProfile({...profile, phone: e.target.value})} className="w-full rounded-xl border border-white/5 bg-[#0F172A] px-4 py-3 text-sm text-white focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition shadow-inner" />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-slate-400 mb-2 block uppercase tracking-widest">Location</label>
+                  <input type="text" value={profile.location} onChange={e => setProfile({...profile, location: e.target.value})} className="w-full rounded-xl border border-white/5 bg-[#0F172A] px-4 py-3 text-sm text-white focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition shadow-inner" />
+                </div>
               </div>
             </div>
-            <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">Bio / Role</label>
-              <textarea rows={3} className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Senior Financial Analyst..."></textarea>
-            </div>
-            <div className="mt-6 flex justify-end">
-              <button className="rounded-xl bg-primary px-6 py-2.5 text-sm font-medium text-white transition hover:bg-primary-hover shadow-lg shadow-primary/30">
-                Save Changes
+            <div className="flex justify-end">
+              <button className="flex items-center gap-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 px-6 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-cyan-500/25 transition">
+                <Save className="h-4 w-4" /> Save Changes
               </button>
             </div>
           </div>
+        </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="glass rounded-2xl p-6 border border-slate-200 shadow-sm">
-              <h3 className="flex items-center gap-2 text-lg font-bold text-slate-900 mb-6">
-                <Shield className="h-5 w-5 text-success" /> Security
-              </h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-slate-900">Password</p>
-                    <p className="text-xs text-slate-500">Last changed 3 months ago</p>
-                  </div>
-                  <button className="text-sm font-medium text-primary hover:underline">Update</button>
+        {/* System Preferences */}
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <Lock className="h-5 w-5 text-emerald-400" />
+            <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>System Preferences</h2>
+          </div>
+          <div className="rounded-2xl border border-white/5 bg-[#1E293B] shadow-xl divide-y divide-white/5">
+            
+            {/* Dark Mode */}
+            <div className="p-6 flex items-center justify-between hover:bg-white/5 transition">
+              <div className="flex gap-4 items-center">
+                <div className="h-10 w-10 rounded-full bg-slate-700/50 flex items-center justify-center">
+                  <Moon className="h-5 w-5 text-slate-300" />
                 </div>
-                <div className="border-t border-slate-100 my-2"></div>
-                <div className="flex flex-col gap-2 rounded-xl bg-success/10 p-4 border border-success/20">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-bold text-success">AUTHENTICATOR</span>
-                    <span className="text-xs text-success font-medium flex items-center"><Shield className="w-3 h-3 mr-1"/> Enabled</span>
-                  </div>
-                  <p className="text-xs text-success/80">Two-factor authentication is protecting your account.</p>
+                <div>
+                  <h3 className="font-semibold text-white text-sm">Dark Mode</h3>
+                  <p className="text-xs text-slate-400 mt-1">Adjust the appearance of FinFlow to reduce glare.</p>
                 </div>
               </div>
+              <button 
+                onClick={() => alert("Light mode is coming soon! The app is currently optimized for a dark aesthetic.")} 
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors bg-cyan-500`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition translate-x-6`} />
+              </button>
             </div>
 
-            <div className="glass rounded-2xl p-6 border border-slate-200 shadow-sm">
-              <h3 className="flex items-center gap-2 text-lg font-bold text-slate-900 mb-6">
-                <Sliders className="h-5 w-5 text-warning" /> Preferences
-              </h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
-                    <Globe className="h-4 w-4 text-slate-400" /> Default Currency
-                  </div>
-                  <span className="text-sm font-bold bg-slate-100 px-3 py-1 rounded-md">NPR (₨)</span>
+            {/* Currency */}
+            <div className="p-6 flex items-center justify-between hover:bg-white/5 transition">
+              <div className="flex gap-4 items-center">
+                <div className="h-10 w-10 rounded-full bg-slate-700/50 flex items-center justify-center">
+                  <DollarSign className="h-5 w-5 text-slate-300" />
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
-                    <Smartphone className="h-4 w-4 text-slate-400" /> Theme
-                  </div>
-                  <div className="flex bg-slate-100 p-1 rounded-lg">
-                    <button className="px-3 py-1 text-xs font-medium bg-white rounded shadow-sm text-slate-900">Light</button>
-                    <button className="px-3 py-1 text-xs font-medium text-slate-500">Dark</button>
-                  </div>
+                <div>
+                  <h3 className="font-semibold text-white text-sm">Default Currency</h3>
+                  <p className="text-xs text-slate-400 mt-1">Set the primary currency for your dashboard.</p>
                 </div>
               </div>
+              <select 
+                value={preferences.currency} 
+                onChange={(e) => setPreferences({...preferences, currency: e.target.value})}
+                className="rounded-xl border border-white/10 bg-[#0F172A] px-4 py-2.5 text-sm font-semibold text-white focus:outline-none cursor-pointer"
+              >
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="NPR">NPR (Rs)</option>
+              </select>
+            </div>
+
+            {/* Smart Alerts */}
+            <div className="p-6 flex items-center justify-between hover:bg-white/5 transition">
+              <div className="flex gap-4 items-center">
+                <div className="h-10 w-10 rounded-full bg-slate-700/50 flex items-center justify-center">
+                  <Bell className="h-5 w-5 text-slate-300" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white text-sm">Smart Alerts</h3>
+                  <p className="text-xs text-slate-400 mt-1">Receive push notifications for unusual spending.</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setPreferences({...preferences, smartAlerts: !preferences.smartAlerts})} 
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${preferences.smartAlerts ? 'bg-emerald-500' : 'bg-slate-600'}`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${preferences.smartAlerts ? 'translate-x-6' : 'translate-x-1'}`} />
+              </button>
+            </div>
+
+          </div>
+        </section>
+
+        {/* AI & Privacy */}
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <Shield className="h-5 w-5 text-purple-400" />
+            <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>AI & Privacy</h2>
+          </div>
+          <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-6 shadow-xl space-y-6">
+            
+            <label className="flex items-start gap-4 cursor-pointer group">
+              <div className="relative flex items-start">
+                <input type="checkbox" className="sr-only" checked={privacy.allowAITraining} onChange={() => setPrivacy({...privacy, allowAITraining: !privacy.allowAITraining})} />
+                <div className={`h-5 w-5 rounded border flex items-center justify-center transition ${privacy.allowAITraining ? 'bg-cyan-500 border-cyan-500' : 'bg-[#0F172A] border-white/20 group-hover:border-white/40'}`}>
+                  {privacy.allowAITraining && <svg className="h-3.5 w-3.5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                </div>
+              </div>
+              <div>
+                <h3 className="font-semibold text-white text-sm">Allow AI to analyze my transaction patterns</h3>
+                <p className="text-xs text-slate-400 mt-1">Enables personalized insights like 'Cash Flow Projections' and 'Budget Alerts' based on your unique data.</p>
+              </div>
+            </label>
+
+            <label className="flex items-start gap-4 cursor-pointer group">
+              <div className="relative flex items-start">
+                <input type="checkbox" className="sr-only" checked={privacy.anonymizeData} onChange={() => setPrivacy({...privacy, anonymizeData: !privacy.anonymizeData})} />
+                <div className={`h-5 w-5 rounded border flex items-center justify-center transition ${privacy.anonymizeData ? 'bg-cyan-500 border-cyan-500' : 'bg-[#0F172A] border-white/20 group-hover:border-white/40'}`}>
+                  {privacy.anonymizeData && <svg className="h-3.5 w-3.5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-white text-sm">Anonymize my data before processing</h3>
+                  <EyeOff className="h-3.5 w-3.5 text-slate-500" />
+                </div>
+                <p className="text-xs text-slate-400 mt-1">Strips PII (Personally Identifiable Information) before sending transactions to our AI engine.</p>
+              </div>
+            </label>
+          </div>
+        </section>
+
+        {/* Danger Zone */}
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <AlertTriangle className="h-5 w-5 text-rose-500" />
+            <h2 className="text-lg font-bold text-rose-500" style={{ fontFamily: "var(--font-outfit)" }}>Danger Zone</h2>
+          </div>
+          <div className="rounded-2xl border border-rose-500/20 bg-rose-500/5 p-6 shadow-xl flex flex-col sm:flex-row gap-6 items-center justify-between">
+            <div>
+              <h3 className="font-bold text-white text-sm mb-1">Delete All Data</h3>
+              <p className="text-xs text-rose-200/60 max-w-md">Permanently delete your account, transaction history, savings goals, and tenant records. This cannot be undone.</p>
+            </div>
+            <div className="flex gap-4 w-full sm:w-auto">
+              <button className="flex-1 sm:flex-none rounded-xl border border-white/10 bg-transparent px-5 py-2.5 text-sm font-semibold text-slate-300 hover:bg-white/5 transition">
+                Deactivate
+              </button>
+              <button className="flex-1 sm:flex-none rounded-xl bg-rose-500 hover:bg-rose-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-rose-500/25 transition">
+                Delete Account
+              </button>
             </div>
           </div>
-
-          <div className="glass rounded-2xl p-6 border border-danger/20 shadow-sm bg-danger/5">
-            <h3 className="text-lg font-bold text-danger mb-2">Danger Zone</h3>
-            <p className="text-sm text-danger/80 mb-6">Once you delete your account, there is no going back. Please be certain.</p>
-            <button className="flex items-center gap-2 rounded-xl border border-danger text-danger px-4 py-2 text-sm font-medium hover:bg-danger hover:text-white transition">
-              <Trash2 className="h-4 w-4" /> Delete Account
-            </button>
-          </div>
-        </div>
+        </section>
       </div>
     </div>
   );

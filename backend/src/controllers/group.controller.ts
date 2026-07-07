@@ -23,8 +23,8 @@ export const createGroup = async (req: Request, res: Response): Promise<void> =>
         const userId = req.user?.id;
         if (!userId) return;
 
-        const { name } = req.body;
-        const inviteCode = crypto.randomBytes(4).toString("hex");
+        const { name, description } = req.body;
+        const inviteCode = crypto.randomBytes(4).toString("hex").toUpperCase();
 
         const group = await prisma.group.create({
             data: {
@@ -34,6 +34,7 @@ export const createGroup = async (req: Request, res: Response): Promise<void> =>
                     create: { userId }
                 }
             },
+            include: { members: { include: { user: { select: { name: true, email: true } } } } }
         });
 
         res.status(201).json(group);
@@ -47,7 +48,8 @@ export const joinGroup = async (req: Request, res: Response): Promise<void> => {
         const userId = req.user?.id;
         if (!userId) return;
 
-        const { inviteCode } = req.body;
+        // Accept both `code` and `inviteCode` from frontend
+        const inviteCode = (req.body.code || req.body.inviteCode || "").toUpperCase();
 
         const group = await prisma.group.findUnique({ where: { inviteCode } });
         if (!group) {
@@ -69,6 +71,33 @@ export const joinGroup = async (req: Request, res: Response): Promise<void> => {
         });
 
         res.status(200).json({ message: "Successfully joined the group", groupId: group.id });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message || "Server error" });
+    }
+};
+
+export const deleteGroup = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) return;
+
+        const { id } = req.params;
+
+        const group = await prisma.group.findUnique({
+            where: { id },
+            include: { members: true }
+        });
+
+        if (!group) {
+            res.status(404).json({ message: "Group not found" });
+            return;
+        }
+
+        // Delete members and group
+        await prisma.groupMember.deleteMany({ where: { groupId: id } });
+        await prisma.group.delete({ where: { id } });
+
+        res.json({ message: "Group deleted" });
     } catch (error: any) {
         res.status(500).json({ message: error.message || "Server error" });
     }

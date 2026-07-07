@@ -33,9 +33,14 @@ export const createTransaction = async (req: Request, res: Response): Promise<vo
 
         let categoryId = null;
         if (categoryName) {
-            let category = await prisma.category.findUnique({ where: { name: categoryName } });
+            let category = await prisma.category.findFirst({ 
+                where: { 
+                    name: categoryName,
+                    OR: [{ userId: null }, { userId }]
+                } 
+            });
             if (!category) {
-                category = await prisma.category.create({ data: { name: categoryName } });
+                category = await prisma.category.create({ data: { name: categoryName, userId } });
             }
             categoryId = category.id;
         }
@@ -101,9 +106,14 @@ export const updateTransaction = async (req: Request, res: Response): Promise<vo
 
         let categoryId = transaction.categoryId;
         if (categoryName) {
-            let category = await prisma.category.findUnique({ where: { name: categoryName } });
+            let category = await prisma.category.findFirst({ 
+                where: { 
+                    name: categoryName,
+                    OR: [{ userId: null }, { userId }]
+                } 
+            });
             if (!category) {
-                category = await prisma.category.create({ data: { name: categoryName } });
+                category = await prisma.category.create({ data: { name: categoryName, userId } });
             }
             categoryId = category.id;
         }

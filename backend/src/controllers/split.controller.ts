@@ -39,9 +39,14 @@ export const createSplit = async (req: Request, res: Response): Promise<void> =>
         });
 
         // Add expense transaction for the user
-        let category = await prisma.category.findUnique({ where: { name: 'Shared Expense' } });
+        let category = await prisma.category.findFirst({ 
+            where: { 
+                name: 'Shared Expense',
+                OR: [{ userId: null }, { userId }]
+            } 
+        });
         if (!category) {
-            category = await prisma.category.create({ data: { name: 'Shared Expense' } });
+            category = await prisma.category.create({ data: { name: 'Shared Expense', userId } });
         }
 
         // Deduct only user's share or full amount? The user paid the full amount.

@@ -21,13 +21,22 @@ model User {
   expenseSplits ExpenseSplit[]
   insights      AIInsight[]
   chatHistory   ChatHistory[]
+  tenants       Tenant[]
+  rentBills     RentBill[]
+  categories    Category[]
+  savingsGoals  SavingsGoal[]
 }
 
 model Category {
   id           String        @id @default(cuid())
-  name         String        @unique
+  name         String
+  icon         String?
+  userId       String?
+  user         User?         @relation(fields: [userId], references: [id])
   transactions Transaction[]
   budgets      Budget[]
+
+  @@unique([name, userId])
 }
 
 model Transaction {
@@ -127,6 +136,34 @@ model ChatHistory {
   user   User   @relation(fields: [userId], references: [id])
 }
 
+model Tenant {
+  id             String     @id @default(cuid())
+  name           String
+  roomOrProperty String
+  userId         String
+  user           User       @relation(fields: [userId], references: [id])
+  bills          RentBill[]
+  createdAt      DateTime   @default(now())
+}
 
+model RentBill {
+  id        String   @id @default(cuid())
+  title     String
+  amount    Float
+  status    String   @default("UNPAID")
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
 
-
+model SavingsGoal {
+  id            String   @id @default(cuid())
+  name          String
+  targetAmount  Float
+  currentAmount Float    @default(0)
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  createdAt     DateTime @default(now())
+}
