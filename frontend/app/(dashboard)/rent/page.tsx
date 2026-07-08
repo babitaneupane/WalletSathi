@@ -7,6 +7,7 @@ import api from "../../../lib/api";
 export default function RentDashboard() {
   const [tenants, setTenants] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [generalRentIncome, setGeneralRentIncome] = useState(0);
   
   // Modal state
   const [isTenantModalOpen, setIsTenantModalOpen] = useState(false);
@@ -26,8 +27,17 @@ export default function RentDashboard() {
 
   const fetchTenants = async () => {
     try {
-      const res = await api.get("/rent/tenants");
-      setTenants(res.data);
+      const [tenantsRes, txRes] = await Promise.all([
+        api.get("/rent/tenants"),
+        api.get("/transactions")
+      ]);
+      setTenants(tenantsRes.data);
+      
+      const rentTx = txRes.data.filter((t: any) => 
+        t.type === "INCOME" && t.category?.name?.toLowerCase() === "rent"
+      );
+      const generalRent = rentTx.reduce((sum: number, t: any) => sum + t.amount, 0);
+      setGeneralRentIncome(generalRent);
     } catch (err: any) {
       console.error(err);
     } finally {
@@ -124,7 +134,7 @@ export default function RentDashboard() {
   ).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   const totalPending = allBills.filter(b => b.status === "UNPAID").reduce((s, b) => s + b.amount, 0);
-  const totalCollected = allBills.filter(b => b.status === "PAID").reduce((s, b) => s + b.amount, 0);
+  const totalCollected = allBills.filter(b => b.status === "PAID").reduce((s, b) => s + b.amount, 0) + generalRentIncome;
   const overdueCount = allBills.filter(b => b.status === "UNPAID").length;
 
   return (

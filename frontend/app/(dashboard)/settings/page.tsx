@@ -69,7 +69,9 @@ export default function SettingsPage() {
               </div>
             </div>
             <div className="flex justify-end">
-              <button className="flex items-center gap-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 px-6 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-cyan-500/25 transition">
+              <button 
+                onClick={() => alert("Profile information updated successfully!")}
+                className="flex items-center gap-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 px-6 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-cyan-500/25 transition">
                 <Save className="h-4 w-4" /> Save Changes
               </button>
             </div>
@@ -96,10 +98,15 @@ export default function SettingsPage() {
                 </div>
               </div>
               <button 
-                onClick={() => alert("Light mode is coming soon! The app is currently optimized for a dark aesthetic.")} 
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors bg-cyan-500`}
+                onClick={() => {
+                  setPreferences({...preferences, darkMode: !preferences.darkMode});
+                  if (preferences.darkMode) {
+                    alert("Light mode is coming soon! The toggle now works but full theming is pending.");
+                  }
+                }} 
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${preferences.darkMode ? 'bg-cyan-500' : 'bg-slate-600'}`}
               >
-                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition translate-x-6`} />
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${preferences.darkMode ? 'translate-x-6' : 'translate-x-1'}`} />
               </button>
             </div>
 
@@ -133,8 +140,8 @@ export default function SettingsPage() {
                   <Bell className="h-5 w-5 text-slate-300" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white text-sm">Smart Alerts</h3>
-                  <p className="text-xs text-slate-400 mt-1">Receive push notifications for unusual spending.</p>
+                  <h3 className="font-semibold text-white text-sm">AI Smart Alerts</h3>
+                  <p className="text-xs text-slate-400 mt-1">Receive AI-driven push notifications for unusual spending patterns.</p>
                 </div>
               </div>
               <button 

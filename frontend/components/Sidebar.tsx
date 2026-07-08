@@ -23,12 +23,11 @@ import clsx from "clsx";
 
 const navItems = [
   { name: "Home", href: "/dashboard", icon: Home },
+  { name: "Categories", href: "/categories", icon: Tag },
   { name: "Transactions", href: "/transactions", icon: CreditCard },
   { name: "Analytics", href: "/budgets", icon: PieChart },
-  { name: "Team", href: "/groups", icon: Users },
   { name: "Rent Dashboard", href: "/rent", icon: Building },
   { name: "Split Expenses", href: "/split", icon: SplitSquareHorizontal },
-  { name: "Categories", href: "/categories", icon: Tag },
   { name: "Settings", href: "/settings", icon: Settings },
 ];
 

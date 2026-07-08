@@ -123,6 +123,11 @@ export default function DashboardPage() {
   const totalSpent = stats?.totalExpenses || 0;
   const savingsGoals: any[] = stats?.savingsGoals || [];
 
+  // Calculate current month's stats
+  const now = new Date();
+  const currentMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
+  const currentMonthStats = barDataMap[currentMonthKey] || { income: 0, expense: 0 };
+
   return (
     <div className="flex-1 space-y-5 p-6">
       {/* Page top row */}
@@ -144,40 +149,6 @@ export default function DashboardPage() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Income Card */}
-        <div className="relative overflow-hidden rounded-2xl border border-white/5 bg-[#1E293B] p-5">
-          <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-emerald-500/10 blur-xl" />
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10">
-              <ArrowUpRight className="h-5 w-5 text-emerald-400" />
-            </div>
-            <span className="flex items-center gap-1 text-xs font-semibold text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded-full">
-              <TrendingUp className="h-3 w-3" /> Income
-            </span>
-          </div>
-          <p className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
-            NPR {(stats?.totalIncome || 0).toLocaleString()}
-          </p>
-          <p className="mt-1 text-xs text-slate-500">Total all-time income</p>
-        </div>
-
-        {/* Expense Card */}
-        <div className="relative overflow-hidden rounded-2xl border border-white/5 bg-[#1E293B] p-5">
-          <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-red-500/10 blur-xl" />
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10">
-              <ArrowDownRight className="h-5 w-5 text-red-400" />
-            </div>
-            <span className="flex items-center gap-1 text-xs font-semibold text-red-400 bg-red-400/10 px-2 py-1 rounded-full">
-              <TrendingDown className="h-3 w-3" /> Expenses
-            </span>
-          </div>
-          <p className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
-            NPR {(stats?.totalExpenses || 0).toLocaleString()}
-          </p>
-          <p className="mt-1 text-xs text-slate-500">Total all-time expenses</p>
-        </div>
-
         {/* Balance Card */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-500/80 to-purple-600/80 p-5 border border-white/10">
           <div className="absolute -right-4 -top-4 h-28 w-28 rounded-full bg-white/10 blur-xl" />
@@ -192,7 +163,41 @@ export default function DashboardPage() {
           <p className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
             NPR {(stats?.totalSavings || 0).toLocaleString()}
           </p>
-          <p className="mt-1 text-xs text-white/60">Income minus expenses</p>
+          <p className="mt-1 text-xs text-white/60">Total balance</p>
+        </div>
+
+        {/* Income Card */}
+        <div className="relative overflow-hidden rounded-2xl border border-white/5 bg-[#1E293B] p-5">
+          <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-emerald-500/10 blur-xl" />
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10">
+              <ArrowUpRight className="h-5 w-5 text-emerald-400" />
+            </div>
+            <span className="flex items-center gap-1 text-xs font-semibold text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded-full">
+              <TrendingUp className="h-3 w-3" /> Income
+            </span>
+          </div>
+          <p className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
+            NPR {(currentMonthStats.income || 0).toLocaleString()}
+          </p>
+          <p className="mt-1 text-xs text-slate-500">This month's income</p>
+        </div>
+
+        {/* Expense Card */}
+        <div className="relative overflow-hidden rounded-2xl border border-white/5 bg-[#1E293B] p-5">
+          <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-red-500/10 blur-xl" />
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10">
+              <ArrowDownRight className="h-5 w-5 text-red-400" />
+            </div>
+            <span className="flex items-center gap-1 text-xs font-semibold text-red-400 bg-red-400/10 px-2 py-1 rounded-full">
+              <TrendingDown className="h-3 w-3" /> Expenses
+            </span>
+          </div>
+          <p className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
+            NPR {(currentMonthStats.expense || 0).toLocaleString()}
+          </p>
+          <p className="mt-1 text-xs text-slate-500">This month's expenses</p>
         </div>
       </div>
 
