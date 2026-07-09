@@ -27,7 +27,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 // Health check
-app.get("/", (req, res) => res.json({ message: "FinFlow API running" }));
+app.get("/", (req, res) => res.json({ message: "WalletSathi API running" }));
 
 // API Routes
 app.use("/api/auth", authRoutes);
