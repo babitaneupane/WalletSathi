@@ -41,7 +41,7 @@ export default function LoginPage() {
           </div>
           <div>
             <span className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
-              FinFlow <span className="text-cyan-400">AI</span>
+              WalletSathi <span className="text-cyan-400">AI</span>
             </span>
           </div>
         </div>

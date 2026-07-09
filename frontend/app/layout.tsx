@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata: Metadata = {
-  title: "FinFlow AI | Smart Financial Management",
+  title: "WalletSathi AI | Smart Financial Management",
   description: "AI-powered expense manager and financial planner.",
 };
 

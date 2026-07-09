@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const checkAuth = async () => {
+      const startTime = Date.now();
       const token = localStorage.getItem("token");
       if (token) {
         try {
@@ -42,7 +43,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setUser(null);
         }
       }
-      setLoading(false);
+      
+      const elapsedTime = Date.now() - startTime;
+      const minDelay = 1500; // Enforce minimum 1.5s splash screen delay
+      if (elapsedTime < minDelay) {
+        setTimeout(() => setLoading(false), minDelay - elapsedTime);
+      } else {
+        setLoading(false);
+      }
     };
 
     checkAuth();
@@ -70,7 +78,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider value={{ user, loading, login, logout }}>
-      {children}
+      {loading ? (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0F172A]">
+          <div className="relative flex flex-col items-center">
+            {/* Pulsing background glow */}
+            <div className="absolute inset-0 -m-4 rounded-full bg-cyan-500/20 blur-2xl animate-pulse"></div>
+            
+            {/* Logo Image */}
+            <img 
+              src="/logo.png" 
+              alt="WalletSathi Logo" 
+              className="relative z-10 w-28 h-28 sm:w-36 sm:h-36 object-contain animate-pulse drop-shadow-[0_0_20px_rgba(34,211,238,0.6)]" 
+            />
+            
+            <div className="mt-8 flex flex-col items-center">
+              <h1 className="text-2xl font-bold text-white tracking-tight" style={{ fontFamily: "var(--font-outfit)" }}>
+                WalletSathi <span className="text-cyan-400">AI</span>
+              </h1>
+              <div className="mt-4 flex items-center gap-1.5">
+                <div className="h-1.5 w-1.5 rounded-full bg-cyan-500 animate-bounce" style={{ animationDelay: "0ms" }}></div>
+                <div className="h-1.5 w-1.5 rounded-full bg-cyan-500 animate-bounce" style={{ animationDelay: "150ms" }}></div>
+                <div className="h-1.5 w-1.5 rounded-full bg-cyan-500 animate-bounce" style={{ animationDelay: "300ms" }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };

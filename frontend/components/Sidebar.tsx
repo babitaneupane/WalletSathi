@@ -45,7 +45,7 @@ export default function Sidebar() {
           </div>
           <div>
             <span className="text-base font-bold text-white tracking-tight" style={{ fontFamily: "var(--font-outfit)" }}>
-              FinFlow
+              WalletSathi
             </span>
             <span className="ml-1 text-xs font-semibold text-cyan-400">AI</span>
           </div>

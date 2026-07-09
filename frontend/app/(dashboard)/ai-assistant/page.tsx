@@ -92,7 +92,7 @@ export default function AIAssistantPage() {
                   {msg.role === "assistant" && (
                     <div className="flex items-center gap-2 mb-2 text-cyan-400">
                       <Sparkles className="h-4 w-4" />
-                      <span className="text-xs font-bold uppercase tracking-widest">FinFlow AI</span>
+                      <span className="text-xs font-bold uppercase tracking-widest">WalletSathi AI</span>
                     </div>
                   )}
                   <div className={`text-sm leading-relaxed whitespace-pre-wrap ${msg.role === "user" ? "font-medium" : ""}`}>
@@ -125,7 +125,7 @@ export default function AIAssistantPage() {
                 </button>
               </div>
             </form>
-            <p className="text-center text-[10px] text-slate-500 mt-3 font-medium">FinFlow AI can make mistakes. Consider verifying important financial decisions.</p>
+            <p className="text-center text-[10px] text-slate-500 mt-3 font-medium">WalletSathi AI can make mistakes. Consider verifying important financial decisions.</p>
           </div>
         </div>
 

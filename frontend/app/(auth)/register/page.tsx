@@ -29,7 +29,7 @@ export default function RegisterPage() {
       <div className="mb-8 flex flex-col items-center">
         <div className="flex items-center gap-2 text-2xl font-bold text-primary mb-2">
           <Wallet className="h-8 w-8 text-primary" />
-          FinFlow
+          WalletSathi
         </div>
         <p className="text-sm text-slate-500 uppercase tracking-widest font-medium text-center">
           Join the future of autonomous financial management

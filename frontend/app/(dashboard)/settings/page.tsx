@@ -1,14 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { User, Shield, Moon, DollarSign, Bell, Lock, AlertTriangle, Upload, EyeOff, Save } from "lucide-react";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function SettingsPage() {
+  const { user } = useAuth();
+
   const [profile, setProfile] = useState({
-    name: "Alex Miller",
-    email: "alex.miller@example.com",
-    phone: "+1 (555) 019-2837",
-    location: "New York, USA"
+    name: "",
+    email: "",
+    phone: "",
+    location: ""
   });
 
   const [preferences, setPreferences] = useState({
@@ -21,6 +24,33 @@ export default function SettingsPage() {
     allowAITraining: true,
     anonymizeData: false
   });
+
+  useEffect(() => {
+    const savedProfile = localStorage.getItem("settings_profile");
+    if (savedProfile) {
+      setProfile(JSON.parse(savedProfile));
+    } else if (user) {
+      setProfile({
+        name: user.name || "",
+        email: user.email || "",
+        phone: "",
+        location: ""
+      });
+    }
+
+    const savedPrefs = localStorage.getItem("settings_prefs");
+    if (savedPrefs) setPreferences(JSON.parse(savedPrefs));
+
+    const savedPrivacy = localStorage.getItem("settings_privacy");
+    if (savedPrivacy) setPrivacy(JSON.parse(savedPrivacy));
+  }, [user]);
+
+  const handleSave = () => {
+    localStorage.setItem("settings_profile", JSON.stringify(profile));
+    localStorage.setItem("settings_prefs", JSON.stringify(preferences));
+    localStorage.setItem("settings_privacy", JSON.stringify(privacy));
+    alert("Settings saved successfully!");
+  };
 
   return (
     <div className="space-y-8 p-6 max-w-4xl mx-auto pb-20">
@@ -41,7 +71,7 @@ export default function SettingsPage() {
             <div className="flex flex-col sm:flex-row gap-8 items-start mb-8 border-b border-white/5 pb-8">
               <div className="flex flex-col items-center gap-3">
                 <div className="h-24 w-24 rounded-full border border-white/10 bg-[#0F172A] flex items-center justify-center text-3xl font-bold text-white overflow-hidden relative group cursor-pointer">
-                  {profile.name.charAt(0)}
+                  {profile.name ? profile.name.charAt(0).toUpperCase() : (user?.name?.charAt(0).toUpperCase() || "U")}
                   <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition">
                     <Upload className="h-5 w-5 text-white mb-1" />
                     <span className="text-[10px] text-white font-semibold">Change</span>
@@ -70,7 +100,7 @@ export default function SettingsPage() {
             </div>
             <div className="flex justify-end">
               <button 
-                onClick={() => alert("Profile information updated successfully!")}
+                onClick={handleSave}
                 className="flex items-center gap-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 px-6 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-cyan-500/25 transition">
                 <Save className="h-4 w-4" /> Save Changes
               </button>
@@ -94,7 +124,7 @@ export default function SettingsPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white text-sm">Dark Mode</h3>
-                  <p className="text-xs text-slate-400 mt-1">Adjust the appearance of FinFlow to reduce glare.</p>
+                  <p className="text-xs text-slate-400 mt-1">Adjust the appearance of WalletSathi to reduce glare.</p>
                 </div>
               </div>
               <button 
