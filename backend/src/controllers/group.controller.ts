@@ -18,6 +18,36 @@ export const getGroups = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
+export const getGroupById = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) return;
+
+        const { id } = req.params as { id: string };
+
+        const group = await prisma.group.findUnique({
+            where: { id },
+            include: { members: { include: { user: { select: { id: true, name: true, email: true } } } } },
+        });
+
+        if (!group) {
+            res.status(404).json({ message: "Group not found" });
+            return;
+        }
+
+        // Verify user is a member
+        const isMember = group.members.some(m => m.userId === userId);
+        if (!isMember) {
+            res.status(403).json({ message: "Not authorized to view this group" });
+            return;
+        }
+
+        res.json(group);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message || "Server error" });
+    }
+};
+
 export const createGroup = async (req: Request, res: Response): Promise<void> => {
     try {
         const userId = req.user?.id;

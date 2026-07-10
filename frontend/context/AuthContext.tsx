@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
       
       const elapsedTime = Date.now() - startTime;
-      const minDelay = 1500; // Enforce minimum 1.5s splash screen delay
+      const minDelay = 3000; // Enforce minimum 3s splash screen delay
       if (elapsedTime < minDelay) {
         setTimeout(() => setLoading(false), minDelay - elapsedTime);
       } else {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { User, Shield, Moon, DollarSign, Bell, Lock, AlertTriangle, Upload, EyeOff, Save } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 
@@ -11,8 +11,23 @@ export default function SettingsPage() {
     name: "",
     email: "",
     phone: "",
-    location: ""
+    location: "",
+    photoUrl: ""
   });
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setProfile({ ...profile, photoUrl: url });
+    }
+  };
+
+  const removePhoto = () => {
+    setProfile({ ...profile, photoUrl: "" });
+  };
 
   const [preferences, setPreferences] = useState({
     darkMode: true,
@@ -34,7 +49,8 @@ export default function SettingsPage() {
         name: user.name || "",
         email: user.email || "",
         phone: "",
-        location: ""
+        location: "",
+        photoUrl: ""
       });
     }
 
@@ -70,14 +86,19 @@ export default function SettingsPage() {
           <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-6 shadow-xl">
             <div className="flex flex-col sm:flex-row gap-8 items-start mb-8 border-b border-white/5 pb-8">
               <div className="flex flex-col items-center gap-3">
-                <div className="h-24 w-24 rounded-full border border-white/10 bg-[#0F172A] flex items-center justify-center text-3xl font-bold text-white overflow-hidden relative group cursor-pointer">
-                  {profile.name ? profile.name.charAt(0).toUpperCase() : (user?.name?.charAt(0).toUpperCase() || "U")}
+                <input type="file" ref={fileInputRef} onChange={handlePhotoUpload} accept="image/*" className="hidden" />
+                <div onClick={() => fileInputRef.current?.click()} className="h-24 w-24 rounded-full border border-white/10 bg-[#0F172A] flex items-center justify-center text-3xl font-bold text-white overflow-hidden relative group cursor-pointer">
+                  {profile.photoUrl ? (
+                    <img src={profile.photoUrl} alt="Profile" className="h-full w-full object-cover" />
+                  ) : (
+                    profile.name ? profile.name.charAt(0).toUpperCase() : (user?.name?.charAt(0).toUpperCase() || "U")
+                  )}
                   <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition">
                     <Upload className="h-5 w-5 text-white mb-1" />
                     <span className="text-[10px] text-white font-semibold">Change</span>
                   </div>
                 </div>
-                <button className="text-xs font-semibold text-cyan-400 hover:text-cyan-300">Remove Photo</button>
+                <button onClick={removePhoto} className="text-xs font-semibold text-cyan-400 hover:text-cyan-300">Remove Photo</button>
               </div>
               <div className="flex-1 grid sm:grid-cols-2 gap-6 w-full">
                 <div>

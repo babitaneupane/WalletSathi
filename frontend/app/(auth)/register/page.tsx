@@ -27,9 +27,9 @@ export default function RegisterPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-[#f8f9fc] to-[#e6e8f4] py-12">
       <div className="mb-8 flex flex-col items-center">
-        <div className="flex items-center gap-2 text-2xl font-bold text-primary mb-2">
-          <Wallet className="h-8 w-8 text-primary" />
-          WalletSathi
+        <div className="flex items-center justify-center mb-2">
+          <img src="/logo.png" alt="WalletSathi Logo" className="h-12 w-12 object-contain mr-3" />
+          <span className="text-2xl font-bold text-primary">WalletSathi</span>
         </div>
         <p className="text-sm text-slate-500 uppercase tracking-widest font-medium text-center">
           Join the future of autonomous financial management

@@ -64,11 +64,18 @@ export const chat = async (req: Request, res: Response): Promise<void> => {
             data: { role: "user", message, userId }
         });
 
+        // Fetch user's transactions for context
+        const transactions = await prisma.transaction.findMany({ 
+            where: { userId },
+            include: { category: true }
+        });
+
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
         let reply = "I am currently running without a Gemini API key. Please add it to your .env to chat with me!";
         
         if (ENV.GEMINI_API_KEY) {
-            const result = await model.generateContent(message);
+            const systemPrompt = `You are WalletSathi AI, a helpful financial assistant. Here are the user's recent transactions: ${JSON.stringify(transactions)}. Answer their question: ${message}`;
+            const result = await model.generateContent(systemPrompt);
             reply = result.response.text();
         }
 

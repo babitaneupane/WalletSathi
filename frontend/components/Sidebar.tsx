@@ -40,8 +40,8 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="px-5 py-6">
         <Link href="/dashboard" className="flex items-center gap-3">
-          <div className="rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 p-2 shadow-lg shadow-cyan-500/30">
-            <Wallet className="h-5 w-5 text-white" />
+          <div className="flex items-center justify-center">
+            <img src="/logo.png" alt="WalletSathi Logo" className="h-10 w-10 object-contain" />
           </div>
           <div>
             <span className="text-base font-bold text-white tracking-tight" style={{ fontFamily: "var(--font-outfit)" }}>

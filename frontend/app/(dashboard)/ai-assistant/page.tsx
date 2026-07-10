@@ -91,7 +91,7 @@ export default function AIAssistantPage() {
                 }`}>
                   {msg.role === "assistant" && (
                     <div className="flex items-center gap-2 mb-2 text-cyan-400">
-                      <Sparkles className="h-4 w-4" />
+                      <img src="/logo.png" alt="Logo" className="h-4 w-4 object-contain" />
                       <span className="text-xs font-bold uppercase tracking-widest">WalletSathi AI</span>
                     </div>
                   )}

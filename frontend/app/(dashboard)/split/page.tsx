@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Plus, Users, Receipt, UserPlus, CheckCircle2, Loader2, Copy, Check, Key, X } from "lucide-react";
 import api from "../../../lib/api";
 
@@ -155,12 +156,12 @@ export default function SplitPage() {
                         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                       </button>
                     </div>
-                    <button
-                      onClick={() => setDetailGroup(group)}
-                      className="w-full sm:w-auto rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 px-5 py-2 text-sm font-semibold text-cyan-400 transition"
+                    <Link
+                      href={`/split/${group.id}`}
+                      className="w-full sm:w-auto rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 px-5 py-2 text-sm font-semibold text-cyan-400 transition text-center"
                     >
                       View Details
-                    </button>
+                    </Link>
                   </div>
                 </div>
               );

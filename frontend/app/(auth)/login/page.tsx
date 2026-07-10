@@ -36,8 +36,8 @@ export default function LoginPage() {
       {/* Logo */}
       <div className="mb-8 flex flex-col items-center">
         <div className="flex items-center gap-3 mb-3">
-          <div className="rounded-2xl bg-gradient-to-br from-cyan-500 to-purple-600 p-3 shadow-2xl shadow-cyan-500/30">
-            <Wallet className="h-7 w-7 text-white" />
+          <div className="flex items-center justify-center">
+            <img src="/logo.png" alt="WalletSathi Logo" className="h-12 w-12 object-contain" />
           </div>
           <div>
             <span className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
