@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Calendar from "react-calendar";
 import {
   ArrowUpRight,
   ArrowDownRight,
@@ -9,15 +10,22 @@ import {
   Wallet,
   Plus,
   Target,
-  MoreHorizontal,
   X,
+  CalendarDays,
 } from "lucide-react";
+
+// Filter state (moved inside component)
+// (Will be defined inside DashboardPage function)
+
 import {
   AreaChart,
   Area,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   Tooltip,
+  CartesianGrid,
   ResponsiveContainer,
   PieChart,
   Pie,
@@ -50,12 +58,21 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSavingsModalOpen, setIsSavingsModalOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  // pendingRange holds what the user is selecting in the calendar
+  const [pendingRange, setPendingRange] = useState<[Date | null, Date | null]>([null, null]);
+  // appliedRange is what has actually been sent to the API
+  const [appliedRange, setAppliedRange] = useState<[Date | null, Date | null]>([null, null]);
+  const [chartType, setChartType] = useState<"bar" | "area">("bar");
   const [savingsForm, setSavingsForm] = useState({ name: "", targetAmount: "", currentAmount: "" });
   const [savingSavings, setSavingSavings] = useState(false);
 
-  const fetchStats = async () => {
+  const fetchStats = async (start?: Date | null, end?: Date | null) => {
     try {
-      const res = await api.get("/dashboard/stats");
+      const params: Record<string, string> = {};
+      if (start) params.startDate = start.toISOString();
+      if (end) params.endDate = end.toISOString();
+      const res = await api.get("/dashboard/stats", { params });
       setStats(res.data);
     } catch (err) {
       console.error("Failed to fetch dashboard stats", err);
@@ -75,13 +92,31 @@ export default function DashboardPage() {
       });
       setIsSavingsModalOpen(false);
       setSavingsForm({ name: "", targetAmount: "", currentAmount: "" });
-      fetchStats();
+      fetchStats(appliedRange[0], appliedRange[1]);
     } catch (err) {
       console.error("Failed to create savings goal", err);
     } finally {
       setSavingSavings(false);
     }
   };
+
+  const applyDateFilter = () => {
+    setAppliedRange(pendingRange);
+    setIsFilterOpen(false);
+    fetchStats(pendingRange[0], pendingRange[1]);
+  };
+
+  const clearDateFilter = () => {
+    setPendingRange([null, null]);
+    setAppliedRange([null, null]);
+    setIsFilterOpen(false);
+    fetchStats(null, null);
+  };
+
+  useEffect(() => {
+    // Open the calendar with the currently applied range pre-selected
+    if (isFilterOpen) setPendingRange(appliedRange);
+  }, [isFilterOpen]);
 
   useEffect(() => {
     fetchStats();
@@ -128,6 +163,8 @@ export default function DashboardPage() {
   const currentMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
   const currentMonthStats = barDataMap[currentMonthKey] || { income: 0, expense: 0 };
 
+  const isFiltered = !!(appliedRange[0] || appliedRange[1]);
+
   return (
     <div className="flex-1 space-y-5 p-6">
       {/* Page top row */}
@@ -137,15 +174,96 @@ export default function DashboardPage() {
           <h1 className="text-2xl font-bold text-white mt-0.5" style={{ fontFamily: "var(--font-outfit)" }}>
             Financial Overview
           </h1>
+          {isFiltered && appliedRange[0] && appliedRange[1] && (
+            <p className="text-xs text-cyan-400 mt-1 flex items-center gap-1">
+              <CalendarDays className="h-3 w-3" />
+              {appliedRange[0].toLocaleDateString()} → {appliedRange[1].toLocaleDateString()}
+            </p>
+          )}
         </div>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-cyan-500/30 transition-all duration-200 hover:scale-105 active:scale-95"
-        >
-          <Plus className="h-4 w-4" />
-          Add Transaction
-        </button>
+        <div className="flex gap-2">
+          {isFiltered && (
+            <button
+              onClick={clearDateFilter}
+              className="flex items-center gap-1 rounded-xl px-3 py-1.5 text-sm font-medium bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/20 transition"
+            >
+              <X className="h-3.5 w-3.5" />
+              Reset
+            </button>
+          )}
+          <button
+            onClick={() => setIsFilterOpen(prev => !prev)}
+            className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium transition ${isFiltered
+                ? "bg-cyan-500 text-slate-900 hover:bg-cyan-400"
+                : "bg-gray-700 hover:bg-gray-600 text-slate-200"
+              }`}
+          >
+            <CalendarDays className="h-4 w-4" />
+            {isFiltered ? "Filtered" : "Filter"}
+          </button>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-cyan-500/30 transition-all duration-200 hover:scale-105 active:scale-95"
+          >
+            <Plus className="h-4 w-4" />
+            Add Transaction
+          </button>
+        </div>
       </div>
+      {/* Filter Modal */}
+      {isFilterOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          onClick={e => e.target === e.currentTarget && setIsFilterOpen(false)}
+        >
+          <div className="bg-[#1E293B] p-5 rounded-2xl border border-white/10 shadow-2xl w-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-base font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Filter by Date Range</h2>
+              <button onClick={() => setIsFilterOpen(false)} className="text-slate-500 hover:text-slate-300 transition">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Selected range label */}
+            <div className="mb-3 flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 text-xs text-slate-400">
+              <CalendarDays className="h-3.5 w-3.5 shrink-0 text-cyan-400" />
+              {pendingRange[0] && pendingRange[1]
+                ? `${pendingRange[0].toLocaleDateString()} → ${pendingRange[1].toLocaleDateString()}`
+                : pendingRange[0]
+                  ? `From ${pendingRange[0].toLocaleDateString()}`
+                  : "Select a start and end date"}
+            </div>
+
+            {/* react-calendar */}
+            <Calendar
+              selectRange
+              value={pendingRange[0] && pendingRange[1] ? [pendingRange[0], pendingRange[1]] : null}
+              onChange={(val) => {
+                if (Array.isArray(val)) {
+                  setPendingRange([val[0] ?? null, val[1] ?? null]);
+                }
+              }}
+              className="wallet-calendar"
+            />
+
+            <div className="flex gap-2 mt-4">
+              <button
+                onClick={clearDateFilter}
+                className="flex-1 rounded-xl border border-white/10 py-2 text-sm font-medium text-slate-400 hover:bg-white/5 transition"
+              >
+                Reset
+              </button>
+              <button
+                onClick={applyDateFilter}
+                disabled={!pendingRange[0] || !pendingRange[1]}
+                className="flex-1 rounded-xl bg-cyan-500 hover:bg-cyan-400 disabled:opacity-40 disabled:cursor-not-allowed py-2 text-sm font-bold text-slate-900 transition"
+              >
+                Apply Filter
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -163,7 +281,7 @@ export default function DashboardPage() {
           <p className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
             NPR {(stats?.totalSavings || 0).toLocaleString()}
           </p>
-          <p className="mt-1 text-xs text-white/60">Total balance</p>
+          <p className="mt-1 text-xs text-white/60">{isFiltered ? "Period balance" : "Total balance"}</p>
         </div>
 
         {/* Income Card */}
@@ -178,9 +296,9 @@ export default function DashboardPage() {
             </span>
           </div>
           <p className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
-            NPR {(currentMonthStats.income || 0).toLocaleString()}
+            NPR {(isFiltered ? (stats?.totalIncome || 0) : (currentMonthStats.income || 0)).toLocaleString()}
           </p>
-          <p className="mt-1 text-xs text-slate-500">This month's income</p>
+          <p className="mt-1 text-xs text-slate-500">{isFiltered ? "Period income" : "This month's income"}</p>
         </div>
 
         {/* Expense Card */}
@@ -195,67 +313,113 @@ export default function DashboardPage() {
             </span>
           </div>
           <p className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
-            NPR {(currentMonthStats.expense || 0).toLocaleString()}
+            NPR {(isFiltered ? (stats?.totalExpenses || 0) : (currentMonthStats.expense || 0)).toLocaleString()}
           </p>
-          <p className="mt-1 text-xs text-slate-500">This month's expenses</p>
+          <p className="mt-1 text-xs text-slate-500">{isFiltered ? "Period expenses" : "This month's expenses"}</p>
         </div>
       </div>
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Area Chart */}
+        {/* Chart Panel */}
         <div className="lg:col-span-2 rounded-2xl border border-white/5 bg-[#1E293B] p-5">
           <div className="flex items-center justify-between mb-5">
             <div>
               <h2 className="font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Monthly Trend</h2>
               <p className="text-xs text-slate-500 mt-0.5">Income vs Expenses over time</p>
             </div>
-            <div className="flex items-center gap-3 text-xs">
-              <span className="flex items-center gap-1.5 text-slate-400"><span className="h-2 w-2 rounded-full bg-cyan-400 inline-block" />Income</span>
-              <span className="flex items-center gap-1.5 text-slate-400"><span className="h-2 w-2 rounded-full bg-purple-400 inline-block" />Expense</span>
+            <div className="flex items-center gap-3">
+              {/* Legend */}
+              <span className="flex items-center gap-1.5 text-xs text-slate-400">
+                <span className="h-2 w-2 rounded-full bg-cyan-400 inline-block" />Income
+              </span>
+              <span className="flex items-center gap-1.5 text-xs text-slate-400">
+                <span className="h-2 w-2 rounded-full bg-purple-400 inline-block" />Expense
+              </span>
+              {/* Toggle */}
+              <div className="flex rounded-lg overflow-hidden border border-white/10 text-xs">
+                <button
+                  onClick={() => setChartType("bar")}
+                  className={`px-3 py-1.5 font-medium transition-all ${chartType === "bar"
+                      ? "bg-cyan-500 text-slate-900"
+                      : "bg-transparent text-slate-400 hover:text-slate-200"
+                    }`}
+                >
+                  Bar
+                </button>
+                <button
+                  onClick={() => setChartType("area")}
+                  className={`px-3 py-1.5 font-medium transition-all ${chartType === "area"
+                      ? "bg-cyan-500 text-slate-900"
+                      : "bg-transparent text-slate-400 hover:text-slate-200"
+                    }`}
+                >
+                  Area
+                </button>
+              </div>
             </div>
           </div>
           <div className="h-56 w-full">
             {areaData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={areaData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
-                  <defs>
-                    <linearGradient id="incomeGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#06B6D4" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#06B6D4" stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient id="expenseGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <XAxis
-                    dataKey="name"
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: "#475569", fontSize: 11 }}
-                  />
-                  <YAxis hide />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Area
-                    type="monotone"
-                    dataKey="income"
-                    name="Income"
-                    stroke="#06B6D4"
-                    strokeWidth={2}
-                    fill="url(#incomeGrad)"
-                    dot={{ fill: "#06B6D4", r: 3, strokeWidth: 0 }}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="expense"
-                    name="Expense"
-                    stroke="#8B5CF6"
-                    strokeWidth={2}
-                    fill="url(#expenseGrad)"
-                    dot={{ fill: "#8B5CF6", r: 3, strokeWidth: 0 }}
-                  />
-                </AreaChart>
+                {chartType === "bar" ? (
+                  <BarChart data={areaData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }} barCategoryGap="30%" barGap={4}>
+                    <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.04)" />
+                    <XAxis
+                      dataKey="name"
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fill: "#475569", fontSize: 11 }}
+                    />
+                    <YAxis hide />
+                    <Tooltip
+                      cursor={{ fill: "rgba(255,255,255,0.03)" }}
+                      content={<CustomTooltip />}
+                    />
+                    <Bar dataKey="income" name="Income" fill="#06B6D4" radius={[6, 6, 0, 0]} maxBarSize={36} />
+                    <Bar dataKey="expense" name="Expense" fill="#8B5CF6" radius={[6, 6, 0, 0]} maxBarSize={36} />
+                  </BarChart>
+                ) : (
+                  <AreaChart data={areaData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+                    <defs>
+                      <linearGradient id="incomeGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#06B6D4" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#06B6D4" stopOpacity={0} />
+                      </linearGradient>
+                      <linearGradient id="expenseGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.04)" />
+                    <XAxis
+                      dataKey="name"
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fill: "#475569", fontSize: 11 }}
+                    />
+                    <YAxis hide />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Area
+                      type="monotone"
+                      dataKey="income"
+                      name="Income"
+                      stroke="#06B6D4"
+                      strokeWidth={2}
+                      fill="url(#incomeGrad)"
+                      dot={{ fill: "#06B6D4", r: 3, strokeWidth: 0 }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="expense"
+                      name="Expense"
+                      stroke="#8B5CF6"
+                      strokeWidth={2}
+                      fill="url(#expenseGrad)"
+                      dot={{ fill: "#8B5CF6", r: 3, strokeWidth: 0 }}
+                    />
+                  </AreaChart>
+                )}
               </ResponsiveContainer>
             ) : (
               <div className="h-full flex flex-col items-center justify-center text-slate-600 gap-2">
@@ -352,9 +516,8 @@ export default function DashboardPage() {
                   className="flex items-center gap-4 rounded-xl bg-white/3 px-4 py-3 hover:bg-white/5 transition-colors group"
                 >
                   <div
-                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
-                      tx.type === "INCOME" ? "bg-emerald-500/15 text-emerald-400" : "bg-red-500/15 text-red-400"
-                    }`}
+                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${tx.type === "INCOME" ? "bg-emerald-500/15 text-emerald-400" : "bg-red-500/15 text-red-400"
+                      }`}
                   >
                     {tx.type === "INCOME" ? (
                       <ArrowUpRight className="h-4 w-4" />
@@ -434,7 +597,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <TransactionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSuccess={fetchStats} />
+      <TransactionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSuccess={() => fetchStats(appliedRange[0], appliedRange[1])} />
 
       {/* Savings Goal Modal */}
       {isSavingsModalOpen && (

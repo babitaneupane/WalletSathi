@@ -26,3 +26,148 @@ body {
   backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
+
+
+/* ── react-calendar dark theme override ── */
+.wallet-calendar {
+  background: transparent !important;
+  border: none !important;
+  color: #F1F5F9;
+  font-family: var(--font-sans), sans-serif;
+  width: 100% !important;
+}
+
+/* Strip ALL default button chrome from every calendar button/tile */
+.wallet-calendar button,
+.wallet-calendar .react-calendar__tile {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+/* Navigation bar */
+.wallet-calendar .react-calendar__navigation {
+  display: flex;
+  margin-bottom: 8px;
+}
+.wallet-calendar .react-calendar__navigation button {
+  background: transparent;
+  color: #CBD5E1;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 8px;
+  min-width: 36px;
+  padding: 4px 8px;
+  transition: background 0.15s;
+}
+.wallet-calendar .react-calendar__navigation button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.06);
+  color: #F1F5F9;
+}
+.wallet-calendar .react-calendar__navigation button:disabled {
+  color: #475569;
+  cursor: default;
+}
+
+/* Weekday headers */
+.wallet-calendar .react-calendar__month-view__weekdays {
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.wallet-calendar .react-calendar__month-view__weekdays abbr {
+  text-decoration: none;
+  cursor: default;
+}
+
+/* Day tiles grid */
+.wallet-calendar .react-calendar__month-view__days {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+/* Day tiles */
+.wallet-calendar .react-calendar__tile {
+  background: transparent;
+  color: #CBD5E1;
+  border-radius: 8px;
+  padding: 7px 4px;
+  font-size: 0.8rem;
+  transition: background 0.15s, color 0.15s;
+  border: none;
+  text-align: center;
+  line-height: 1;
+}
+/* Kill abbr styling inside tiles — this was causing the white boxes */
+.wallet-calendar .react-calendar__tile abbr {
+  text-decoration: none;
+  background: none;
+  border: none;
+  display: inline;
+  font: inherit;
+  color: inherit;
+}
+.wallet-calendar .react-calendar__tile:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #F1F5F9;
+}
+.wallet-calendar .react-calendar__tile:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Today */
+.wallet-calendar .react-calendar__tile--now {
+  background: rgba(6, 182, 212, 0.12) !important;
+  color: #22D3EE !important;
+  font-weight: 700;
+}
+.wallet-calendar .react-calendar__tile--now:hover:not(:disabled) {
+  background: rgba(6, 182, 212, 0.22) !important;
+}
+
+/* Selected / range start & end */
+.wallet-calendar .react-calendar__tile--active,
+.wallet-calendar .react-calendar__tile--rangeStart,
+.wallet-calendar .react-calendar__tile--rangeEnd {
+  background: #06B6D4 !important;
+  color: #0F172A !important;
+  font-weight: 700;
+  border-radius: 8px !important;
+}
+.wallet-calendar .react-calendar__tile--active:hover,
+.wallet-calendar .react-calendar__tile--rangeStart:hover,
+.wallet-calendar .react-calendar__tile--rangeEnd:hover {
+  background: #22D3EE !important;
+}
+
+/* Range in between */
+.wallet-calendar .react-calendar__tile--range {
+  background: rgba(6, 182, 212, 0.15) !important;
+  color: #E2E8F0 !important;
+  border-radius: 0 !important;
+}
+.wallet-calendar .react-calendar__tile--rangeStart {
+  border-radius: 8px 0 0 8px !important;
+}
+.wallet-calendar .react-calendar__tile--rangeEnd {
+  border-radius: 0 8px 8px 0 !important;
+}
+
+/* Neighbouring-month days */
+.wallet-calendar .react-calendar__month-view__days__day--neighboringMonth {
+  color: #334155;
+}
+
+/* Disabled tiles */
+.wallet-calendar .react-calendar__tile:disabled {
+  color: #334155;
+  cursor: not-allowed;
+}

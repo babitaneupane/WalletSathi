@@ -26,7 +26,7 @@ export default function AIAssistantPage() {
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
-    
+
     const userMessage = input.trim();
     const newUserMsg = {
       id: Date.now(),
@@ -34,11 +34,11 @@ export default function AIAssistantPage() {
       content: userMessage,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
-    
+
     setMessages(prev => [...prev, newUserMsg]);
     setInput("");
     setLoading(true);
-    
+
     try {
       const res = await api.post("/ai/chat", { message: userMessage });
       // Map backend history to our UI format
@@ -74,7 +74,7 @@ export default function AIAssistantPage() {
         {/* Left Column (Chat Interface) */}
         <div className="lg:col-span-2 flex flex-col rounded-3xl border border-white/5 bg-[#1E293B] shadow-2xl overflow-hidden relative">
           <div className="absolute top-0 right-0 h-[500px] w-[500px] bg-cyan-500/5 rounded-full blur-3xl -mr-40 -mt-40 pointer-events-none"></div>
-          
+
           <div className="flex-1 overflow-y-auto p-6 space-y-6 relative z-10 scrollbar-hide">
             <div className="flex justify-center my-6">
               <span className="text-[10px] font-bold px-3 py-1 bg-[#0F172A] text-slate-500 rounded-full uppercase tracking-widest border border-white/5">
@@ -84,14 +84,13 @@ export default function AIAssistantPage() {
 
             {messages.map((msg) => (
               <div key={msg.id} className={`flex flex-col ${msg.role === "user" ? "items-end" : "items-start"}`}>
-                <div className={`max-w-[80%] rounded-2xl p-4 ${
-                  msg.role === "user" 
-                    ? "bg-cyan-500 text-slate-900 rounded-tr-sm" 
+                <div className={`max-w-[80%] rounded-2xl p-4 ${msg.role === "user"
+                    ? "bg-cyan-500 text-slate-900 rounded-tr-sm"
                     : "bg-[#0F172A] border border-white/5 text-slate-200 rounded-tl-sm"
-                }`}>
+                  }`}>
                   {msg.role === "assistant" && (
                     <div className="flex items-center gap-2 mb-2 text-cyan-400">
-                      <img src="/logo.png" alt="Logo" className="h-4 w-4 object-contain" />
+                      <img src="/logo.png" alt="Logo" className="h-16 w-16 object-contain" />
                       <span className="text-xs font-bold uppercase tracking-widest">WalletSathi AI</span>
                     </div>
                   )}
@@ -181,12 +180,12 @@ export default function AIAssistantPage() {
               {[40, 70, 45, 90, 60, 85].map((height, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
                   <div className="w-full bg-[#0F172A] rounded-t-sm relative">
-                    <div 
-                      className={`w-full rounded-t-sm transition-all duration-500 ${i === 3 ? "bg-cyan-500" : "bg-cyan-500/20 group-hover:bg-cyan-500/40"}`} 
+                    <div
+                      className={`w-full rounded-t-sm transition-all duration-500 ${i === 3 ? "bg-cyan-500" : "bg-cyan-500/20 group-hover:bg-cyan-500/40"}`}
                       style={{ height: `${height}%` }}
                     ></div>
                   </div>
-                  <span className="text-[10px] text-slate-500 font-bold">W{i+1}</span>
+                  <span className="text-[10px] text-slate-500 font-bold">W{i + 1}</span>
                 </div>
               ))}
             </div>

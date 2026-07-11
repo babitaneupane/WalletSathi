@@ -37,12 +37,10 @@ export default function LoginPage() {
       <div className="mb-8 flex flex-col items-center">
         <div className="flex items-center gap-3 mb-3">
           <div className="flex items-center justify-center">
-            <img src="/logo.png" alt="WalletSathi Logo" className="h-12 w-12 object-contain" />
+            <img src="/logo.png" alt="WalletSathi Logo" className="h-48 w-48 object-contain" />
           </div>
           <div>
-            <span className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
-              WalletSathi <span className="text-cyan-400">AI</span>
-            </span>
+
           </div>
         </div>
         <p className="text-xs text-slate-500 uppercase tracking-widest font-medium">

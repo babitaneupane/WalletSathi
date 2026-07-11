@@ -40,19 +40,12 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="px-5 py-6">
         <Link href="/dashboard" className="flex items-center gap-3">
-          <div className="flex items-center justify-center">
-            <img src="/logo.png" alt="WalletSathi Logo" className="h-10 w-10 object-contain" />
-          </div>
+          <img src="/logo.png " height={100} width={100} alt="WalletSathi Logo" />
           <div>
-            <span className="text-base font-bold text-white tracking-tight" style={{ fontFamily: "var(--font-outfit)" }}>
-              WalletSathi
-            </span>
-            <span className="ml-1 text-xs font-semibold text-cyan-400">AI</span>
+
           </div>
         </Link>
-        <div className="mt-3 mx-1">
-          <span className="text-[10px] font-semibold tracking-widest text-slate-500 uppercase">Premium Plan</span>
-        </div>
+
       </div>
 
       {/* Nav Items */}
