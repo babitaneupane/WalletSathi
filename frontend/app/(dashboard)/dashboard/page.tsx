@@ -53,6 +53,289 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
+// ── 3-D bar chart ────────────────────────────────────────────────────────────
+const ThreeDBarChart = ({ data }: { data: { name: string; income: number; expense: number }[] }) => {
+  const [hovered, setHovered] = useState<string | null>(null);
+
+  const svgW = 560;
+  const svgH = 240;
+  const padL = 10;
+  const padR = 10;
+  const padT = 20;
+  const padB = 36;
+  const chartW = svgW - padL - padR;
+  const chartH = svgH - padT - padB;
+
+  const depth = 8; // 3-D depth offset
+
+  const allVals = data.flatMap((d) => [d.income, d.expense]);
+  const maxVal = Math.max(...allVals, 1);
+
+  const groupCount = data.length;
+  const groupW = chartW / groupCount;
+  const barW = Math.min(28, groupW * 0.3);
+  const gap = 4;
+
+  // Horizontal grid lines
+  const gridLines = [0, 25, 50, 75, 100];
+
+  const incomeGradId = "inc3d";
+  const incSideId = "inc3dside";
+  const expGradId = "exp3d";
+  const expSideId = "exp3dside";
+  const incTopId = "inc3dtop";
+  const expTopId = "exp3dtop";
+
+  return (
+    <svg
+      viewBox={`0 0 ${svgW} ${svgH}`}
+      width="100%"
+      height="100%"
+      style={{ overflow: "visible" }}
+    >
+      <defs>
+        {/* Income – front face gradient (cyan → blue) */}
+        <linearGradient id={incomeGradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#22D3EE" />
+          <stop offset="100%" stopColor="#0369A1" />
+        </linearGradient>
+        {/* Income – right side face (darker) */}
+        <linearGradient id={incSideId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#0E7490" />
+          <stop offset="100%" stopColor="#075985" />
+        </linearGradient>
+        {/* Income – top face */}
+        <linearGradient id={incTopId} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#67E8F9" />
+          <stop offset="100%" stopColor="#22D3EE" />
+        </linearGradient>
+
+        {/* Expense – front face gradient (purple → magenta) */}
+        <linearGradient id={expGradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#C084FC" />
+          <stop offset="100%" stopColor="#7C3AED" />
+        </linearGradient>
+        {/* Expense – right side face */}
+        <linearGradient id={expSideId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#6D28D9" />
+          <stop offset="100%" stopColor="#5B21B6" />
+        </linearGradient>
+        {/* Expense – top face */}
+        <linearGradient id={expTopId} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#E879F9" />
+          <stop offset="100%" stopColor="#C084FC" />
+        </linearGradient>
+
+        {/* Drop shadow filter */}
+        <filter id="bar-shadow" x="-20%" y="-20%" width="150%" height="150%">
+          <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="rgba(0,0,0,0.45)" />
+        </filter>
+      </defs>
+
+      {/* Grid lines */}
+      {gridLines.map((pct) => {
+        const y = padT + chartH - (pct / 100) * chartH;
+        return (
+          <g key={pct}>
+            <line
+              x1={padL}
+              y1={y}
+              x2={padL + chartW}
+              y2={y}
+              stroke="rgba(255,255,255,0.06)"
+              strokeWidth={1}
+            />
+            <text x={padL - 4} y={y + 4} textAnchor="end" fontSize={8} fill="#334155">
+              {pct}
+            </text>
+          </g>
+        );
+      })}
+
+      {/* Bars */}
+      {data.map((d, i) => {
+        const groupX = padL + i * groupW + groupW / 2;
+        const incH = Math.max(4, (d.income / maxVal) * chartH);
+        const expH = Math.max(4, (d.expense / maxVal) * chartH);
+        const incPct = maxVal > 0 ? Math.round((d.income / maxVal) * 100) : 0;
+        const expPct = maxVal > 0 ? Math.round((d.expense / maxVal) * 100) : 0;
+
+        // x centres of the two bars
+        const incX = groupX - barW - gap / 2;
+        const expX = groupX + gap / 2;
+        const baseY = padT + chartH;
+
+        const isHovInc = hovered === `inc-${i}`;
+        const isHovExp = hovered === `exp-${i}`;
+        const liftInc = isHovInc ? -5 : 0;
+        const liftExp = isHovExp ? -5 : 0;
+
+        return (
+          <g key={d.name}>
+            {/* ─── Income bar ─── */}
+            <g
+              style={{ cursor: "pointer", transition: "transform 0.2s ease" }}
+              transform={`translate(0, ${liftInc})`}
+              onMouseEnter={() => setHovered(`inc-${i}`)}
+              onMouseLeave={() => setHovered(null)}
+              filter="url(#bar-shadow)"
+            >
+              {/* right side face */}
+              <polygon
+                points={`
+                  ${incX + barW},${baseY}
+                  ${incX + barW + depth},${baseY - depth}
+                  ${incX + barW + depth},${baseY - incH - depth}
+                  ${incX + barW},${baseY - incH}
+                `}
+                fill={`url(#${incSideId})`}
+              />
+              {/* top face */}
+              <polygon
+                points={`
+                  ${incX},${baseY - incH}
+                  ${incX + barW},${baseY - incH}
+                  ${incX + barW + depth},${baseY - incH - depth}
+                  ${incX + depth},${baseY - incH - depth}
+                `}
+                fill={`url(#${incTopId})`}
+              />
+              {/* front face */}
+              <rect
+                x={incX}
+                y={baseY - incH}
+                width={barW}
+                height={incH}
+                fill={`url(#${incomeGradId})`}
+                rx={2}
+              />
+              {/* percentage label inside bar */}
+              {incH > 28 && (
+                <text
+                  x={incX + barW / 2}
+                  y={baseY - incH / 2}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  fontSize={9}
+                  fontWeight="700"
+                  fill="rgba(255,255,255,0.9)"
+                  transform={`rotate(-90, ${incX + barW / 2}, ${baseY - incH / 2})`}
+                >
+                  {incPct}%
+                </text>
+              )}
+            </g>
+
+            {/* ─── Expense bar ─── */}
+            <g
+              style={{ cursor: "pointer", transition: "transform 0.2s ease" }}
+              transform={`translate(0, ${liftExp})`}
+              onMouseEnter={() => setHovered(`exp-${i}`)}
+              onMouseLeave={() => setHovered(null)}
+              filter="url(#bar-shadow)"
+            >
+              {/* right side face */}
+              <polygon
+                points={`
+                  ${expX + barW},${baseY}
+                  ${expX + barW + depth},${baseY - depth}
+                  ${expX + barW + depth},${baseY - expH - depth}
+                  ${expX + barW},${baseY - expH}
+                `}
+                fill={`url(#${expSideId})`}
+              />
+              {/* top face */}
+              <polygon
+                points={`
+                  ${expX},${baseY - expH}
+                  ${expX + barW},${baseY - expH}
+                  ${expX + barW + depth},${baseY - expH - depth}
+                  ${expX + depth},${baseY - expH - depth}
+                `}
+                fill={`url(#${expTopId})`}
+              />
+              {/* front face */}
+              <rect
+                x={expX}
+                y={baseY - expH}
+                width={barW}
+                height={expH}
+                fill={`url(#${expGradId})`}
+                rx={2}
+              />
+              {/* percentage label */}
+              {expH > 28 && (
+                <text
+                  x={expX + barW / 2}
+                  y={baseY - expH / 2}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  fontSize={9}
+                  fontWeight="700"
+                  fill="rgba(255,255,255,0.9)"
+                  transform={`rotate(-90, ${expX + barW / 2}, ${baseY - expH / 2})`}
+                >
+                  {expPct}%
+                </text>
+              )}
+            </g>
+
+            {/* Tooltip on hover */}
+            {(isHovInc || isHovExp) && (
+              <g>
+                <rect
+                  x={groupX - 44}
+                  y={padT - 16}
+                  width={88}
+                  height={isHovInc ? 28 : 28}
+                  rx={6}
+                  fill="#0F172A"
+                  stroke="rgba(255,255,255,0.12)"
+                  strokeWidth={1}
+                />
+                <text
+                  x={groupX}
+                  y={padT - 4}
+                  textAnchor="middle"
+                  fontSize={9}
+                  fill={isHovInc ? "#22D3EE" : "#C084FC"}
+                  fontWeight="600"
+                >
+                  {isHovInc ? "Income" : "Expense"}: NPR{" "}
+                  {(isHovInc ? d.income : d.expense).toLocaleString()}
+                </text>
+              </g>
+            )}
+
+            {/* Month label */}
+            <text
+              x={groupX + depth / 2}
+              y={baseY + 16}
+              textAnchor="middle"
+              fontSize={10}
+              fill="#475569"
+              fontWeight="500"
+            >
+              {d.name}
+            </text>
+          </g>
+        );
+      })}
+
+      {/* Base line */}
+      <line
+        x1={padL}
+        y1={padT + chartH}
+        x2={padL + chartW + depth}
+        y2={padT + chartH}
+        stroke="rgba(255,255,255,0.1)"
+        strokeWidth={1}
+      />
+    </svg>
+  );
+};
+// ─────────────────────────────────────────────────────────────────────────────
+
 export default function DashboardPage() {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -359,27 +642,12 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
-          <div className="h-56 w-full">
+          <div className="h-64 w-full">
             {areaData.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                {chartType === "bar" ? (
-                  <BarChart data={areaData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }} barCategoryGap="30%" barGap={4}>
-                    <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.04)" />
-                    <XAxis
-                      dataKey="name"
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fill: "#475569", fontSize: 11 }}
-                    />
-                    <YAxis hide />
-                    <Tooltip
-                      cursor={{ fill: "rgba(255,255,255,0.03)" }}
-                      content={<CustomTooltip />}
-                    />
-                    <Bar dataKey="income" name="Income" fill="#06B6D4" radius={[6, 6, 0, 0]} maxBarSize={36} />
-                    <Bar dataKey="expense" name="Expense" fill="#8B5CF6" radius={[6, 6, 0, 0]} maxBarSize={36} />
-                  </BarChart>
-                ) : (
+              chartType === "bar" ? (
+                <ThreeDBarChart data={areaData} />
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={areaData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
                     <defs>
                       <linearGradient id="incomeGrad" x1="0" y1="0" x2="0" y2="1">
@@ -419,8 +687,8 @@ export default function DashboardPage() {
                       dot={{ fill: "#8B5CF6", r: 3, strokeWidth: 0 }}
                     />
                   </AreaChart>
-                )}
-              </ResponsiveContainer>
+                </ResponsiveContainer>
+              )
             ) : (
               <div className="h-full flex flex-col items-center justify-center text-slate-600 gap-2">
                 <TrendingUp className="h-10 w-10 opacity-30" />

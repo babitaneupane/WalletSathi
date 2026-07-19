@@ -85,8 +85,8 @@ export default function AIAssistantPage() {
             {messages.map((msg) => (
               <div key={msg.id} className={`flex flex-col ${msg.role === "user" ? "items-end" : "items-start"}`}>
                 <div className={`max-w-[80%] rounded-2xl p-4 ${msg.role === "user"
-                    ? "bg-cyan-500 text-slate-900 rounded-tr-sm"
-                    : "bg-[#0F172A] border border-white/5 text-slate-200 rounded-tl-sm"
+                  ? "bg-cyan-500 text-slate-900 rounded-tr-sm"
+                  : "bg-[#0F172A] border border-white/5 text-slate-200 rounded-tl-sm"
                   }`}>
                   {msg.role === "assistant" && (
                     <div className="flex items-center gap-2 mb-2 text-cyan-400">
@@ -152,20 +152,6 @@ export default function AIAssistantPage() {
             </button>
           </div>
 
-          {/* Opportunity Card */}
-          <div className="rounded-2xl border border-emerald-500/20 bg-[#1E293B] p-5 relative overflow-hidden group">
-            <div className="absolute right-0 top-0 h-24 w-24 bg-emerald-500/10 rounded-full blur-xl -mr-10 -mt-10 transition group-hover:bg-emerald-500/20"></div>
-            <div className="flex items-center gap-3 mb-3 relative z-10">
-              <div className="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                <TrendingUp className="h-4 w-4 text-emerald-400" />
-              </div>
-              <h4 className="font-bold text-white text-sm">Opportunity</h4>
-            </div>
-            <h5 className="font-bold text-emerald-400 text-xs uppercase tracking-widest mb-1 relative z-10">Tax Optimization</h5>
-            <p className="text-xs text-slate-400 leading-relaxed relative z-10">
-              Transferring <strong className="text-white">€2,000</strong> to your 401(k) before year-end will maximize your employer match and reduce your taxable bracket.
-            </p>
-          </div>
 
           {/* Chart Widget */}
           <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-5">

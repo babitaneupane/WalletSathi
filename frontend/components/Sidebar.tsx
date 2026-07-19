@@ -38,9 +38,9 @@ export default function Sidebar() {
   return (
     <aside className="w-60 flex flex-col h-screen shrink-0 sticky top-0 border-r border-white/5 bg-[#0F172A]">
       {/* Logo */}
-      <div className="px-5 py-6">
-        <Link href="/dashboard" className="flex items-center gap-3">
-          <img src="/logo.png " height={100} width={100} alt="WalletSathi Logo" />
+      <div className="px-4 py-4">
+        <Link href="/dashboard" className="flex items-center gap-4">
+          <img src="/logo.png " height={100} width={130} alt="WalletSathi Logo" />
           <div>
 
           </div>

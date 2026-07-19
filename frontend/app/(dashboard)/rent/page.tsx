@@ -3,8 +3,10 @@
 import { useState, useEffect } from "react";
 import { Plus, CheckCircle, Clock, User, FileText, Trash2, AlertCircle, ArrowUpRight, TrendingUp, Search, Download, Filter, Receipt, Calendar, AlertTriangle, X } from "lucide-react";
 import api from "../../../lib/api";
+import { useAlert } from "../../../context/AlertContext";
 
 export default function RentDashboard() {
+  const { showAlert } = useAlert();
   const [tenants, setTenants] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [generalRentIncome, setGeneralRentIncome] = useState(0);
@@ -105,7 +107,7 @@ export default function RentDashboard() {
       await api.put(`/rent/bills/${billId}/pay`);
       fetchTenants();
     } catch (err: any) {
-      alert(err?.response?.data?.message || "Failed to mark as paid.");
+      showAlert(err?.response?.data?.message || "Failed to mark as paid.", "error");
     }
   };
 
@@ -123,7 +125,7 @@ export default function RentDashboard() {
       setTenantToDelete(null);
       fetchTenants();
     } catch (err: any) {
-      alert(err?.response?.data?.message || "Failed to delete tenant.");
+      showAlert(err?.response?.data?.message || "Failed to delete tenant.", "error");
     } finally {
       setIsDeleting(false);
     }

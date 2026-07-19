@@ -9,8 +9,27 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
             return;
         }
 
+        const { startDate, endDate } = req.query;
+
+        // Build optional date filter
+        const dateFilter: Record<string, Date> = {};
+        if (startDate && typeof startDate === "string") {
+            dateFilter.gte = new Date(startDate);
+        }
+        if (endDate && typeof endDate === "string") {
+            // Include the full end day by setting time to end of day
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999);
+            dateFilter.lte = end;
+        }
+
+        const whereClause: any = { userId };
+        if (Object.keys(dateFilter).length > 0) {
+            whereClause.createdAt = dateFilter;
+        }
+
         const transactions = await prisma.transaction.findMany({
-            where: { userId },
+            where: whereClause,
             include: { category: true },
             orderBy: { createdAt: "desc" }
         });
@@ -33,7 +52,8 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
             totalSavings: totalIncome - totalExpenses,
             recentTransactions: transactions.slice(0, 5),
             transactions,
-            savingsGoals
+            savingsGoals,
+            isFiltered: Object.keys(dateFilter).length > 0,
         });
     } catch (error: any) {
         res.status(500).json({ message: error.message || "Server error" });

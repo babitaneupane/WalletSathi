@@ -3,8 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import { User, Shield, Moon, DollarSign, Bell, Lock, AlertTriangle, Upload, EyeOff, Save } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
+import { useAlert } from "../../../context/AlertContext";
 
 export default function SettingsPage() {
+  const { showAlert } = useAlert();
   const { user } = useAuth();
 
   const [profile, setProfile] = useState({
@@ -54,7 +56,7 @@ export default function SettingsPage() {
       });
     }
 
-    const savedPrefs = localStorage.getItem("settings_prefs");
+    const savedPrefs = localStorage.getItem("settings_prefs_v2");
     if (savedPrefs) setPreferences(JSON.parse(savedPrefs));
 
     const savedPrivacy = localStorage.getItem("settings_privacy");
@@ -63,9 +65,9 @@ export default function SettingsPage() {
 
   const handleSave = () => {
     localStorage.setItem("settings_profile", JSON.stringify(profile));
-    localStorage.setItem("settings_prefs", JSON.stringify(preferences));
+    localStorage.setItem("settings_prefs_v2", JSON.stringify(preferences));
     localStorage.setItem("settings_privacy", JSON.stringify(privacy));
-    alert("Settings saved successfully!");
+    showAlert("Settings saved successfully!", "success");
   };
 
   return (
@@ -153,7 +155,7 @@ export default function SettingsPage() {
                   onClick={() => {
                     setPreferences({ ...preferences, darkMode: !preferences.darkMode });
                     if (preferences.darkMode) {
-                      alert("Light mode is coming soon! The toggle now works but full theming is pending.");
+                      showAlert("Light mode is coming soon! The toggle now works but full theming is pending.", "info");
                     }
                   }}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${preferences.darkMode ? 'bg-cyan-500' : 'bg-slate-600'}`}
@@ -179,9 +181,6 @@ export default function SettingsPage() {
                   className="rounded-xl border border-white/10 bg-[#0F172A] px-4 py-2.5 text-sm font-semibold text-white focus:outline-none cursor-pointer"
                 >
                   <option value="NPR">NPR (Rs)</option>
-                  <option value="EUR">EUR (€)</option>
-                  <option value="GBP">GBP (£)</option>
-                  <option value="USD">USD ($)</option>
                 </select>
               </div>
 

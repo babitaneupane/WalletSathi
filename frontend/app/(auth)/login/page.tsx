@@ -37,13 +37,13 @@ export default function LoginPage() {
       <div className="mb-8 flex flex-col items-center">
         <div className="flex items-center gap-3 mb-3">
           <div className="flex items-center justify-center">
-            <img src="/logo.png" alt="WalletSathi Logo" className="h-48 w-48 object-contain" />
+            <img src="/logo.png" alt="WalletSathi Logo" className="h-30 w-48 object-contain" />
           </div>
           <div>
 
           </div>
         </div>
-        <p className="text-xs text-slate-500 uppercase tracking-widest font-medium">
+        <p className="text-sm text-slate-500 uppercase tracking-widest font-medium">
           Smart Financial Management
         </p>
       </div>

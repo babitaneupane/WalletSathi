@@ -1,34 +1,38 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Plus, Receipt, Users, Loader2, DollarSign, SplitSquareHorizontal } from "lucide-react";
+import { ArrowLeft, Plus, Receipt, Users, Loader2, DollarSign, SplitSquareHorizontal, CheckCircle2, Circle, Trash2, UserPlus } from "lucide-react";
 import Link from "next/link";
 import api from "../../../../lib/api";
-import { useAuth } from "../../../../context/AuthContext";
+import { useAlert } from "../../../../context/AlertContext";
 
 export default function GroupDetailsPage() {
+  const { showAlert } = useAlert();
   const { id } = useParams() as { id: string };
   const router = useRouter();
-  const { user } = useAuth();
-  
+
   const [group, setGroup] = useState<any>(null);
   const [expenses, setExpenses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
+
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const [formData, setFormData] = useState({ title: "", amount: "" });
+  const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
 
   const fetchData = async () => {
     try {
       const [groupRes, expensesRes] = await Promise.all([
         api.get(`/groups/${id}`),
-        api.get(`/groupExpenses/${id}`)
+        api.get(`/group-expenses/${id}`)
       ]);
       setGroup(groupRes.data);
-      setExpenses(expensesRes.data);
+      setExpenses((expensesRes.data || []).map((exp: any) => ({
+        ...exp,
+        splits: (exp.splits || []).map((split: any) => ({ ...split, isPaid: split.isPaid ?? false }))
+      })));
     } catch (err: any) {
       console.error(err);
       setError("Failed to load group details.");
@@ -41,24 +45,30 @@ export default function GroupDetailsPage() {
     fetchData();
   }, [id]);
 
+  useEffect(() => {
+    if (group?.members?.length) {
+      setSelectedMembers(group.members.map((member: any) => member.userId));
+    }
+  }, [group]);
+
   const handleAddExpense = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.title || !formData.amount || isNaN(Number(formData.amount))) return;
-    
+
     setSaving(true);
-    
-    // Equal split among all members
+
     const totalAmount = Number(formData.amount);
-    const memberCount = group.members.length;
-    const splitAmount = totalAmount / memberCount;
-    
-    const splits = group.members.map((m: any) => ({
-      userId: m.userId,
+    const memberIds = selectedMembers.length > 0 ? selectedMembers : (group.members || []).map((m: any) => m.userId);
+    const participantCount = memberIds.length || 1;
+    const splitAmount = totalAmount / participantCount;
+
+    const splits = memberIds.map((userId: string) => ({
+      userId,
       amount: splitAmount
     }));
-    
+
     try {
-      await api.post("/groupExpenses", {
+      await api.post("/group-expenses", {
         title: formData.title,
         amount: totalAmount,
         groupId: id,
@@ -66,32 +76,77 @@ export default function GroupDetailsPage() {
       });
       setIsAddExpenseOpen(false);
       setFormData({ title: "", amount: "" });
-      fetchData(); // Refresh list
+      setSelectedMembers((group.members || []).map((member: any) => member.userId));
+      fetchData();
+      showAlert("Expense added successfully!", "success");
     } catch (err: any) {
       console.error(err);
-      alert(err.response?.data?.message || "Failed to add expense");
+      showAlert(err.response?.data?.message || "Failed to add expense", "error");
     } finally {
       setSaving(false);
     }
   };
 
-  // Calculate balances
-  // Positive balance means the person is owed money
-  // Negative balance means the person owes money
+  const toggleMemberSelection = (userId: string) => {
+    setSelectedMembers((current) =>
+      current.includes(userId) ? current.filter((id) => id !== userId) : [...current, userId]
+    );
+  };
+
+  const updateExpenseSplits = (expenseId: string, nextSplits: any[]) => {
+    setExpenses((current) => current.map((exp) => (exp.id === expenseId ? { ...exp, splits: nextSplits } : exp)));
+  };
+
+  const handleAddSplitMember = (expenseId: string, userId: string) => {
+    setExpenses((current) =>
+      current.map((exp) => {
+        if (exp.id !== expenseId) return exp;
+        const currentSplits = Array.isArray(exp.splits) ? exp.splits : [];
+        const nextSplits = [...currentSplits, { userId, amount: 0, isPaid: false }];
+        const share = nextSplits.length > 0 ? exp.amount / nextSplits.length : 0;
+        return { ...exp, splits: nextSplits.map((split: any) => ({ ...split, amount: share })) };
+      })
+    );
+  };
+
+  const handleRemoveSplitMember = (expenseId: string, userId: string) => {
+    setExpenses((current) =>
+      current.map((exp) => {
+        if (exp.id !== expenseId) return exp;
+        const currentSplits = Array.isArray(exp.splits) ? exp.splits : [];
+        const nextSplits = currentSplits.filter((split: any) => split.userId !== userId);
+        const share = nextSplits.length > 0 ? exp.amount / nextSplits.length : 0;
+        return { ...exp, splits: nextSplits.map((split: any) => ({ ...split, amount: share })) };
+      })
+    );
+  };
+
+  const handleTogglePaid = (expenseId: string, userId: string) => {
+    setExpenses((current) =>
+      current.map((exp) => {
+        if (exp.id !== expenseId) return exp;
+        return {
+          ...exp,
+          splits: (exp.splits || []).map((split: any) =>
+            split.userId === userId ? { ...split, isPaid: !split.isPaid } : split
+          )
+        };
+      })
+    );
+  };
+
   const balances: Record<string, { name: string; balance: number }> = {};
-  
+
   if (group) {
     group.members.forEach((m: any) => {
       balances[m.userId] = { name: m.user?.name || "Unknown", balance: 0 };
     });
-    
-    expenses.forEach(exp => {
-      // The person who paid gets credit
+
+    expenses.forEach((exp: any) => {
       if (balances[exp.paidById]) {
         balances[exp.paidById].balance += exp.amount;
       }
-      // Everyone in the split owes their share
-      exp.splits.forEach((s: any) => {
+      (exp.splits || []).forEach((s: any) => {
         if (balances[s.userId]) {
           balances[s.userId].balance -= s.amount;
         }
@@ -99,7 +154,14 @@ export default function GroupDetailsPage() {
     });
   }
 
-  const balanceList = Object.values(balances).filter(b => Math.abs(b.balance) > 0.01);
+  const balanceList = Object.values(balances).filter((b: any) => Math.abs(b.balance) > 0.01);
+  const memberMap = useMemo(() => {
+    const map: Record<string, any> = {};
+    (group?.members || []).forEach((member: any) => {
+      map[member.userId] = member;
+    });
+    return map;
+  }, [group]);
 
   if (loading) {
     return (
@@ -120,7 +182,6 @@ export default function GroupDetailsPage() {
 
   return (
     <div className="space-y-6 p-6 max-w-5xl mx-auto pb-24">
-      {/* Header */}
       <div className="flex items-center gap-4 border-b border-white/5 pb-6">
         <button onClick={() => router.push("/split")} className="p-2 rounded-full hover:bg-white/5 transition text-slate-400 hover:text-white">
           <ArrowLeft className="h-5 w-5" />
@@ -138,10 +199,9 @@ export default function GroupDetailsPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Col: Expenses */}
         <div className="lg:col-span-2 space-y-4">
           <h2 className="text-xl font-bold text-white mb-4" style={{ fontFamily: "var(--font-outfit)" }}>Recent Expenses</h2>
-          
+
           {expenses.length === 0 ? (
             <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-10 flex flex-col items-center text-center">
               <Receipt className="h-10 w-10 text-slate-600 mb-3" />
@@ -149,44 +209,104 @@ export default function GroupDetailsPage() {
               <p className="text-sm text-slate-500 mt-1">Add an expense to start splitting!</p>
             </div>
           ) : (
-            expenses.map(exp => (
-              <div key={exp.id} className="rounded-2xl border border-white/5 bg-[#1E293B] p-5 shadow flex items-center justify-between group">
-                <div className="flex items-center gap-4">
-                  <div className="h-10 w-10 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-400">
-                    <Receipt className="h-5 w-5" />
+            expenses.map((exp: any) => {
+              const splitRows = (group.members || []).map((member: any) => {
+                const existingSplit = (exp.splits || []).find((split: any) => split.userId === member.userId);
+                return {
+                  userId: member.userId,
+                  name: member.user?.name || "Unknown",
+                  email: member.user?.email || "",
+                  isIncluded: Boolean(existingSplit),
+                  amount: existingSplit?.amount || 0,
+                  isPaid: Boolean(existingSplit?.isPaid)
+                };
+              });
+
+              return (
+                <div key={exp.id} className="rounded-2xl border border-white/5 bg-[#1E293B] p-5 shadow space-y-4">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="h-10 w-10 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-400">
+                        <Receipt className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-slate-200">{exp.title}</h3>
+                        <p className="text-xs text-slate-500">Paid by <span className="font-semibold text-slate-300">{exp.paidBy?.name || "Someone"}</span></p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-white">NPR {Number(exp.amount || 0).toFixed(2)}</p>
+                      <p className="text-[10px] text-slate-500 mt-0.5">{new Date(exp.createdAt).toLocaleDateString()}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-slate-200">{exp.title}</h3>
-                    <p className="text-xs text-slate-500">Paid by <span className="font-semibold text-slate-300">{exp.paidBy?.name || "Someone"}</span></p>
+
+                  <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                    <div className="mb-2 flex items-center justify-between">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Split details</p>
+                      <span className="text-[11px] text-slate-400">{splitRows.filter((row: any) => row.isIncluded).length} joined</span>
+                    </div>
+                    <div className="space-y-2">
+                      {splitRows.map((row: any) => (
+                        <div key={row.userId} className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-[#0F172A] px-3 py-2">
+                          <div>
+                            <p className="text-sm font-semibold text-slate-200">{row.name}</p>
+                            <p className="text-[11px] text-slate-500">{row.isIncluded ? `Share: NPR ${row.amount.toFixed(2)}` : "Not in this split"}</p>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            {row.isIncluded ? (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => handleTogglePaid(exp.id, row.userId)}
+                                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${row.isPaid ? "bg-emerald-500/15 text-emerald-400" : "bg-white/5 text-slate-400 hover:text-white"}`}
+                                >
+                                  {row.isPaid ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Circle className="h-3.5 w-3.5" />}
+                                  {row.isPaid ? "Done" : "Mark paid"}
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveSplitMember(exp.id, row.userId)}
+                                  className="inline-flex items-center gap-1 rounded-full bg-rose-500/10 px-2.5 py-1 text-[11px] font-semibold text-rose-400 hover:bg-rose-500/20"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />Remove
+                                </button>
+                              </>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => handleAddSplitMember(exp.id, row.userId)}
+                                className="inline-flex items-center gap-1 rounded-full bg-cyan-500/10 px-2.5 py-1 text-[11px] font-semibold text-cyan-400 hover:bg-cyan-500/20"
+                              >
+                                <UserPlus className="h-3.5 w-3.5" />Add
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="font-bold text-white">${exp.amount.toFixed(2)}</p>
-                  <p className="text-[10px] text-slate-500 mt-0.5">{new Date(exp.createdAt).toLocaleDateString()}</p>
-                </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
 
-        {/* Right Col: Balances & Members */}
         <div className="space-y-6">
-          {/* Balances */}
           <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-5 shadow-lg">
             <div className="flex items-center gap-2 mb-4">
               <SplitSquareHorizontal className="h-5 w-5 text-emerald-400" />
               <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Balances</h2>
             </div>
-            
+
             {balanceList.length === 0 ? (
               <p className="text-sm text-slate-500 text-center py-4">Everyone is settled up!</p>
             ) : (
               <div className="space-y-3">
-                {balanceList.map((b, i) => (
+                {balanceList.map((b: any, i: number) => (
                   <div key={i} className="flex items-center justify-between text-sm">
                     <span className="font-medium text-slate-300">{b.name}</span>
                     <span className={`font-bold ${b.balance > 0 ? "text-emerald-400" : "text-rose-400"}`}>
-                      {b.balance > 0 ? "gets back" : "owes"} ${Math.abs(b.balance).toFixed(2)}
+                      {b.balance > 0 ? "gets back" : "owes"} NPR {Math.abs(b.balance).toFixed(2)}
                     </span>
                   </div>
                 ))}
@@ -194,14 +314,13 @@ export default function GroupDetailsPage() {
             )}
           </div>
 
-          {/* Members */}
           <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-5 shadow-lg">
             <div className="flex items-center gap-2 mb-4">
               <Users className="h-5 w-5 text-purple-400" />
-              <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Members</h2>
+              <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Joined Members</h2>
             </div>
             <div className="space-y-3">
-              {group.members.map((m: any, i: number) => (
+              {(group.members || []).map((m: any, i: number) => (
                 <div key={i} className="flex items-center gap-3">
                   <div className="h-8 w-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-white">
                     {(m.user?.name || "?").charAt(0).toUpperCase()}
@@ -217,16 +336,15 @@ export default function GroupDetailsPage() {
         </div>
       </div>
 
-      {/* Add Expense Modal */}
       {isAddExpenseOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}
-          onClick={e => e.target === e.currentTarget && setIsAddExpenseOpen(false)}>
+          onClick={(e) => e.target === e.currentTarget && setIsAddExpenseOpen(false)}>
           <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1E293B] p-6 shadow-2xl">
             <h2 className="text-lg font-bold text-white mb-5" style={{ fontFamily: "var(--font-outfit)" }}>Add an Expense</h2>
             <form onSubmit={handleAddExpense} className="space-y-4">
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase">Description</label>
-                <input type="text" required value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })}
+                <input type="text" required value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="e.g. Dinner at Mario's"
                   className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none" />
               </div>
@@ -234,16 +352,28 @@ export default function GroupDetailsPage() {
                 <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase">Amount</label>
                 <div className="relative">
                   <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-                  <input type="number" step="0.01" required value={formData.amount} onChange={e => setFormData({ ...formData, amount: e.target.value })}
+                  <input type="number" step="0.01" required value={formData.amount} onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                     placeholder="0.00"
                     className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none" />
                 </div>
               </div>
-              
+
+              <div className="rounded-lg bg-cyan-500/10 border border-cyan-500/20 p-3">
+                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-cyan-400">Add members to this split</p>
+                <div className="space-y-2">
+                  {(group.members || []).map((member: any) => (
+                    <label key={member.userId} className="flex items-center justify-between rounded-lg border border-white/10 bg-[#0F172A] px-3 py-2 text-sm text-slate-300">
+                      <span>{member.user?.name || "Unknown"}</span>
+                      <input type="checkbox" checked={selectedMembers.includes(member.userId)} onChange={() => toggleMemberSelection(member.userId)} className="h-4 w-4 rounded border-slate-600 bg-transparent text-cyan-400 focus:ring-cyan-500" />
+                    </label>
+                  ))}
+                </div>
+              </div>
+
               <div className="rounded-lg bg-cyan-500/10 border border-cyan-500/20 p-3 flex items-start gap-2 mt-2">
                 <SplitSquareHorizontal className="h-4 w-4 text-cyan-400 mt-0.5 shrink-0" />
                 <p className="text-xs text-cyan-400/90 leading-relaxed">
-                  This expense will be split equally among all {group.members.length} members. You paid for it.
+                  This expense will be split equally among the selected members. You paid for it.
                 </p>
               </div>
 

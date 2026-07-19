@@ -4,8 +4,10 @@ import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Bell, Search, ChevronDown, LogOut, User as UserIcon } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { useAlert } from "../context/AlertContext";
 
 export default function Header() {
+  const { showAlert } = useAlert();
   const pathname = usePathname();
   const { user, logout } = useAuth();
   
@@ -31,7 +33,7 @@ export default function Header() {
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && searchQuery.trim()) {
-      alert(`Searching for: ${searchQuery}`);
+      showAlert(`Searching for: ${searchQuery}`, "info");
       setSearchQuery("");
     }
   };
