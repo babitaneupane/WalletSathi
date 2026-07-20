@@ -123,11 +123,26 @@ export const deleteGroup = async (req: Request, res: Response): Promise<void> =>
             return;
         }
 
-        // Delete members and group
-        await prisma.groupMember.deleteMany({ where: { groupId: id } });
-        await prisma.group.delete({ where: { id } });
+        // Clean up all related tables to avoid foreign key constraint errors
+        await prisma.expenseSplit.deleteMany({
+            where: { groupExpense: { groupId: id } }
+        });
+        await prisma.groupExpense.deleteMany({
+            where: { groupId: id }
+        });
+        await prisma.transaction.deleteMany({
+            where: { groupId: id }
+        });
+        await prisma.groupMember.deleteMany({
+            where: { groupId: id }
+        });
 
-        res.json({ message: "Group deleted" });
+        // Finally delete the group itself
+        await prisma.group.delete({
+            where: { id }
+        });
+
+        res.json({ message: "Group deleted successfully" });
     } catch (error: any) {
         res.status(500).json({ message: error.message || "Server error" });
     }

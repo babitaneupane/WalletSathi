@@ -7,6 +7,36 @@ import Link from "next/link";
 import api from "../../../../lib/api";
 import { useAlert } from "../../../../context/AlertContext";
 
+function ReceiptNPRIcon({ className, ...props }: React.SVGProps<SVGSVGElement> & { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      {...props}
+    >
+      <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" />
+      <text
+        x="12"
+        y="14.5"
+        fontSize="6.2"
+        fontWeight="bold"
+        fontFamily="system-ui, -apple-system, sans-serif"
+        textAnchor="middle"
+        fill="currentColor"
+        stroke="none"
+      >
+        NPR
+      </text>
+    </svg>
+  );
+}
+
 export default function GroupDetailsPage() {
   const { showAlert } = useAlert();
   const { id } = useParams() as { id: string };
@@ -121,18 +151,43 @@ export default function GroupDetailsPage() {
     );
   };
 
-  const handleTogglePaid = (expenseId: string, userId: string) => {
+  const handleTogglePaid = async (expenseId: string, userId: string) => {
+    const expense = expenses.find((exp) => exp.id === expenseId);
+    const split = expense?.splits?.find((s: any) => s.userId === userId);
+    if (!split) return;
+
+    // Optimistically update the UI
     setExpenses((current) =>
       current.map((exp) => {
         if (exp.id !== expenseId) return exp;
         return {
           ...exp,
-          splits: (exp.splits || []).map((split: any) =>
-            split.userId === userId ? { ...split, isPaid: !split.isPaid } : split
+          splits: (exp.splits || []).map((s: any) =>
+            s.userId === userId ? { ...s, isPaid: !s.isPaid } : s
           )
         };
       })
     );
+
+    try {
+      await api.patch(`/group-expenses/splits/${split.id}/toggle-paid`);
+      showAlert("Split payment status updated!", "success");
+    } catch (err: any) {
+      console.error(err);
+      showAlert(err.response?.data?.message || "Failed to update split payment status", "error");
+      // Rollback on error
+      setExpenses((current) =>
+        current.map((exp) => {
+          if (exp.id !== expenseId) return exp;
+          return {
+            ...exp,
+            splits: (exp.splits || []).map((s: any) =>
+              s.userId === userId ? { ...s, isPaid: !s.isPaid } : s
+            )
+          };
+        })
+      );
+    }
   };
 
   const balances: Record<string, { name: string; balance: number }> = {};
@@ -143,12 +198,15 @@ export default function GroupDetailsPage() {
     });
 
     expenses.forEach((exp: any) => {
-      if (balances[exp.paidById]) {
-        balances[exp.paidById].balance += exp.amount;
-      }
       (exp.splits || []).forEach((s: any) => {
-        if (balances[s.userId]) {
-          balances[s.userId].balance -= s.amount;
+        // Only calculate outstanding balances for unpaid splits, excluding the payer
+        if (!s.isPaid && s.userId !== exp.paidById) {
+          if (balances[s.userId]) {
+            balances[s.userId].balance -= s.amount;
+          }
+          if (balances[exp.paidById]) {
+            balances[exp.paidById].balance += s.amount;
+          }
         }
       });
     });
@@ -204,7 +262,7 @@ export default function GroupDetailsPage() {
 
           {expenses.length === 0 ? (
             <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-10 flex flex-col items-center text-center">
-              <Receipt className="h-10 w-10 text-slate-600 mb-3" />
+              <ReceiptNPRIcon className="h-10 w-10 text-slate-600 mb-3" />
               <p className="text-slate-400 font-medium">No expenses yet.</p>
               <p className="text-sm text-slate-500 mt-1">Add an expense to start splitting!</p>
             </div>
@@ -227,7 +285,7 @@ export default function GroupDetailsPage() {
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
                       <div className="h-10 w-10 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-400">
-                        <Receipt className="h-5 w-5" />
+                        <ReceiptNPRIcon className="h-5 w-5" />
                       </div>
                       <div>
                         <h3 className="font-bold text-slate-200">{exp.title}</h3>
@@ -349,12 +407,12 @@ export default function GroupDetailsPage() {
                   className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none" />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase">Amount</label>
+                <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase">Amount (NPR)</label>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500 select-none">NPR</span>
                   <input type="number" step="0.01" required value={formData.amount} onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                     placeholder="0.00"
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none" />
+                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-14 pr-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none" />
                 </div>
               </div>
 

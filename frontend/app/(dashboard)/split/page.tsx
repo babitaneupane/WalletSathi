@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Users, Receipt, UserPlus, CheckCircle2, Loader2, Copy, Check, Key, X } from "lucide-react";
+import { Plus, Users, Receipt, UserPlus, CheckCircle2, Loader2, Copy, Check, Key, X, Trash2, AlertTriangle } from "lucide-react";
 import api from "../../../lib/api";
 
 export default function SplitPage() {
@@ -16,6 +16,10 @@ export default function SplitPage() {
   const [saving, setSaving] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
+
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [groupToDelete, setGroupToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchGroups = async () => {
     try {
@@ -60,6 +64,26 @@ export default function SplitPage() {
       setError(err?.response?.data?.message || "Failed to join group");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const confirmDelete = (id: string) => {
+    setGroupToDelete(id);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteGroup = async () => {
+    if (!groupToDelete) return;
+    setIsDeleting(true);
+    try {
+      await api.delete(`/groups/${groupToDelete}`);
+      setDeleteModalOpen(false);
+      setGroupToDelete(null);
+      fetchGroups();
+    } catch (err) {
+      console.error("Failed to delete group", err);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -156,12 +180,21 @@ export default function SplitPage() {
                         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                       </button>
                     </div>
-                    <Link
-                      href={`/split/${group.id}`}
-                      className="w-full sm:w-auto rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 px-5 py-2 text-sm font-semibold text-cyan-400 transition text-center"
-                    >
-                      View Details
-                    </Link>
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                      <Link
+                        href={`/split/${group.id}`}
+                        className="flex-1 sm:flex-none rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 px-5 py-2 text-sm font-semibold text-cyan-400 transition text-center"
+                      >
+                        View Details
+                      </Link>
+                      <button
+                        onClick={() => confirmDelete(group.id)}
+                        className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 transition shrink-0"
+                        title="Delete Group"
+                      >
+                        <Trash2 className="h-4.5 w-4.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -293,6 +326,69 @@ export default function SplitPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ─── Delete Confirmation Modal ─── */}
+      {deleteModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)" }}
+          onClick={(e) => e.target === e.currentTarget && !isDeleting && setDeleteModalOpen(false)}
+        >
+          <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#1E293B] p-6 shadow-2xl">
+            <div className="flex justify-between items-start mb-5">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center shrink-0">
+                  <AlertTriangle className="h-5 w-5 text-rose-400" />
+                </div>
+                <div>
+                  <h2 className="text-base font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Delete Group?</h2>
+                  <p className="text-xs text-slate-500 mt-0.5">This action cannot be undone</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setDeleteModalOpen(false)}
+                disabled={isDeleting}
+                className="text-slate-500 hover:text-slate-300 transition"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <p className="text-sm text-slate-400 mb-6 leading-relaxed">
+              All expenses, splits, and member data associated with this group will be permanently deleted.
+            </p>
+
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setDeleteModalOpen(false)}
+                disabled={isDeleting}
+                className="flex-1 rounded-xl border border-white/10 py-2.5 text-sm font-medium text-slate-400 hover:bg-white/5 transition disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteGroup}
+                disabled={isDeleting}
+                className="flex-1 rounded-xl bg-rose-500 hover:bg-rose-400 py-2.5 text-sm font-bold text-white shadow-lg shadow-rose-500/20 transition disabled:opacity-60 flex items-center justify-center gap-2"
+              >
+                {isDeleting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="h-4 w-4" />
+                    Delete Group
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -108,8 +108,9 @@ model GroupExpense {
 }
 
 model ExpenseSplit {
-  id     String @id @default(cuid())
+  id     String  @id @default(cuid())
   amount Float
+  isPaid Boolean @default(false)
 
   groupExpenseId String
   groupExpense   GroupExpense @relation(fields: [groupExpenseId], references: [id])

@@ -12,6 +12,8 @@ import {
   Target,
   X,
   CalendarDays,
+  Edit2,
+  Trash2,
 } from "lucide-react";
 
 // Filter state (moved inside component)
@@ -341,6 +343,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSavingsModalOpen, setIsSavingsModalOpen] = useState(false);
+  const [editingGoal, setEditingGoal] = useState<any>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   // pendingRange holds what the user is selecting in the calendar
   const [pendingRange, setPendingRange] = useState<[Date | null, Date | null]>([null, null]);
@@ -364,22 +367,41 @@ export default function DashboardPage() {
     }
   };
 
-  const handleCreateSavingsGoal = async (e: React.FormEvent) => {
+  const handleSaveSavingsGoal = async (e: React.FormEvent) => {
     e.preventDefault();
     setSavingSavings(true);
     try {
-      await api.post("/savings", {
-        name: savingsForm.name,
-        targetAmount: parseFloat(savingsForm.targetAmount),
-        currentAmount: parseFloat(savingsForm.currentAmount || "0"),
-      });
+      if (editingGoal) {
+        await api.put(`/savings/${editingGoal.id}`, {
+          name: savingsForm.name,
+          targetAmount: parseFloat(savingsForm.targetAmount),
+          currentAmount: parseFloat(savingsForm.currentAmount || "0"),
+        });
+      } else {
+        await api.post("/savings", {
+          name: savingsForm.name,
+          targetAmount: parseFloat(savingsForm.targetAmount),
+          currentAmount: parseFloat(savingsForm.currentAmount || "0"),
+        });
+      }
       setIsSavingsModalOpen(false);
+      setEditingGoal(null);
       setSavingsForm({ name: "", targetAmount: "", currentAmount: "" });
       fetchStats(appliedRange[0], appliedRange[1]);
     } catch (err) {
-      console.error("Failed to create savings goal", err);
+      console.error("Failed to save savings goal", err);
     } finally {
       setSavingSavings(false);
+    }
+  };
+
+  const handleDeleteSavingsGoal = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this savings goal?")) return;
+    try {
+      await api.delete(`/savings/${id}`);
+      fetchStats(appliedRange[0], appliedRange[1]);
+    } catch (err) {
+      console.error("Failed to delete savings goal", err);
     }
   };
 
@@ -823,7 +845,14 @@ export default function DashboardPage() {
               <h2 className="font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Savings</h2>
               <p className="text-xs text-slate-500 mt-0.5">Your goals</p>
             </div>
-            <button onClick={() => setIsSavingsModalOpen(true)} className="h-7 w-7 flex items-center justify-center rounded-lg text-slate-500 hover:bg-white/5 hover:text-slate-300 transition">
+            <button
+              onClick={() => {
+                setEditingGoal(null);
+                setSavingsForm({ name: "", targetAmount: "", currentAmount: "" });
+                setIsSavingsModalOpen(true);
+              }}
+              className="h-7 w-7 flex items-center justify-center rounded-lg text-slate-500 hover:bg-white/5 hover:text-slate-300 transition"
+            >
               <Plus className="h-4 w-4" />
             </button>
           </div>
@@ -834,10 +863,34 @@ export default function DashboardPage() {
                 const colors = ["from-cyan-500 to-cyan-400", "from-purple-500 to-purple-400", "from-emerald-500 to-emerald-400"];
                 return (
                   <div key={goal.id}>
-                    <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center justify-between mb-1.5 group/goal">
                       <div className="flex items-center gap-2">
                         <Target className="h-4 w-4 text-slate-500" />
                         <span className="text-sm font-semibold text-slate-200">{goal.name}</span>
+                        <div className="opacity-0 group-hover/goal:opacity-100 flex items-center gap-1.5 ml-2 transition duration-200">
+                          <button
+                            onClick={() => {
+                              setEditingGoal(goal);
+                              setSavingsForm({
+                                name: goal.name,
+                                targetAmount: goal.targetAmount.toString(),
+                                currentAmount: goal.currentAmount.toString(),
+                              });
+                              setIsSavingsModalOpen(true);
+                            }}
+                            className="text-slate-500 hover:text-cyan-400 transition"
+                            title="Edit Goal"
+                          >
+                            <Edit2 className="h-3 w-3" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteSavingsGoal(goal.id)}
+                            className="text-slate-500 hover:text-red-400 transition"
+                            title="Delete Goal"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        </div>
                       </div>
                       <span className="text-xs font-bold text-slate-400">{pct.toFixed(0)}%</span>
                     </div>
@@ -870,13 +923,30 @@ export default function DashboardPage() {
       {/* Savings Goal Modal */}
       {isSavingsModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}
-          onClick={e => e.target === e.currentTarget && setIsSavingsModalOpen(false)}>
+          onClick={e => {
+            if (e.target === e.currentTarget) {
+              setIsSavingsModalOpen(false);
+              setEditingGoal(null);
+              setSavingsForm({ name: "", targetAmount: "", currentAmount: "" });
+            }
+          }}>
           <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1E293B] p-6 shadow-2xl">
             <div className="flex justify-between items-center mb-5">
-              <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>New Savings Goal</h2>
-              <button onClick={() => setIsSavingsModalOpen(false)} className="text-slate-500 hover:text-slate-300 transition"><X className="h-5 w-5" /></button>
+              <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
+                {editingGoal ? "Edit Savings Goal" : "New Savings Goal"}
+              </h2>
+              <button
+                onClick={() => {
+                  setIsSavingsModalOpen(false);
+                  setEditingGoal(null);
+                  setSavingsForm({ name: "", targetAmount: "", currentAmount: "" });
+                }}
+                className="text-slate-500 hover:text-slate-300 transition"
+              >
+                <X className="h-5 w-5" />
+              </button>
             </div>
-            <form onSubmit={handleCreateSavingsGoal} className="space-y-4">
+            <form onSubmit={handleSaveSavingsGoal} className="space-y-4">
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Goal Name</label>
                 <input type="text" required value={savingsForm.name} onChange={e => setSavingsForm({ ...savingsForm, name: e.target.value })}
@@ -896,9 +966,19 @@ export default function DashboardPage() {
                   className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition" />
               </div>
               <div className="flex gap-3 pt-1">
-                <button type="button" onClick={() => setIsSavingsModalOpen(false)} className="flex-1 rounded-xl border border-white/10 py-2.5 text-sm font-medium text-slate-400 hover:bg-white/5 transition">Cancel</button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsSavingsModalOpen(false);
+                    setEditingGoal(null);
+                    setSavingsForm({ name: "", targetAmount: "", currentAmount: "" });
+                  }}
+                  className="flex-1 rounded-xl border border-white/10 py-2.5 text-sm font-medium text-slate-400 hover:bg-white/5 transition"
+                >
+                  Cancel
+                </button>
                 <button type="submit" disabled={savingSavings} className="flex-1 rounded-xl bg-cyan-500 hover:bg-cyan-400 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-cyan-500/20 transition">
-                  {savingSavings ? "Saving..." : "Create Goal"}
+                  {savingSavings ? "Saving..." : editingGoal ? "Save Changes" : "Create Goal"}
                 </button>
               </div>
             </form>
