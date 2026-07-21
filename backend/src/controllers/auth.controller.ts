@@ -93,3 +93,59 @@ export const getMe = async (req: Request, res: Response): Promise<void> => {
         res.status(500).json({ message: error.message || "Server error" });
     }
 };
+
+export const deleteAccount = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) {
+            res.status(401).json({ message: "Not authenticated" });
+            return;
+        }
+
+        // Delete in FK-safe order: children first, then user
+        await prisma.chatHistory.deleteMany({ where: { userId } });
+        await prisma.aIInsight.deleteMany({ where: { userId } });
+        await prisma.expenseSplit.deleteMany({ where: { userId } });
+        await prisma.groupExpense.deleteMany({ where: { paidById: userId } });
+        await prisma.groupMember.deleteMany({ where: { userId } });
+        await prisma.rentBill.deleteMany({ where: { userId } });
+        await prisma.tenant.deleteMany({ where: { userId } });
+        await prisma.savingsGoal.deleteMany({ where: { userId } });
+        await prisma.transaction.deleteMany({ where: { userId } });
+        await prisma.budget.deleteMany({ where: { userId } });
+        await prisma.category.deleteMany({ where: { userId } });
+        await prisma.user.delete({ where: { id: userId } });
+
+        res.json({ message: "Account permanently deleted." });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message || "Server error" });
+    }
+};
+
+export const deactivateAccount = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) {
+            res.status(401).json({ message: "Not authenticated" });
+            return;
+        }
+
+        // Wipe all data but keep the user account intact
+        await prisma.chatHistory.deleteMany({ where: { userId } });
+        await prisma.aIInsight.deleteMany({ where: { userId } });
+        await prisma.expenseSplit.deleteMany({ where: { userId } });
+        await prisma.groupExpense.deleteMany({ where: { paidById: userId } });
+        await prisma.groupMember.deleteMany({ where: { userId } });
+        await prisma.rentBill.deleteMany({ where: { userId } });
+        await prisma.tenant.deleteMany({ where: { userId } });
+        await prisma.savingsGoal.deleteMany({ where: { userId } });
+        await prisma.transaction.deleteMany({ where: { userId } });
+        await prisma.budget.deleteMany({ where: { userId } });
+        await prisma.category.deleteMany({ where: { userId } });
+
+        res.json({ message: "Account deactivated. All data has been cleared." });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message || "Server error" });
+    }
+};
+

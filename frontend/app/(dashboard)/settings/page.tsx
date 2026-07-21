@@ -1,13 +1,48 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { User, Shield, Moon, DollarSign, Bell, Lock, AlertTriangle, Upload, EyeOff, Save } from "lucide-react";
+import { User, Shield, Moon, DollarSign, Bell, Lock, AlertTriangle, Upload, EyeOff, Save, Loader2, X } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import { useAlert } from "../../../context/AlertContext";
+import api from "../../../lib/api";
 
 export default function SettingsPage() {
   const { showAlert } = useAlert();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+
+  const [modal, setModal] = useState<"" | "deactivate" | "delete">("");
+  const [confirmText, setConfirmText] = useState("");
+  const [actionLoading, setActionLoading] = useState(false);
+
+  const handleDeactivate = async () => {
+    if (confirmText !== "DEACTIVATE") return;
+    setActionLoading(true);
+    try {
+      await api.post("/auth/deactivate");
+      showAlert("Account deactivated. All your data has been cleared.", "success");
+      setModal("");
+      setTimeout(() => logout(), 1500);
+    } catch (err: any) {
+      showAlert(err?.response?.data?.message || "Failed to deactivate account.", "error");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (confirmText !== "DELETE") return;
+    setActionLoading(true);
+    try {
+      await api.delete("/auth/delete");
+      showAlert("Account permanently deleted.", "success");
+      setModal("");
+      setTimeout(() => logout(), 1500);
+    } catch (err: any) {
+      showAlert(err?.response?.data?.message || "Failed to delete account.", "error");
+    } finally {
+      setActionLoading(false);
+    }
+  };
 
   const [profile, setProfile] = useState({
     name: "",
@@ -257,10 +292,16 @@ export default function SettingsPage() {
                 <p className="text-xs text-rose-200/60 max-w-md">Permanently delete your account, transaction history, savings goals, and tenant records. This cannot be undone.</p>
               </div>
               <div className="flex gap-4 w-full sm:w-auto">
-                <button className="flex-1 sm:flex-none rounded-xl border border-white/10 bg-transparent px-5 py-2.5 text-sm font-semibold text-slate-300 hover:bg-white/5 transition">
+                <button
+                  onClick={() => { setModal("deactivate"); setConfirmText(""); }}
+                  className="flex-1 sm:flex-none rounded-xl border border-white/10 bg-transparent px-5 py-2.5 text-sm font-semibold text-slate-300 hover:bg-white/5 transition"
+                >
                   Deactivate
                 </button>
-                <button className="flex-1 sm:flex-none rounded-xl bg-rose-500 hover:bg-rose-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-rose-500/25 transition">
+                <button
+                  onClick={() => { setModal("delete"); setConfirmText(""); }}
+                  className="flex-1 sm:flex-none rounded-xl bg-rose-500 hover:bg-rose-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-rose-500/25 transition"
+                >
                   Delete Account
                 </button>
               </div>
@@ -268,6 +309,74 @@ export default function SettingsPage() {
           </section>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      {modal !== "" && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md rounded-3xl border border-white/10 bg-[#1E293B] shadow-2xl p-8 relative">
+            <button
+              onClick={() => setModal("")}
+              className="absolute top-5 right-5 text-slate-400 hover:text-white transition"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="flex items-center gap-3 mb-4">
+              <div className={`h-10 w-10 rounded-full flex items-center justify-center ${modal === "delete" ? "bg-rose-500/10" : "bg-amber-500/10"}`}>
+                <AlertTriangle className={`h-5 w-5 ${modal === "delete" ? "text-rose-400" : "text-amber-400"}`} />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-white">
+                  {modal === "delete" ? "Delete Account" : "Deactivate Account"}
+                </h2>
+                <p className="text-xs text-slate-400">
+                  {modal === "delete" ? "This is permanent and cannot be undone." : "All your data will be cleared, but your account stays."}
+                </p>
+              </div>
+            </div>
+
+            <p className="text-sm text-slate-300 mb-4">
+              {modal === "delete"
+                ? "This will permanently delete your account and all associated data — transactions, budgets, savings goals, tenants, and more."
+                : "This will clear all your transactions, budgets, savings goals, tenants and more. Your login credentials will remain intact."}
+            </p>
+
+            <div className="mb-6">
+              <label className="text-xs font-semibold text-slate-400 mb-2 block uppercase tracking-widest">
+                Type <span className="text-white font-bold">{modal === "delete" ? "DELETE" : "DEACTIVATE"}</span> to confirm
+              </label>
+              <input
+                type="text"
+                value={confirmText}
+                onChange={e => setConfirmText(e.target.value)}
+                placeholder={modal === "delete" ? "DELETE" : "DEACTIVATE"}
+                className="w-full rounded-xl border border-white/10 bg-[#0F172A] px-4 py-3 text-sm text-white focus:border-rose-500/50 focus:outline-none focus:ring-1 focus:ring-rose-500/30 transition"
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setModal("")}
+                className="flex-1 rounded-xl border border-white/10 bg-transparent px-4 py-2.5 text-sm font-semibold text-slate-300 hover:bg-white/5 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={modal === "delete" ? handleDelete : handleDeactivate}
+                disabled={actionLoading || confirmText !== (modal === "delete" ? "DELETE" : "DEACTIVATE")}
+                className={`flex-1 flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold text-white shadow-lg transition disabled:opacity-40 disabled:cursor-not-allowed ${
+                  modal === "delete"
+                    ? "bg-rose-500 hover:bg-rose-600 shadow-rose-500/25"
+                    : "bg-amber-500 hover:bg-amber-600 shadow-amber-500/25"
+                }`}
+              >
+                {actionLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+                {modal === "delete" ? "Permanently Delete" : "Deactivate Account"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
