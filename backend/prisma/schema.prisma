@@ -168,3 +168,14 @@ model SavingsGoal {
   user          User     @relation(fields: [userId], references: [id])
   createdAt     DateTime @default(now())
 }
+
+model VerificationCode {
+  id        String   @id @default(cuid())
+  email     String
+  code      String
+  type      String   // "REGISTER" | "RESET_PASSWORD"
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@unique([email, type])
+}
