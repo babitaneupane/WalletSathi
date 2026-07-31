@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[#0F0B1E] font-sans text-slate-100">
+      <body className="min-h-full flex flex-col bg-gradient-to-br from-emerald-50 to-teal-100 font-sans text-slate-900">
         <AlertProvider>
           <AuthProvider>{children}</AuthProvider>
         </AlertProvider>

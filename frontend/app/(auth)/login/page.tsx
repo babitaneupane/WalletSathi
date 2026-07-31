@@ -90,9 +90,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative flex h-screen flex-col items-center justify-center bg-[#0F0B1E] overflow-hidden">
+    <div className="relative flex h-screen flex-col items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-100 overflow-hidden">
       {/* Background glow orbs */}
-      <div className="pointer-events-none absolute -top-40 -left-40 h-80 w-80 rounded-full bg-indigo-500/10 blur-3xl" />
+      <div className="pointer-events-none absolute -top-40 -left-40 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-40 -right-40 h-80 w-80 rounded-full bg-purple-600/10 blur-3xl" />
 
       {/* Logo */}
@@ -108,12 +108,12 @@ export default function LoginPage() {
       </div>
 
       {/* Card */}
-      <div className="w-full max-w-md rounded-2xl border border-white/5 bg-[#1A1333] p-8 shadow-2xl">
+      <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-2xl">
 
         {view === "login" && (
           <>
             <div className="mb-7">
-              <h1 className="text-xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
+              <h1 className="text-xl font-bold text-slate-900" style={{ fontFamily: "var(--font-outfit)" }}>
                 Welcome back
               </h1>
               <p className="text-sm text-slate-500 mt-1">
@@ -134,7 +134,7 @@ export default function LoginPage() {
 
             <form onSubmit={handleLoginSubmit} className="space-y-4">
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   Email Address
                 </label>
                 <div className="relative">
@@ -144,7 +144,7 @@ export default function LoginPage() {
                     placeholder="name@company.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
+                    className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 shadow-sm text-sm text-slate-800 placeholder:text-slate-600 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
                     required
                   />
                 </div>
@@ -152,11 +152,11 @@ export default function LoginPage() {
 
               <div>
                 <div className="mb-1.5 flex items-center justify-between">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Password</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Password</label>
                   <button
                     type="button"
                     onClick={() => { setView("forgot"); setError(""); setSuccess(""); }}
-                    className="text-xs text-indigo-400 hover:text-indigo-300 transition"
+                    className="text-xs text-emerald-500 hover:text-teal-500 transition"
                   >
                     Forgot Password?
                   </button>
@@ -168,7 +168,7 @@ export default function LoginPage() {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
+                    className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 shadow-sm text-sm text-slate-800 placeholder:text-slate-600 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
                     required
                   />
                 </div>
@@ -177,7 +177,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <div className="h-4 w-4 rounded-full border-2 border-slate-900/30 border-t-slate-900 animate-spin" />
@@ -196,11 +196,11 @@ export default function LoginPage() {
             <div className="mb-7">
               <button
                 onClick={() => { setView("login"); setError(""); setSuccess(""); }}
-                className="flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-indigo-400 transition uppercase tracking-wider mb-4"
+                className="flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-emerald-500 transition uppercase tracking-wider mb-4"
               >
                 <ArrowLeft className="h-3.5 w-3.5" /> Back to Login
               </button>
-              <h1 className="text-xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
+              <h1 className="text-xl font-bold text-slate-900" style={{ fontFamily: "var(--font-outfit)" }}>
                 Forgot Password
               </h1>
               <p className="text-sm text-slate-500 mt-1">
@@ -216,7 +216,7 @@ export default function LoginPage() {
 
             <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   Email Address
                 </label>
                 <div className="relative">
@@ -226,7 +226,7 @@ export default function LoginPage() {
                     placeholder="name@company.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
+                    className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 shadow-sm text-sm text-slate-800 placeholder:text-slate-600 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
                     required
                   />
                 </div>
@@ -235,7 +235,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <div className="h-4 w-4 rounded-full border-2 border-slate-900/30 border-t-slate-900 animate-spin" />
@@ -254,15 +254,15 @@ export default function LoginPage() {
             <div className="mb-7">
               <button
                 onClick={() => { setView("forgot"); setError(""); setSuccess(""); }}
-                className="flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-indigo-400 transition uppercase tracking-wider mb-4"
+                className="flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-emerald-500 transition uppercase tracking-wider mb-4"
               >
                 <ArrowLeft className="h-3.5 w-3.5" /> Back
               </button>
-              <h1 className="text-xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
+              <h1 className="text-xl font-bold text-slate-900" style={{ fontFamily: "var(--font-outfit)" }}>
                 Reset Password
               </h1>
               <p className="text-sm text-slate-500 mt-1">
-                Enter the code sent to <span className="text-indigo-400 font-semibold">{email}</span> and your new password
+                Enter the code sent to <span className="text-emerald-500 font-semibold">{email}</span> and your new password
               </p>
             </div>
 
@@ -272,14 +272,14 @@ export default function LoginPage() {
               </div>
             )}
             {success && (
-              <div className="mb-5 rounded-xl border border-indigo-500/20 bg-indigo-500/10 px-4 py-3 text-sm text-indigo-400 text-center">
+              <div className="mb-5 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-500 text-center">
                 {success}
               </div>
             )}
 
             <form onSubmit={handleResetSubmit} className="space-y-4">
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   Verification Code
                 </label>
                 <div className="relative">
@@ -290,14 +290,14 @@ export default function LoginPage() {
                     placeholder="Enter 6-digit OTP"
                     value={code}
                     onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-center tracking-[0.5em] text-lg font-bold text-slate-200 placeholder:text-slate-600 placeholder:tracking-normal focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
+                    className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 shadow-sm text-center tracking-[0.5em] text-lg font-bold text-slate-800 placeholder:text-slate-600 placeholder:tracking-normal focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   New Password
                 </label>
                 <div className="relative">
@@ -307,7 +307,7 @@ export default function LoginPage() {
                     placeholder="••••••••"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
+                    className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 shadow-sm text-sm text-slate-800 placeholder:text-slate-600 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
                     required
                   />
                 </div>
@@ -316,7 +316,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading || code.length !== 6}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <div className="h-4 w-4 rounded-full border-2 border-slate-900/30 border-t-slate-900 animate-spin" />
@@ -333,7 +333,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={handleForgotPasswordSubmit}
                 disabled={loading || cooldown > 0}
-                className="text-sm font-medium text-indigo-400 hover:text-indigo-300 disabled:text-slate-600 transition"
+                className="text-sm font-medium text-emerald-500 hover:text-teal-500 disabled:text-slate-600 transition"
               >
                 {cooldown > 0 ? `Resend Code in ${cooldown}s` : "Resend Code"}
               </button>
@@ -343,16 +343,16 @@ export default function LoginPage() {
 
         <p className="mt-7 text-center text-sm text-slate-500">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="font-semibold text-indigo-400 hover:text-indigo-300 transition">
+          <Link href="/register" className="font-semibold text-emerald-500 hover:text-teal-500 transition">
             Create an account
           </Link>
         </p>
       </div>
 
       <div className="mt-8 flex gap-6 text-xs text-slate-600">
-        <Link href="#" className="hover:text-slate-400 transition">Privacy Policy</Link>
-        <Link href="#" className="hover:text-slate-400 transition">Terms of Service</Link>
-        <Link href="#" className="hover:text-slate-400 transition">Support</Link>
+        <Link href="#" className="hover:text-slate-500 transition">Privacy Policy</Link>
+        <Link href="#" className="hover:text-slate-500 transition">Terms of Service</Link>
+        <Link href="#" className="hover:text-slate-500 transition">Support</Link>
       </div>
     </div>
   );

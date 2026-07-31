@@ -79,18 +79,18 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
       style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1A1333] p-6 shadow-2xl shadow-black/50 animate-in fade-in slide-in-from-bottom-4 duration-200">
+      <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl shadow-slate-200/50 animate-in fade-in slide-in-from-bottom-4 duration-200">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
+            <h2 className="text-lg font-bold text-slate-900" style={{ fontFamily: "var(--font-outfit)" }}>
               Add Transaction
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">Record your income or expense</p>
           </div>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-white/10 hover:text-slate-200 transition"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition"
           >
             <X className="h-4 w-4" />
           </button>
@@ -103,7 +103,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
               className={`cursor-pointer rounded-xl border p-3 text-center transition-all ${
                 formData.type === "EXPENSE"
                   ? "border-red-500/40 bg-red-500/15 text-red-400 shadow-sm shadow-red-500/10"
-                  : "border-white/5 bg-white/3 text-slate-500 hover:bg-white/8"
+                  : "border-slate-200 bg-white/3 text-slate-500 hover:bg-white/8"
               }`}
             >
               <input
@@ -123,7 +123,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
               className={`cursor-pointer rounded-xl border p-3 text-center transition-all ${
                 formData.type === "INCOME"
                   ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-400 shadow-sm shadow-emerald-500/10"
-                  : "border-white/5 bg-white/3 text-slate-500 hover:bg-white/8"
+                  : "border-slate-200 bg-white/3 text-slate-500 hover:bg-white/8"
               }`}
             >
               <input
@@ -151,7 +151,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
               required
               value={formData.amount}
               onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-              className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 px-4 text-sm text-slate-800 placeholder:text-slate-600 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
               placeholder="0.00"
             />
           </div>
@@ -168,21 +168,21 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
                   autoFocus
                   value={newCategoryName}
                   onChange={(e) => setNewCategoryName(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 px-4 text-sm text-slate-800 placeholder:text-slate-600 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
                   placeholder="e.g. Groceries"
                   onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleCreateCategory())}
                 />
                 <button
                   type="button"
                   onClick={handleCreateCategory}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-500 text-slate-900 hover:bg-indigo-400 transition"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500 text-slate-900 hover:bg-emerald-500 transition"
                 >
                   <Check className="h-4 w-4" />
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsAddingCategory(false)}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 hover:bg-white/10 transition"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100 transition"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -193,10 +193,10 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
                   required
                   value={formData.categoryName}
                   onChange={(e) => setFormData({ ...formData, categoryName: e.target.value })}
-                  className="w-full rounded-xl border border-white/10 bg-[#0F0B1E] py-3 px-4 text-sm text-slate-200 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 px-4 text-sm text-slate-800 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
                 >
                   {categories.map((c) => (
-                    <option key={c.id} value={c.name} className="bg-[#1A1333]">
+                    <option key={c.id} value={c.name} className="bg-white">
                       {c.name}
                     </option>
                   ))}
@@ -204,7 +204,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
                 <button
                   type="button"
                   onClick={() => setIsAddingCategory(true)}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 transition"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 transition"
                   title="Add new category"
                 >
                   <Plus className="h-4 w-4" />
@@ -223,7 +223,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
               required
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 px-4 text-sm text-slate-800 placeholder:text-slate-600 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
               placeholder="e.g. Grocery shopping"
             />
           </div>
@@ -231,7 +231,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
           <button
             type="submit"
             disabled={saving}
-            className="w-full rounded-xl bg-indigo-500 hover:bg-indigo-400 py-3 text-sm font-bold text-slate-900 shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] mt-2 disabled:opacity-60"
+            className="w-full rounded-xl bg-emerald-500 hover:bg-emerald-500 py-3 text-sm font-bold text-slate-900 shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] mt-2 disabled:opacity-60"
           >
             {saving ? "Saving..." : "Save Transaction"}
           </button>

@@ -22,7 +22,7 @@ export default function RegisterPage() {
     }
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
     if (!passwordRegex.test(password)) {
-      setError("Enter a combination of at least six numbers, letters and punctuation marks (like ! and &).");
+      setError("Enter a combination of at least six numbers, letters and punctuation marks.");
       return;
     }
     setError("");
@@ -38,9 +38,9 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-[#0F0B1E] py-12 overflow-hidden">
+    <div className="relative flex min-h-screen flex-col items-center justify-center bg-slate-50 py-12 overflow-hidden">
       {/* Background glow orbs */}
-      <div className="pointer-events-none absolute -top-40 -left-40 h-80 w-80 rounded-full bg-indigo-500/10 blur-3xl" />
+      <div className="pointer-events-none absolute -top-40 -left-40 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-40 -right-40 h-80 w-80 rounded-full bg-purple-600/10 blur-3xl" />
 
       <div className="mb-8 flex flex-col items-center z-10">
@@ -52,9 +52,9 @@ export default function RegisterPage() {
         </p>
       </div>
 
-      <div className="z-10 w-full max-w-md rounded-2xl border border-white/5 bg-[#1A1333] p-8 shadow-2xl">
+      <div className="z-10 w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-2xl">
         <div className="mb-7">
-          <h1 className="text-xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Create an Account</h1>
+          <h1 className="text-xl font-bold text-slate-900" style={{ fontFamily: "var(--font-outfit)" }}>Create an Account</h1>
           <p className="text-sm text-slate-500 mt-1">
             Setup your AI-powered dashboard
           </p>
@@ -64,7 +64,7 @@ export default function RegisterPage() {
 
         <form onSubmit={handleInitialSubmit} className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-xs font-semibold text-slate-400 uppercase tracking-wider">Full Name</label>
+            <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Full Name</label>
             <div className="relative">
               <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
               <input
@@ -72,14 +72,14 @@ export default function RegisterPage() {
                 placeholder="John Doe"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
+                className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 shadow-sm text-sm text-slate-800 placeholder:text-slate-600 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="mb-1.5 block text-xs font-semibold text-slate-400 uppercase tracking-wider">Email Address</label>
+            <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Email Address</label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
               <input
@@ -87,14 +87,14 @@ export default function RegisterPage() {
                 placeholder="name@company.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
+                className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 shadow-sm text-sm text-slate-800 placeholder:text-slate-600 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="mb-1.5 block text-xs font-semibold text-slate-400 uppercase tracking-wider">Password</label>
+            <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Password</label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
               <input
@@ -102,7 +102,7 @@ export default function RegisterPage() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
+                className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 shadow-sm text-sm text-slate-800 placeholder:text-slate-600 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
                 required
               />
             </div>
@@ -111,7 +111,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] mt-6 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] mt-6 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? (
               <div className="h-4 w-4 rounded-full border-2 border-slate-900/30 border-t-slate-900 animate-spin" />
@@ -125,7 +125,7 @@ export default function RegisterPage() {
 
         <p className="mt-7 text-center text-sm text-slate-500">
           Already have an account?{" "}
-          <Link href="/login" className="font-semibold text-indigo-400 hover:text-indigo-300 transition">
+          <Link href="/login" className="font-semibold text-emerald-500 hover:text-teal-500 transition">
             Login
           </Link>
         </p>

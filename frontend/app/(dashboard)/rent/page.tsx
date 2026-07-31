@@ -143,14 +143,14 @@ export default function RentDashboard() {
     <div className="space-y-8 p-6 max-w-7xl">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2" style={{ fontFamily: "var(--font-outfit)" }}>Rent Dashboard</h1>
-          <p className="text-sm text-slate-400">Real-time oversight of your property portfolio performance.</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2" style={{ fontFamily: "var(--font-outfit)" }}>Rent Dashboard</h1>
+          <p className="text-sm text-slate-500">Real-time oversight of your property portfolio performance.</p>
         </div>
         <div className="flex gap-3">
-          <button onClick={() => setIsTenantModalOpen(true)} className="flex items-center gap-2 rounded-xl bg-[#1A1333] border border-white/10 px-4 py-2.5 text-sm font-semibold text-white hover:bg-white/5 transition">
+          <button onClick={() => setIsTenantModalOpen(true)} className="flex items-center gap-2 rounded-xl bg-white border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition">
             <User className="h-4 w-4" /> Add Tenant
           </button>
-          <button onClick={() => setIsBillModalOpen(true)} className="flex items-center gap-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 px-5 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-indigo-500/25 transition">
+          <button onClick={() => setIsBillModalOpen(true)} className="flex items-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-emerald-500/25 transition">
             <Receipt className="h-4 w-4" /> Generate Rent Bill
           </button>
         </div>
@@ -158,47 +158,47 @@ export default function RentDashboard() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-2xl border border-white/5 bg-[#1A1333] p-5">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5">
           <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Total Collection</p>
-          <p className="text-3xl font-bold text-white mb-2">NPR {totalCollected.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-slate-900 mb-2">NPR {totalCollected.toLocaleString()}</p>
           <p className="text-xs text-emerald-400 flex items-center gap-1"><ArrowUpRight className="h-3 w-3" /> +12.5% this month</p>
         </div>
-        <div className="rounded-2xl border border-white/5 bg-[#1A1333] p-5">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5">
           <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Occupancy Rate</p>
-          <p className="text-3xl font-bold text-white mb-2">94.2%</p>
-          <div className="h-1.5 w-full rounded-full bg-white/5 overflow-hidden mt-3">
-            <div className="h-full bg-indigo-400 rounded-full" style={{ width: '94.2%' }}></div>
+          <p className="text-3xl font-bold text-slate-900 mb-2">94.2%</p>
+          <div className="h-1.5 w-full rounded-full bg-slate-50 overflow-hidden mt-3">
+            <div className="h-full bg-emerald-500 rounded-full" style={{ width: '94.2%' }}></div>
           </div>
         </div>
-        <div className="rounded-2xl border border-white/5 bg-[#1A1333] p-5">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5">
           <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Overdue Payments</p>
           <p className="text-3xl font-bold text-red-400 mb-2">NPR {totalPending.toLocaleString()}</p>
-          <p className="text-xs text-slate-400">{overdueCount} Tenants outstanding</p>
+          <p className="text-xs text-slate-500">{overdueCount} Tenants outstanding</p>
         </div>
-        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#1E293B] to-[#0F172A] p-5 relative overflow-hidden">
-          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-indigo-500/10 blur-2xl"></div>
-          <p className="text-xs font-semibold text-indigo-500 uppercase tracking-widest mb-2 relative z-10 flex items-center gap-1.5"><TrendingUp className="h-3 w-3" /> AI Yield Forecast</p>
-          <p className="text-3xl font-bold text-indigo-400 mb-2 relative z-10">NPR {(totalCollected * 1.15).toLocaleString()}</p>
-          <p className="text-xs text-slate-400 relative z-10">Predicted for next cycle</p>
+        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-[#1E293B] to-[#0F172A] p-5 relative overflow-hidden">
+          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-emerald-500/10 blur-2xl"></div>
+          <p className="text-xs font-semibold text-emerald-500 uppercase tracking-widest mb-2 relative z-10 flex items-center gap-1.5"><TrendingUp className="h-3 w-3" /> AI Yield Forecast</p>
+          <p className="text-3xl font-bold text-emerald-500 mb-2 relative z-10">NPR {(totalCollected * 1.15).toLocaleString()}</p>
+          <p className="text-xs text-slate-500 relative z-10">Predicted for next cycle</p>
         </div>
       </div>
 
       {/* Active Tenants */}
       <div>
         <div className="flex justify-between items-end mb-4">
-          <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Active Tenants</h2>
-          <button className="text-xs text-indigo-400 font-semibold hover:underline flex items-center gap-1">View All <ArrowUpRight className="h-3 w-3" /></button>
+          <h2 className="text-lg font-bold text-slate-900" style={{ fontFamily: "var(--font-outfit)" }}>Active Tenants</h2>
+          <button className="text-xs text-emerald-500 font-semibold hover:underline flex items-center gap-1">View All <ArrowUpRight className="h-3 w-3" /></button>
         </div>
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 animate-pulse">
-            {[1, 2, 3, 4].map(i => <div key={i} className="h-32 rounded-2xl bg-white/5" />)}
+            {[1, 2, 3, 4].map(i => <div key={i} className="h-32 rounded-2xl bg-slate-50" />)}
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {tenants.map(tenant => {
               const hasOverdue = (tenant.bills || []).some((b: any) => b.status === "UNPAID");
               return (
-                <div key={tenant.id} className="rounded-2xl border border-white/5 bg-[#1A1333] p-5 relative group">
+                <div key={tenant.id} className="rounded-2xl border border-slate-200 bg-white p-5 relative group">
                   <div className="absolute top-4 right-4">
                     <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${hasOverdue ? "bg-red-500/10 text-red-400" : "bg-emerald-500/10 text-emerald-400"}`}>
                       {hasOverdue ? "Unpaid" : "Paid"}
@@ -208,20 +208,20 @@ export default function RentDashboard() {
                     <Trash2 className="h-3 w-3" />
                   </button>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="h-10 w-10 rounded-full bg-slate-700 border-2 border-[#1E293B] shadow-md flex items-center justify-center font-bold text-sm text-white">
+                    <div className="h-10 w-10 rounded-full bg-slate-700 border-2 border-[#1E293B] shadow-md flex items-center justify-center font-bold text-sm text-slate-900">
                       {tenant.name.charAt(0)}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-slate-200 text-sm">{tenant.name}</h3>
+                      <h3 className="font-semibold text-slate-800 text-sm">{tenant.name}</h3>
                       <p className="text-xs text-slate-500">{tenant.roomOrProperty || "General"}</p>
                     </div>
                   </div>
-                  <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
-                    <span className="text-sm font-bold text-white">
+                  <div className="mt-4 pt-4 border-t border-slate-200 flex items-center justify-between">
+                    <span className="text-sm font-bold text-slate-900">
                       NPR {(tenant.bills?.[0]?.amount || 0).toLocaleString()}
                       <span className="text-xs font-normal text-slate-500">/mo</span>
                     </span>
-                    <button className="text-slate-500 hover:text-white transition">
+                    <button className="text-slate-500 hover:text-slate-900 transition">
                       <div className="flex gap-0.5">
                         <div className="h-1 w-1 bg-current rounded-full"></div>
                         <div className="h-1 w-1 bg-current rounded-full"></div>
@@ -237,17 +237,17 @@ export default function RentDashboard() {
       </div>
 
       {/* Rent Ledger */}
-      <div className="rounded-2xl border border-white/5 bg-[#1A1333] overflow-hidden flex flex-col">
-        <div className="p-5 border-b border-white/5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden flex flex-col">
+        <div className="p-5 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Rent Ledger</h2>
-            <p className="text-xs text-slate-400 mt-1">Historical and pending payment breakdown</p>
+            <h2 className="text-lg font-bold text-slate-900" style={{ fontFamily: "var(--font-outfit)" }}>Rent Ledger</h2>
+            <p className="text-xs text-slate-500 mt-1">Historical and pending payment breakdown</p>
           </div>
           <div className="flex gap-2">
-            <button className="flex items-center gap-2 text-xs font-semibold text-slate-300 border border-white/10 bg-[#0F0B1E] px-3 py-2 rounded-lg hover:bg-white/5 transition">
+            <button className="flex items-center gap-2 text-xs font-semibold text-slate-700 border border-slate-200 bg-slate-50 px-3 py-2 rounded-lg hover:bg-slate-50 transition">
               <Filter className="h-3 w-3" /> Filter
             </button>
-            <button className="flex items-center gap-2 text-xs font-semibold text-slate-300 border border-white/10 bg-[#0F0B1E] px-3 py-2 rounded-lg hover:bg-white/5 transition">
+            <button className="flex items-center gap-2 text-xs font-semibold text-slate-700 border border-slate-200 bg-slate-50 px-3 py-2 rounded-lg hover:bg-slate-50 transition">
               <Download className="h-3 w-3" /> Export
             </button>
           </div>
@@ -255,7 +255,7 @@ export default function RentDashboard() {
         
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm whitespace-nowrap">
-            <thead className="text-[10px] font-bold uppercase tracking-widest text-slate-500 border-b border-white/5 bg-white/3">
+            <thead className="text-[10px] font-bold uppercase tracking-widest text-slate-500 border-b border-slate-200 bg-white/3">
               <tr>
                 <th className="px-5 py-4">Transaction ID</th>
                 <th className="px-5 py-4">Tenant</th>
@@ -272,15 +272,15 @@ export default function RentDashboard() {
                 </tr>
               ) : (
                 allBills.map((bill: any) => (
-                  <tr key={bill.id} className="border-b border-white/5 hover:bg-white/3 transition">
+                  <tr key={bill.id} className="border-b border-slate-200 hover:bg-white/3 transition">
                     <td className="px-5 py-4 text-slate-500 text-xs font-mono">#INV-{bill.id.substring(bill.id.length - 6).toUpperCase()}</td>
-                    <td className="px-5 py-4 font-semibold text-slate-200">{bill.tenantName}</td>
-                    <td className="px-5 py-4 text-slate-400">
+                    <td className="px-5 py-4 font-semibold text-slate-800">{bill.tenantName}</td>
+                    <td className="px-5 py-4 text-slate-500">
                       <div className="flex flex-col">
                         <span>{new Date(bill.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                       </div>
                     </td>
-                    <td className="px-5 py-4 font-bold text-white">NPR {bill.amount.toLocaleString()}</td>
+                    <td className="px-5 py-4 font-bold text-slate-900">NPR {bill.amount.toLocaleString()}</td>
                     <td className="px-5 py-4">
                       {bill.status === "PAID" ? (
                         <span className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full w-fit">
@@ -294,7 +294,7 @@ export default function RentDashboard() {
                     </td>
                     <td className="px-5 py-4 text-right">
                       {bill.status === "UNPAID" ? (
-                        <button onClick={() => handlePayBill(bill.id)} className="text-xs font-semibold text-indigo-400 hover:text-indigo-300">
+                        <button onClick={() => handlePayBill(bill.id)} className="text-xs font-semibold text-emerald-500 hover:text-teal-500">
                           Mark Paid
                         </button>
                       ) : (
@@ -314,22 +314,22 @@ export default function RentDashboard() {
       {/* Add Tenant Modal */}
       {isTenantModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }} onClick={(e) => e.target === e.currentTarget && setIsTenantModalOpen(false)}>
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1A1333] p-6 shadow-2xl">
-            <h2 className="text-xl font-bold text-white mb-6" style={{ fontFamily: "var(--font-outfit)" }}>Add New Tenant</h2>
+          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
+            <h2 className="text-xl font-bold text-slate-900 mb-6" style={{ fontFamily: "var(--font-outfit)" }}>Add New Tenant</h2>
             <form onSubmit={handleAddTenant} className="space-y-4">
               <div>
-                <label className="text-xs font-semibold text-indigo-400 mb-2 block">Tenant Name</label>
+                <label className="text-xs font-semibold text-emerald-500 mb-2 block">Tenant Name</label>
                 <input type="text" required value={newTenant.name} onChange={e => setNewTenant({ ...newTenant, name: e.target.value })}
-                  className="w-full rounded-xl border border-white/5 bg-[#0F0B1E] px-4 py-3 text-sm text-slate-200 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition" />
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition" />
               </div>
               <div>
-                <label className="text-xs font-semibold text-indigo-400 mb-2 block">Room / Property</label>
+                <label className="text-xs font-semibold text-emerald-500 mb-2 block">Room / Property</label>
                 <input type="text" value={newTenant.roomOrProperty} onChange={e => setNewTenant({ ...newTenant, roomOrProperty: e.target.value })}
-                  className="w-full rounded-xl border border-white/5 bg-[#0F0B1E] px-4 py-3 text-sm text-slate-200 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition" />
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition" />
               </div>
               {tenantError && <div className="text-sm text-red-400 bg-red-500/10 rounded-xl p-3">{tenantError}</div>}
               {tenantSuccess && <div className="text-sm text-emerald-400 bg-emerald-500/10 rounded-xl p-3">{tenantSuccess}</div>}
-              <button type="submit" disabled={savingTenant} className="w-full rounded-xl bg-indigo-500 hover:bg-indigo-400 py-3 text-sm font-bold text-slate-900 shadow-lg shadow-indigo-500/25 transition mt-2">
+              <button type="submit" disabled={savingTenant} className="w-full rounded-xl bg-emerald-500 hover:bg-emerald-500 py-3 text-sm font-bold text-slate-900 shadow-lg shadow-emerald-500/25 transition mt-2">
                 {savingTenant ? "Saving..." : "Save Tenant"}
               </button>
             </form>
@@ -340,30 +340,30 @@ export default function RentDashboard() {
       {/* Add Bill Modal */}
       {isBillModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }} onClick={(e) => e.target === e.currentTarget && setIsBillModalOpen(false)}>
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1A1333] p-6 shadow-2xl">
-            <h2 className="text-xl font-bold text-white mb-6" style={{ fontFamily: "var(--font-outfit)" }}>Generate Rent Bill</h2>
+          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
+            <h2 className="text-xl font-bold text-slate-900 mb-6" style={{ fontFamily: "var(--font-outfit)" }}>Generate Rent Bill</h2>
             <form onSubmit={handleAddBill} className="space-y-4">
               <div>
-                <label className="text-xs font-semibold text-indigo-400 mb-2 block">Select Tenant</label>
+                <label className="text-xs font-semibold text-emerald-500 mb-2 block">Select Tenant</label>
                 <select required value={newBill.tenantId} onChange={e => setNewBill({ ...newBill, tenantId: e.target.value })}
-                  className="w-full rounded-xl border border-white/5 bg-[#0F0B1E] px-4 py-3 text-sm text-slate-200 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition">
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition">
                   <option value="">Choose tenant...</option>
                   {tenants.map(t => <option key={t.id} value={t.id}>{t.name} {t.roomOrProperty ? `(${t.roomOrProperty})` : ""}</option>)}
                 </select>
               </div>
               <div>
-                <label className="text-xs font-semibold text-indigo-400 mb-2 block">Bill Title</label>
+                <label className="text-xs font-semibold text-emerald-500 mb-2 block">Bill Title</label>
                 <input type="text" placeholder="e.g. June Rent" required value={newBill.title} onChange={e => setNewBill({ ...newBill, title: e.target.value })}
-                  className="w-full rounded-xl border border-white/5 bg-[#0F0B1E] px-4 py-3 text-sm text-slate-200 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition" />
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition" />
               </div>
               <div>
-                <label className="text-xs font-semibold text-indigo-400 mb-2 block">Amount (NPR)</label>
+                <label className="text-xs font-semibold text-emerald-500 mb-2 block">Amount (NPR)</label>
                 <input type="number" required value={newBill.amount} onChange={e => setNewBill({ ...newBill, amount: e.target.value })}
-                  className="w-full rounded-xl border border-white/5 bg-[#0F0B1E] px-4 py-3 text-sm text-slate-200 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition" />
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition" />
               </div>
               {billError && <div className="text-sm text-red-400 bg-red-500/10 rounded-xl p-3">{billError}</div>}
               {billSuccess && <div className="text-sm text-emerald-400 bg-emerald-500/10 rounded-xl p-3">{billSuccess}</div>}
-              <button type="submit" disabled={savingBill || tenants.length === 0} className="w-full rounded-xl bg-indigo-500 hover:bg-indigo-400 py-3 text-sm font-bold text-slate-900 shadow-lg shadow-indigo-500/25 transition mt-2">
+              <button type="submit" disabled={savingBill || tenants.length === 0} className="w-full rounded-xl bg-emerald-500 hover:bg-emerald-500 py-3 text-sm font-bold text-slate-900 shadow-lg shadow-emerald-500/25 transition mt-2">
                 {savingBill ? "Generating..." : "Issue Bill"}
               </button>
             </form>
@@ -375,26 +375,26 @@ export default function RentDashboard() {
       {deleteModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}
           onClick={(e) => e.target === e.currentTarget && !isDeleting && setDeleteModalOpen(false)}>
-          <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#1A1333] p-6 shadow-2xl">
+          <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
             <div className="flex justify-between items-start mb-4">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">
                   <AlertTriangle className="h-5 w-5 text-red-400" />
                 </div>
-                <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Delete Tenant?</h2>
+                <h2 className="text-lg font-bold text-slate-900" style={{ fontFamily: "var(--font-outfit)" }}>Delete Tenant?</h2>
               </div>
-              <button onClick={() => setDeleteModalOpen(false)} disabled={isDeleting} className="text-slate-500 hover:text-slate-300 transition">
+              <button onClick={() => setDeleteModalOpen(false)} disabled={isDeleting} className="text-slate-500 hover:text-slate-700 transition">
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <p className="text-sm text-slate-400 mb-6">Are you sure you want to delete this tenant and all their bills? This action cannot be undone.</p>
+            <p className="text-sm text-slate-500 mb-6">Are you sure you want to delete this tenant and all their bills? This action cannot be undone.</p>
             <div className="flex gap-3">
               <button type="button" onClick={() => setDeleteModalOpen(false)} disabled={isDeleting}
-                className="flex-1 rounded-xl border border-white/10 py-2.5 text-sm font-medium text-slate-400 hover:bg-white/5 transition">
+                className="flex-1 rounded-xl border border-slate-200 py-2.5 text-sm font-medium text-slate-500 hover:bg-slate-50 transition">
                 Cancel
               </button>
               <button type="button" onClick={handleDeleteTenant} disabled={isDeleting}
-                className="flex-1 rounded-xl bg-red-500 hover:bg-red-400 py-2.5 text-sm font-bold text-white shadow-lg shadow-red-500/20 transition disabled:opacity-50">
+                className="flex-1 rounded-xl bg-red-500 hover:bg-red-400 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-red-500/20 transition disabled:opacity-50">
                 {isDeleting ? "Deleting..." : "Delete"}
               </button>
             </div>

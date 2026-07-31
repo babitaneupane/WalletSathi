@@ -54,7 +54,7 @@ export default function AIInsightsPage() {
           <button 
             onClick={handleGenerate}
             disabled={generating}
-            className="flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-medium text-white transition hover:bg-primary-hover shadow-lg shadow-primary/30 disabled:opacity-50"
+            className="flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-medium text-slate-900 transition hover:bg-primary-hover shadow-lg shadow-primary/30 disabled:opacity-50"
           >
             {generating ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
             {generating ? "Analyzing..." : "Generate New Insights"}
@@ -79,7 +79,7 @@ export default function AIInsightsPage() {
             <div className="flex justify-between items-start mb-6">
               <span className="text-xs font-bold text-primary uppercase tracking-widest">SPENDING SUMMARY</span>
               <div className="rounded-full bg-slate-100 p-2">
-                <BrainCircuit className="h-5 w-5 text-slate-400" />
+                <BrainCircuit className="h-5 w-5 text-slate-500" />
               </div>
             </div>
             
@@ -132,7 +132,7 @@ export default function AIInsightsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {insights.map((insight: any) => (
                 <div key={insight.id} className="glass rounded-xl p-5 border border-slate-200 shadow-sm">
-                  <p className="text-xs text-slate-400 mb-3">{new Date(insight.createdAt).toLocaleString()}</p>
+                  <p className="text-xs text-slate-500 mb-3">{new Date(insight.createdAt).toLocaleString()}</p>
                   <p className="text-sm text-slate-700 leading-relaxed">{insight.summary}</p>
                 </div>
               ))}

@@ -54,9 +54,9 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-white/5 bg-[#0F0B1E]/90 px-6 backdrop-blur-md">
+    <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-slate-200 bg-slate-50/90 px-6 backdrop-blur-md">
       <div>
-        <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
+        <h2 className="text-lg font-bold text-slate-900" style={{ fontFamily: "var(--font-outfit)" }}>
           {pageTitle()}
         </h2>
         <p className="text-xs text-slate-500">
@@ -74,7 +74,7 @@ export default function Header() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleSearch}
-            className="h-9 w-56 rounded-xl border border-white/10 bg-white/5 pl-9 pr-4 text-sm text-slate-300 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
+            className="h-9 w-56 rounded-xl border border-slate-200 bg-slate-50 pl-9 pr-4 text-sm text-slate-700 placeholder:text-slate-600 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
           />
         </div>
 
@@ -82,18 +82,18 @@ export default function Header() {
         <div className="relative" ref={notifRef}>
           <button 
             onClick={() => setIsNotifOpen(!isNotifOpen)}
-            className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 hover:text-slate-200 hover:bg-white/10 transition"
+            className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition"
           >
             <Bell className="h-4 w-4" />
             <span className="absolute top-2 right-2 h-1.5 w-1.5 rounded-full bg-red-500"></span>
           </button>
 
           {isNotifOpen && (
-            <div className="absolute right-0 mt-2 w-64 rounded-xl border border-white/10 bg-[#1A1333] shadow-lg shadow-black/50 p-4 z-50">
-              <h4 className="text-sm font-semibold text-white mb-2">Notifications</h4>
+            <div className="absolute right-0 mt-2 w-64 rounded-xl border border-slate-200 bg-white shadow-lg shadow-slate-200/50 p-4 z-50">
+              <h4 className="text-sm font-semibold text-slate-900 mb-2">Notifications</h4>
               <div className="flex flex-col gap-2">
-                <div className="rounded-lg bg-white/5 p-2 text-xs text-slate-300 border border-white/5">
-                  <p className="font-medium text-indigo-400 mb-0.5">Welcome!</p>
+                <div className="rounded-lg bg-slate-50 p-2 text-xs text-slate-700 border border-slate-200">
+                  <p className="font-medium text-emerald-500 mb-0.5">Welcome!</p>
                   <p>Your WalletSathi account is ready.</p>
                 </div>
               </div>
@@ -105,22 +105,22 @@ export default function Header() {
         <div className="relative" ref={profileRef}>
           <div 
             onClick={() => setIsProfileOpen(!isProfileOpen)}
-            className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 pl-1 pr-3 py-1 cursor-pointer hover:bg-white/10 transition"
+            className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 pl-1 pr-3 py-1 cursor-pointer hover:bg-slate-100 transition"
           >
-            <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs shadow">
+            <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-emerald-500 to-purple-600 flex items-center justify-center text-slate-900 font-bold text-xs shadow">
               {user?.name?.charAt(0).toUpperCase() || "U"}
             </div>
             <div className="hidden sm:block">
-              <p className="text-sm font-semibold text-slate-200 leading-none">{user?.name || "User"}</p>
+              <p className="text-sm font-semibold text-slate-800 leading-none">{user?.name || "User"}</p>
             </div>
             <ChevronDown className={`h-3.5 w-3.5 text-slate-500 ml-1 transition-transform ${isProfileOpen ? "rotate-180" : ""}`} />
           </div>
 
           {isProfileOpen && (
-            <div className="absolute right-0 mt-2 w-48 rounded-xl border border-white/10 bg-[#1A1333] shadow-lg shadow-black/50 py-1 z-50">
-              <div className="px-4 py-3 border-b border-white/5 mb-1 bg-white/5 rounded-t-xl mx-1 mt-1">
-                <p className="text-sm font-semibold text-white">{user?.name || "User"}</p>
-                <p className="text-[10px] text-slate-400 truncate mt-0.5">{user?.email || "user@example.com"}</p>
+            <div className="absolute right-0 mt-2 w-48 rounded-xl border border-slate-200 bg-white shadow-lg shadow-slate-200/50 py-1 z-50">
+              <div className="px-4 py-3 border-b border-slate-200 mb-1 bg-slate-50 rounded-t-xl mx-1 mt-1">
+                <p className="text-sm font-semibold text-slate-900">{user?.name || "User"}</p>
+                <p className="text-[10px] text-slate-500 truncate mt-0.5">{user?.email || "user@example.com"}</p>
               </div>
               
               <button 

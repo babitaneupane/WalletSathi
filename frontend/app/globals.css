@@ -1,38 +1,38 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-primary: #6366F1;
-  --color-primary-hover: #818CF8;
-  --color-secondary: #A5B4FC;
-  --color-tertiary: #F0ABFC;
+  --color-primary: #10B981;
+  --color-primary-hover: #059669;
+  --color-secondary: #14B8A6;
+  --color-tertiary: #0EA5E9;
   --color-success: #10B981;
   --color-danger: #EF4444;
   --color-warning: #F59E0B;
   --color-info: #3B82F6;
-  --color-background: #0F0B1E;
-  --color-surface: #1A1333;
+  --color-background: #F8FAFC;
+  --color-surface: #FFFFFF;
   --font-sans: var(--font-inter);
   --font-heading: var(--font-outfit);
 }
 
 body {
   background-color: var(--color-background);
-  color: #F8FAFC;
+  color: #0F172A;
 }
 
-/* Glassmorphism utilities for dark mode */
+/* Glassmorphism utilities for light mode */
 .glass {
-  background: rgba(38, 85, 119, 0.6);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 
-/* ── react-calendar dark theme override ── */
+/* ── react-calendar light theme override ── */
 .wallet-calendar {
   background: transparent !important;
   border: none !important;
-  color: #F1F5F9;
+  color: #0F172A;
   font-family: var(--font-sans), sans-serif;
   width: 100% !important;
 }
@@ -56,7 +56,7 @@ body {
 
 .wallet-calendar .react-calendar__navigation button {
   background: transparent;
-  color: #CBD5E1;
+  color: #475569;
   font-weight: 600;
   font-size: 0.875rem;
   border-radius: 8px;
@@ -66,12 +66,12 @@ body {
 }
 
 .wallet-calendar .react-calendar__navigation button:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.06);
-  color: #F1F5F9;
+  background: rgba(0, 0, 0, 0.05);
+  color: #0F172A;
 }
 
 .wallet-calendar .react-calendar__navigation button:disabled {
-  color: #475569;
+  color: #CBD5E1;
   cursor: default;
 }
 
@@ -80,7 +80,7 @@ body {
   text-align: center;
   font-size: 0.7rem;
   font-weight: 600;
-  color: #475569;
+  color: #64748B;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 4px;
@@ -100,7 +100,7 @@ body {
 /* Day tiles */
 .wallet-calendar .react-calendar__tile {
   background: transparent;
-  color: #CBD5E1;
+  color: #334155;
   border-radius: 8px;
   padding: 7px 4px;
   font-size: 0.8rem;
@@ -121,8 +121,8 @@ body {
 }
 
 .wallet-calendar .react-calendar__tile:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.06) !important;
-  color: #F1F5F9;
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: #0F172A;
 }
 
 .wallet-calendar .react-calendar__tile:focus {
@@ -132,21 +132,21 @@ body {
 
 /* Today */
 .wallet-calendar .react-calendar__tile--now {
-  background: rgba(99, 102, 241, 0.12) !important;
-  color: #818CF8 !important;
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #059669 !important;
   font-weight: 700;
 }
 
 .wallet-calendar .react-calendar__tile--now:hover:not(:disabled) {
-  background: rgba(99, 102, 241, 0.22) !important;
+  background: rgba(16, 185, 129, 0.25) !important;
 }
 
 /* Selected / range start & end */
 .wallet-calendar .react-calendar__tile--active,
 .wallet-calendar .react-calendar__tile--rangeStart,
 .wallet-calendar .react-calendar__tile--rangeEnd {
-  background: #6366F1 !important;
-  color: #0F0B1E !important;
+  background: #10B981 !important;
+  color: #FFFFFF !important;
   font-weight: 700;
   border-radius: 8px !important;
 }
@@ -154,13 +154,13 @@ body {
 .wallet-calendar .react-calendar__tile--active:hover,
 .wallet-calendar .react-calendar__tile--rangeStart:hover,
 .wallet-calendar .react-calendar__tile--rangeEnd:hover {
-  background: #818CF8 !important;
+  background: #059669 !important;
 }
 
 /* Range in between */
 .wallet-calendar .react-calendar__tile--range {
-  background: rgba(99, 102, 241, 0.15) !important;
-  color: #E2E8F0 !important;
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #0F172A !important;
   border-radius: 0 !important;
 }
 
@@ -174,11 +174,11 @@ body {
 
 /* Neighbouring-month days */
 .wallet-calendar .react-calendar__month-view__days__day--neighboringMonth {
-  color: #334155;
+  color: #CBD5E1;
 }
 
 /* Disabled tiles */
 .wallet-calendar .react-calendar__tile:disabled {
-  color: #334155;
+  color: #CBD5E1;
   cursor: not-allowed;
 }
