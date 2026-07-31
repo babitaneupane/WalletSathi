@@ -208,8 +208,10 @@ export const sendOtp = async (req: Request, res: Response): Promise<void> => {
             },
         });
 
-        // Send code to email
-        await sendOtpEmail(email, code, type);
+        // Send code to email asynchronously
+        sendOtpEmail(email, code, type).catch((err) => {
+            console.error("Failed to send OTP email:", err);
+        });
 
         res.json({ message: `Verification code sent to ${email}` });
     } catch (error: any) {

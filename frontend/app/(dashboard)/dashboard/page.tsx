@@ -499,8 +499,8 @@ export default function DashboardPage() {
           <button
             onClick={() => setIsFilterOpen(prev => !prev)}
             className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium transition ${isFiltered
-                ? "bg-emerald-500 text-slate-900 hover:bg-emerald-500"
-                : "bg-gray-700 hover:bg-gray-600 text-slate-800"
+              ? "bg-emerald-500 text-slate-900 hover:bg-emerald-500"
+              : "bg-gray-700 hover:bg-gray-600 text-slate-800"
               }`}
           >
             <CalendarDays className="h-4 w-4" />
@@ -646,8 +646,8 @@ export default function DashboardPage() {
                 <button
                   onClick={() => setChartType("bar")}
                   className={`px-3 py-1.5 font-medium transition-all ${chartType === "bar"
-                      ? "bg-emerald-500 text-slate-900"
-                      : "bg-transparent text-slate-500 hover:text-slate-800"
+                    ? "bg-emerald-500 text-slate-900"
+                    : "bg-transparent text-slate-500 hover:text-slate-800"
                     }`}
                 >
                   Bar
@@ -655,8 +655,8 @@ export default function DashboardPage() {
                 <button
                   onClick={() => setChartType("area")}
                   className={`px-3 py-1.5 font-medium transition-all ${chartType === "area"
-                      ? "bg-emerald-500 text-slate-900"
-                      : "bg-transparent text-slate-500 hover:text-slate-800"
+                    ? "bg-emerald-500 text-slate-900"
+                    : "bg-transparent text-slate-500 hover:text-slate-800"
                     }`}
                 >
                   Area
@@ -988,3 +988,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+
