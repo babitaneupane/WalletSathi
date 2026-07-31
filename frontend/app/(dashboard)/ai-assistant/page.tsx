@@ -107,20 +107,20 @@ export default function AIAssistantPage() {
 
       <div className="flex-1 grid lg:grid-cols-3 gap-8 min-h-0">
         {/* Left Column — Chat Interface */}
-        <div className="lg:col-span-2 flex flex-col rounded-3xl border border-white/5 bg-[#1E293B] shadow-2xl overflow-hidden relative">
-          <div className="absolute top-0 right-0 h-[500px] w-[500px] bg-cyan-500/5 rounded-full blur-3xl -mr-40 -mt-40 pointer-events-none" />
+        <div className="lg:col-span-2 flex flex-col rounded-3xl border border-white/5 bg-[#1A1333] shadow-2xl overflow-hidden relative">
+          <div className="absolute top-0 right-0 h-[500px] w-[500px] bg-indigo-500/5 rounded-full blur-3xl -mr-40 -mt-40 pointer-events-none" />
 
           {/* Messages Area */}
           <div className="flex-1 overflow-y-auto p-6 space-y-6 relative z-10 scrollbar-hide">
             {historyLoading ? (
               <div className="flex items-center justify-center h-full">
-                <Loader2 className="h-8 w-8 text-cyan-400 animate-spin" />
+                <Loader2 className="h-8 w-8 text-indigo-400 animate-spin" />
               </div>
             ) : messages.length === 0 ? (
               /* Empty state — welcome screen */
               <div className="flex flex-col items-center justify-center h-full gap-6 text-center px-4">
-                <div className="h-20 w-20 rounded-full bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
-                  <Sparkles className="h-10 w-10 text-cyan-400" />
+                <div className="h-20 w-20 rounded-full bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
+                  <Sparkles className="h-10 w-10 text-indigo-400" />
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white mb-2">Ask me about your finances</h2>
@@ -136,9 +136,9 @@ export default function AIAssistantPage() {
                       key={q}
                       onClick={() => handleSuggestion(q)}
                       disabled={loading}
-                      className="text-left text-sm px-4 py-3 rounded-xl border border-white/10 bg-[#0F172A] text-slate-300 hover:border-cyan-500/40 hover:text-white hover:bg-cyan-500/5 transition-all duration-200 flex items-center gap-3"
+                      className="text-left text-sm px-4 py-3 rounded-xl border border-white/10 bg-[#0F0B1E] text-slate-300 hover:border-indigo-500/40 hover:text-white hover:bg-indigo-500/5 transition-all duration-200 flex items-center gap-3"
                     >
-                      <MessageSquare className="h-4 w-4 text-cyan-400 shrink-0" />
+                      <MessageSquare className="h-4 w-4 text-indigo-400 shrink-0" />
                       {q}
                     </button>
                   ))}
@@ -147,7 +147,7 @@ export default function AIAssistantPage() {
             ) : (
               <>
                 <div className="flex justify-center my-2">
-                  <span className="text-[10px] font-bold px-3 py-1 bg-[#0F172A] text-slate-500 rounded-full uppercase tracking-widest border border-white/5">
+                  <span className="text-[10px] font-bold px-3 py-1 bg-[#0F0B1E] text-slate-500 rounded-full uppercase tracking-widest border border-white/5">
                     {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
                   </span>
                 </div>
@@ -156,12 +156,12 @@ export default function AIAssistantPage() {
                   <div key={msg.id} className={`flex flex-col ${msg.role === "user" ? "items-end" : "items-start"}`}>
                     <div
                       className={`max-w-[80%] rounded-2xl p-4 ${msg.role === "user"
-                        ? "bg-cyan-500 text-slate-900 rounded-tr-sm"
-                        : "bg-[#0F172A] border border-white/5 text-slate-200 rounded-tl-sm"
+                        ? "bg-indigo-500 text-slate-900 rounded-tr-sm"
+                        : "bg-[#0F0B1E] border border-white/5 text-slate-200 rounded-tl-sm"
                         }`}
                     >
                       {msg.role === "assistant" && (
-                        <div className="flex items-center gap-2 mb-2 text-cyan-400">
+                        <div className="flex items-center gap-2 mb-2 text-indigo-400">
                           <Sparkles className="h-4 w-4" />
                           <span className="text-xs font-bold uppercase tracking-widest">WalletSathi AI</span>
                         </div>
@@ -176,15 +176,15 @@ export default function AIAssistantPage() {
 
                 {loading && (
                   <div className="flex items-start">
-                    <div className="max-w-[80%] rounded-2xl rounded-tl-sm p-4 bg-[#0F172A] border border-white/5">
-                      <div className="flex items-center gap-2 mb-2 text-cyan-400">
+                    <div className="max-w-[80%] rounded-2xl rounded-tl-sm p-4 bg-[#0F0B1E] border border-white/5">
+                      <div className="flex items-center gap-2 mb-2 text-indigo-400">
                         <Sparkles className="h-4 w-4" />
                         <span className="text-xs font-bold uppercase tracking-widest">WalletSathi AI</span>
                       </div>
                       <div className="flex gap-1 items-center h-5">
-                        <span className="h-2 w-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: "0ms" }} />
-                        <span className="h-2 w-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: "150ms" }} />
-                        <span className="h-2 w-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: "300ms" }} />
+                        <span className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: "0ms" }} />
+                        <span className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: "150ms" }} />
+                        <span className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: "300ms" }} />
                       </div>
                     </div>
                   </div>
@@ -195,7 +195,7 @@ export default function AIAssistantPage() {
           </div>
 
           {/* Input Area */}
-          <div className="p-6 bg-[#1E293B] border-t border-white/5 relative z-10 shrink-0">
+          <div className="p-6 bg-[#1A1333] border-t border-white/5 relative z-10 shrink-0">
             <form onSubmit={handleSend} className="relative flex items-center">
               <button type="button" className="absolute left-4 text-slate-400 hover:text-white transition">
                 <Paperclip className="h-5 w-5" />
@@ -205,7 +205,7 @@ export default function AIAssistantPage() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask a question about your finances..."
-                className="w-full rounded-full border border-white/10 bg-[#0F172A] py-4 pl-12 pr-24 text-sm text-white placeholder:text-slate-500 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition shadow-inner"
+                className="w-full rounded-full border border-white/10 bg-[#0F0B1E] py-4 pl-12 pr-24 text-sm text-white placeholder:text-slate-500 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition shadow-inner"
               />
               <div className="absolute right-2 flex items-center gap-1">
                 <button type="button" className="p-2 text-slate-400 hover:text-white transition rounded-full hover:bg-white/5">
@@ -214,7 +214,7 @@ export default function AIAssistantPage() {
                 <button
                   type="submit"
                   disabled={!input.trim() || loading}
-                  className="p-2 bg-cyan-500 text-slate-900 rounded-full hover:bg-cyan-400 transition disabled:opacity-50 disabled:bg-slate-600 flex items-center justify-center"
+                  className="p-2 bg-indigo-500 text-slate-900 rounded-full hover:bg-indigo-400 transition disabled:opacity-50 disabled:bg-slate-600 flex items-center justify-center"
                 >
                   {loading ? <Loader2 className="h-4 w-4 animate-spin ml-0.5" /> : <Send className="h-4 w-4 ml-0.5" />}
                 </button>
@@ -234,11 +234,11 @@ export default function AIAssistantPage() {
           </div>
 
           {/* Suggested prompts panel */}
-          <div className="rounded-2xl border border-cyan-500/20 bg-[#1E293B] p-5 relative overflow-hidden group">
-            <div className="absolute right-0 top-0 h-24 w-24 bg-cyan-500/10 rounded-full blur-xl -mr-10 -mt-10 transition group-hover:bg-cyan-500/20" />
+          <div className="rounded-2xl border border-indigo-500/20 bg-[#1A1333] p-5 relative overflow-hidden group">
+            <div className="absolute right-0 top-0 h-24 w-24 bg-indigo-500/10 rounded-full blur-xl -mr-10 -mt-10 transition group-hover:bg-indigo-500/20" />
             <div className="flex items-center gap-3 mb-3 relative z-10">
-              <div className="h-8 w-8 rounded-full bg-cyan-500/10 flex items-center justify-center">
-                <Sparkles className="h-4 w-4 text-cyan-400" />
+              <div className="h-8 w-8 rounded-full bg-indigo-500/10 flex items-center justify-center">
+                <Sparkles className="h-4 w-4 text-indigo-400" />
               </div>
               <h4 className="font-bold text-white text-sm">Try Asking</h4>
             </div>
@@ -248,7 +248,7 @@ export default function AIAssistantPage() {
                   key={q}
                   onClick={() => handleSuggestion(q)}
                   disabled={loading}
-                  className="block w-full text-left text-xs text-slate-400 hover:text-cyan-400 transition py-1 border-b border-white/5 last:border-0"
+                  className="block w-full text-left text-xs text-slate-400 hover:text-indigo-400 transition py-1 border-b border-white/5 last:border-0"
                 >
                   → {q}
                 </button>
@@ -257,7 +257,7 @@ export default function AIAssistantPage() {
           </div>
 
           {/* Budget Alert Card */}
-          <div className="rounded-2xl border border-rose-500/20 bg-[#1E293B] p-5 relative overflow-hidden group">
+          <div className="rounded-2xl border border-rose-500/20 bg-[#1A1333] p-5 relative overflow-hidden group">
             <div className="absolute right-0 top-0 h-24 w-24 bg-rose-500/10 rounded-full blur-xl -mr-10 -mt-10 transition group-hover:bg-rose-500/20" />
             <div className="flex items-center gap-3 mb-3 relative z-10">
               <div className="h-8 w-8 rounded-full bg-rose-500/10 flex items-center justify-center">
@@ -271,19 +271,19 @@ export default function AIAssistantPage() {
           </div>
 
           {/* Cash Flow Widget */}
-          <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-5">
+          <div className="rounded-2xl border border-white/5 bg-[#1A1333] p-5">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <BarChart3 className="h-4 w-4 text-cyan-400" />
+                <BarChart3 className="h-4 w-4 text-indigo-400" />
                 <h4 className="font-bold text-white text-sm">Cash Flow Projection</h4>
               </div>
             </div>
             <div className="h-35 flex items-end gap-2 pt-1">
               {[25, 70, 30, 90, 60, 80].map((height, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                  <div className="w-full bg-[#0F172A] rounded-t-sm relative" style={{ height: "128px" }}>
+                  <div className="w-full bg-[#0F0B1E] rounded-t-sm relative" style={{ height: "128px" }}>
                     <div
-                      className={`w-full rounded-t-sm transition-all duration-500 absolute bottom-0 ${i === 3 ? "bg-cyan-500" : "bg-cyan-500/20 group-hover:bg-cyan-500/40"
+                      className={`w-full rounded-t-sm transition-all duration-500 absolute bottom-0 ${i === 3 ? "bg-indigo-500" : "bg-indigo-500/20 group-hover:bg-indigo-500/40"
                         }`}
                       style={{ height: `${height}%` }}
                     />

@@ -83,7 +83,7 @@ export default function GroupDetailPage() {
     return (
       <div className="flex flex-col items-center justify-center h-full p-6 gap-4">
         <p className="text-slate-400">Group not found.</p>
-        <button onClick={() => router.push("/groups")} className="text-cyan-400 hover:underline text-sm font-semibold flex items-center gap-1">
+        <button onClick={() => router.push("/groups")} className="text-indigo-400 hover:underline text-sm font-semibold flex items-center gap-1">
           <ArrowLeft className="h-4 w-4" /> Back to Groups
         </button>
       </div>
@@ -103,22 +103,22 @@ export default function GroupDetailPage() {
             <p className="text-sm text-slate-400 mt-0.5">{group.description || "No description"}</p>
           </div>
         </div>
-        <button onClick={() => setIsExpenseModalOpen(true)} className="flex items-center gap-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 px-4 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-cyan-500/25 transition">
+        <button onClick={() => setIsExpenseModalOpen(true)} className="flex items-center gap-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 px-4 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-indigo-500/25 transition">
           <Plus className="h-4 w-4" /> Add Expense
         </button>
       </div>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-5">
+        <div className="rounded-2xl border border-white/5 bg-[#1A1333] p-5">
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Total Spent</p>
           <p className="text-2xl font-bold text-white">NPR {totalSpent.toLocaleString()}</p>
         </div>
-        <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-5">
+        <div className="rounded-2xl border border-white/5 bg-[#1A1333] p-5">
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Your Share</p>
-          <p className="text-2xl font-bold text-cyan-400">NPR {group.members?.length > 0 ? (totalSpent / group.members.length).toLocaleString(undefined, { maximumFractionDigits: 0 }) : "0"}</p>
+          <p className="text-2xl font-bold text-indigo-400">NPR {group.members?.length > 0 ? (totalSpent / group.members.length).toLocaleString(undefined, { maximumFractionDigits: 0 }) : "0"}</p>
         </div>
-        <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-5">
+        <div className="rounded-2xl border border-white/5 bg-[#1A1333] p-5">
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Members</p>
           <div className="flex -space-x-2 mt-1">
             {(group.members || []).slice(0, 6).map((m: any, i: number) => (
@@ -134,15 +134,15 @@ export default function GroupDetailPage() {
       <div>
         <h2 className="text-lg font-bold text-white mb-4" style={{ fontFamily: "var(--font-outfit)" }}>Expense Feed</h2>
         {expenses.length === 0 ? (
-          <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-12 flex flex-col items-center gap-4 text-center">
-            <div className="h-12 w-12 rounded-full bg-cyan-500/10 flex items-center justify-center"><Receipt className="h-6 w-6 text-cyan-400" /></div>
+          <div className="rounded-2xl border border-white/5 bg-[#1A1333] p-12 flex flex-col items-center gap-4 text-center">
+            <div className="h-12 w-12 rounded-full bg-indigo-500/10 flex items-center justify-center"><Receipt className="h-6 w-6 text-indigo-400" /></div>
             <h3 className="font-bold text-slate-200">No expenses yet</h3>
             <p className="text-sm text-slate-500 max-w-xs">Click "Add Expense" to record a shared expense for this group.</p>
           </div>
         ) : (
           <div className="space-y-3">
             {expenses.map((expense: any) => (
-              <div key={expense.id} className="rounded-2xl border border-white/5 bg-[#1E293B] p-5 flex items-center justify-between hover:border-white/10 transition">
+              <div key={expense.id} className="rounded-2xl border border-white/5 bg-[#1A1333] p-5 flex items-center justify-between hover:border-white/10 transition">
                 <div className="flex items-center gap-4">
                   <div className="h-10 w-10 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center">
                     <TrendingDown className="h-5 w-5 text-red-400" />
@@ -175,7 +175,7 @@ export default function GroupDetailPage() {
       {isExpenseModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}
           onClick={e => e.target === e.currentTarget && setIsExpenseModalOpen(false)}>
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1E293B] p-6 shadow-2xl">
+          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1A1333] p-6 shadow-2xl">
             <div className="flex justify-between items-center mb-5">
               <div>
                 <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Add Group Expense</h2>
@@ -188,20 +188,20 @@ export default function GroupDetailPage() {
                 <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">What was it for?</label>
                 <input type="text" required value={expenseForm.title} onChange={e => setExpenseForm({ ...expenseForm, title: e.target.value })}
                   placeholder="e.g. Hotel, Dinner, Taxi"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition" />
+                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition" />
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Amount (NPR)</label>
                 <input type="number" required min="1" value={expenseForm.amount} onChange={e => setExpenseForm({ ...expenseForm, amount: e.target.value })}
                   placeholder="0.00"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition" />
+                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition" />
                 {expenseForm.amount && group.members?.length > 0 && (
-                  <p className="text-xs text-slate-500 mt-1.5">Each person pays: <strong className="text-cyan-400">NPR {(parseFloat(expenseForm.amount) / group.members.length).toLocaleString(undefined, { maximumFractionDigits: 2 })}</strong></p>
+                  <p className="text-xs text-slate-500 mt-1.5">Each person pays: <strong className="text-indigo-400">NPR {(parseFloat(expenseForm.amount) / group.members.length).toLocaleString(undefined, { maximumFractionDigits: 2 })}</strong></p>
                 )}
               </div>
               <div className="flex gap-3 pt-1">
                 <button type="button" onClick={() => setIsExpenseModalOpen(false)} className="flex-1 rounded-xl border border-white/10 py-2.5 text-sm font-medium text-slate-400 hover:bg-white/5 transition">Cancel</button>
-                <button type="submit" disabled={saving} className="flex-1 rounded-xl bg-cyan-500 hover:bg-cyan-400 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-cyan-500/20 transition flex items-center justify-center gap-2">
+                <button type="submit" disabled={saving} className="flex-1 rounded-xl bg-indigo-500 hover:bg-indigo-400 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-indigo-500/20 transition flex items-center justify-center gap-2">
                   {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
                   {saving ? "Saving..." : "Add Expense"}
                 </button>

@@ -111,21 +111,21 @@ export default function CategoriesPage() {
         </p>
       </div>
 
-      <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-6 shadow-xl">
+      <div className="rounded-2xl border border-white/5 bg-[#1A1333] p-6 shadow-xl">
         <form onSubmit={handleAddCategory} className="flex flex-col md:flex-row md:items-end gap-6">
           <div className="flex-1">
-            <label className="text-xs font-semibold text-cyan-400 mb-2 block">Category Name</label>
+            <label className="text-xs font-semibold text-indigo-400 mb-2 block">Category Name</label>
             <input
               type="text"
               placeholder="e.g. Cloud Infrastructure"
               value={newCategoryName}
               onChange={(e) => setNewCategoryName(e.target.value)}
-              className="w-full rounded-xl border border-white/5 bg-[#0F172A] px-4 py-3 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition shadow-inner"
+              className="w-full rounded-xl border border-white/5 bg-[#0F0B1E] px-4 py-3 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition shadow-inner"
               required
             />
           </div>
           <div>
-            <label className="text-xs font-semibold text-cyan-400 mb-2 block">Select Icon</label>
+            <label className="text-xs font-semibold text-indigo-400 mb-2 block">Select Icon</label>
             <div className="flex gap-2">
               {[
                 { id: "Wallet", Icon: Wallet },
@@ -137,7 +137,7 @@ export default function CategoriesPage() {
                   key={ic.id}
                   type="button"
                   onClick={() => setSelectedIcon(ic.id)}
-                  className={`p-3 rounded-xl transition ${selectedIcon === ic.id ? "bg-white/10 text-white" : "bg-[#0F172A] text-slate-500 hover:text-slate-300 hover:bg-white/5 border border-white/5"}`}
+                  className={`p-3 rounded-xl transition ${selectedIcon === ic.id ? "bg-white/10 text-white" : "bg-[#0F0B1E] text-slate-500 hover:text-slate-300 hover:bg-white/5 border border-white/5"}`}
                 >
                   <ic.Icon className="h-5 w-5" />
                 </button>
@@ -147,7 +147,7 @@ export default function CategoriesPage() {
           <button
             type="submit"
             disabled={isAdding || !newCategoryName.trim()}
-            className="rounded-xl bg-cyan-500 hover:bg-cyan-400 px-8 py-3 text-sm font-bold text-slate-900 shadow-lg shadow-cyan-500/25 transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:scale-100 h-[46px]"
+            className="rounded-xl bg-indigo-500 hover:bg-indigo-400 px-8 py-3 text-sm font-bold text-slate-900 shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:scale-100 h-[46px]"
           >
             {isAdding ? "Adding..." : "Add Category"}
           </button>
@@ -171,10 +171,10 @@ export default function CategoriesPage() {
               return (
                 <div
                   key={category.id}
-                  className="group flex items-center justify-between rounded-full border border-white/5 bg-[#1E293B] px-5 py-3.5 transition hover:border-white/10 hover:bg-white/5 cursor-pointer"
+                  className="group flex items-center justify-between rounded-full border border-white/5 bg-[#1A1333] px-5 py-3.5 transition hover:border-white/10 hover:bg-white/5 cursor-pointer"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-400 shrink-0">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-400 shrink-0">
                       <Icon className="h-4 w-4" />
                     </div>
                     <h3 className="text-sm font-semibold text-slate-200 truncate pr-2">{category.name}</h3>
@@ -199,7 +199,7 @@ export default function CategoriesPage() {
       {deleteModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}
           onClick={(e) => e.target === e.currentTarget && !isDeleting && setDeleteModalOpen(false)}>
-          <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#1E293B] p-6 shadow-2xl">
+          <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#1A1333] p-6 shadow-2xl">
             <div className="flex justify-between items-start mb-4">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">

@@ -224,7 +224,7 @@ export default function GroupDetailsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin text-cyan-400" />
+        <Loader2 className="h-8 w-8 animate-spin text-indigo-400" />
       </div>
     );
   }
@@ -233,7 +233,7 @@ export default function GroupDetailsPage() {
     return (
       <div className="p-6 text-center">
         <p className="text-red-400 mb-4">{error || "Group not found"}</p>
-        <Link href="/split" className="text-cyan-400 hover:underline">← Back to Groups</Link>
+        <Link href="/split" className="text-indigo-400 hover:underline">← Back to Groups</Link>
       </div>
     );
   }
@@ -246,11 +246,11 @@ export default function GroupDetailsPage() {
         </button>
         <div className="flex-1">
           <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>{group.name}</h1>
-          <p className="text-sm text-slate-400">{group.members.length} members • Code: <span className="font-mono text-cyan-400">{group.inviteCode}</span></p>
+          <p className="text-sm text-slate-400">{group.members.length} members • Code: <span className="font-mono text-indigo-400">{group.inviteCode}</span></p>
         </div>
         <button
           onClick={() => setIsAddExpenseOpen(true)}
-          className="rounded-xl bg-cyan-500 hover:bg-cyan-400 px-4 py-2 text-sm font-bold text-slate-900 shadow-lg shadow-cyan-500/25 transition flex items-center gap-2"
+          className="rounded-xl bg-indigo-500 hover:bg-indigo-400 px-4 py-2 text-sm font-bold text-slate-900 shadow-lg shadow-indigo-500/25 transition flex items-center gap-2"
         >
           <Plus className="h-4 w-4" /> Add Expense
         </button>
@@ -261,7 +261,7 @@ export default function GroupDetailsPage() {
           <h2 className="text-xl font-bold text-white mb-4" style={{ fontFamily: "var(--font-outfit)" }}>Recent Expenses</h2>
 
           {expenses.length === 0 ? (
-            <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-10 flex flex-col items-center text-center">
+            <div className="rounded-2xl border border-white/5 bg-[#1A1333] p-10 flex flex-col items-center text-center">
               <ReceiptNPRIcon className="h-10 w-10 text-slate-600 mb-3" />
               <p className="text-slate-400 font-medium">No expenses yet.</p>
               <p className="text-sm text-slate-500 mt-1">Add an expense to start splitting!</p>
@@ -281,10 +281,10 @@ export default function GroupDetailsPage() {
               });
 
               return (
-                <div key={exp.id} className="rounded-2xl border border-white/5 bg-[#1E293B] p-5 shadow space-y-4">
+                <div key={exp.id} className="rounded-2xl border border-white/5 bg-[#1A1333] p-5 shadow space-y-4">
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-400">
+                      <div className="h-10 w-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400">
                         <ReceiptNPRIcon className="h-5 w-5" />
                       </div>
                       <div>
@@ -305,7 +305,7 @@ export default function GroupDetailsPage() {
                     </div>
                     <div className="space-y-2">
                       {splitRows.map((row: any) => (
-                        <div key={row.userId} className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-[#0F172A] px-3 py-2">
+                        <div key={row.userId} className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-[#0F0B1E] px-3 py-2">
                           <div>
                             <p className="text-sm font-semibold text-slate-200">{row.name}</p>
                             <p className="text-[11px] text-slate-500">{row.isIncluded ? `Share: NPR ${row.amount.toFixed(2)}` : "Not in this split"}</p>
@@ -333,7 +333,7 @@ export default function GroupDetailsPage() {
                               <button
                                 type="button"
                                 onClick={() => handleAddSplitMember(exp.id, row.userId)}
-                                className="inline-flex items-center gap-1 rounded-full bg-cyan-500/10 px-2.5 py-1 text-[11px] font-semibold text-cyan-400 hover:bg-cyan-500/20"
+                                className="inline-flex items-center gap-1 rounded-full bg-indigo-500/10 px-2.5 py-1 text-[11px] font-semibold text-indigo-400 hover:bg-indigo-500/20"
                               >
                                 <UserPlus className="h-3.5 w-3.5" />Add
                               </button>
@@ -350,7 +350,7 @@ export default function GroupDetailsPage() {
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-5 shadow-lg">
+          <div className="rounded-2xl border border-white/5 bg-[#1A1333] p-5 shadow-lg">
             <div className="flex items-center gap-2 mb-4">
               <SplitSquareHorizontal className="h-5 w-5 text-emerald-400" />
               <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Balances</h2>
@@ -372,7 +372,7 @@ export default function GroupDetailsPage() {
             )}
           </div>
 
-          <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-5 shadow-lg">
+          <div className="rounded-2xl border border-white/5 bg-[#1A1333] p-5 shadow-lg">
             <div className="flex items-center gap-2 mb-4">
               <Users className="h-5 w-5 text-purple-400" />
               <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Joined Members</h2>
@@ -397,14 +397,14 @@ export default function GroupDetailsPage() {
       {isAddExpenseOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}
           onClick={(e) => e.target === e.currentTarget && setIsAddExpenseOpen(false)}>
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1E293B] p-6 shadow-2xl">
+          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1A1333] p-6 shadow-2xl">
             <h2 className="text-lg font-bold text-white mb-5" style={{ fontFamily: "var(--font-outfit)" }}>Add an Expense</h2>
             <form onSubmit={handleAddExpense} className="space-y-4">
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase">Description</label>
                 <input type="text" required value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="e.g. Dinner at Mario's"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none" />
+                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none" />
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase">Amount (NPR)</label>
@@ -412,32 +412,32 @@ export default function GroupDetailsPage() {
                   <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500 select-none">NPR</span>
                   <input type="number" step="0.01" required value={formData.amount} onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                     placeholder="0.00"
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-14 pr-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none" />
+                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-14 pr-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none" />
                 </div>
               </div>
 
-              <div className="rounded-lg bg-cyan-500/10 border border-cyan-500/20 p-3">
-                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-cyan-400">Add members to this split</p>
+              <div className="rounded-lg bg-indigo-500/10 border border-indigo-500/20 p-3">
+                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-indigo-400">Add members to this split</p>
                 <div className="space-y-2">
                   {(group.members || []).map((member: any) => (
-                    <label key={member.userId} className="flex items-center justify-between rounded-lg border border-white/10 bg-[#0F172A] px-3 py-2 text-sm text-slate-300">
+                    <label key={member.userId} className="flex items-center justify-between rounded-lg border border-white/10 bg-[#0F0B1E] px-3 py-2 text-sm text-slate-300">
                       <span>{member.user?.name || "Unknown"}</span>
-                      <input type="checkbox" checked={selectedMembers.includes(member.userId)} onChange={() => toggleMemberSelection(member.userId)} className="h-4 w-4 rounded border-slate-600 bg-transparent text-cyan-400 focus:ring-cyan-500" />
+                      <input type="checkbox" checked={selectedMembers.includes(member.userId)} onChange={() => toggleMemberSelection(member.userId)} className="h-4 w-4 rounded border-slate-600 bg-transparent text-indigo-400 focus:ring-indigo-500" />
                     </label>
                   ))}
                 </div>
               </div>
 
-              <div className="rounded-lg bg-cyan-500/10 border border-cyan-500/20 p-3 flex items-start gap-2 mt-2">
-                <SplitSquareHorizontal className="h-4 w-4 text-cyan-400 mt-0.5 shrink-0" />
-                <p className="text-xs text-cyan-400/90 leading-relaxed">
+              <div className="rounded-lg bg-indigo-500/10 border border-indigo-500/20 p-3 flex items-start gap-2 mt-2">
+                <SplitSquareHorizontal className="h-4 w-4 text-indigo-400 mt-0.5 shrink-0" />
+                <p className="text-xs text-indigo-400/90 leading-relaxed">
                   This expense will be split equally among the selected members. You paid for it.
                 </p>
               </div>
 
               <div className="flex gap-3 pt-4">
                 <button type="button" onClick={() => setIsAddExpenseOpen(false)} className="flex-1 rounded-xl border border-white/10 py-2.5 text-sm font-medium text-slate-400 hover:bg-white/5 transition">Cancel</button>
-                <button type="submit" disabled={saving} className="flex-1 rounded-xl bg-cyan-500 hover:bg-cyan-400 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-cyan-500/20 transition flex items-center justify-center gap-2">
+                <button type="submit" disabled={saving} className="flex-1 rounded-xl bg-indigo-500 hover:bg-indigo-400 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-indigo-500/20 transition flex items-center justify-center gap-2">
                   {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save Expense"}
                 </button>
               </div>

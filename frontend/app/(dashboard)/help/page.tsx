@@ -32,15 +32,15 @@ export default function HelpPage() {
           <p>Savings goals allow you to set money aside for specific long-term purchases, emergency funds, or trips.</p>
           <div className="space-y-2">
             <div className="flex items-start gap-2">
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-bold mt-0.5">1</span>
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold mt-0.5">1</span>
               <p>Click the <strong className="text-white font-medium">plus (+) icon</strong> in the Savings card on the dashboard to open the modal.</p>
             </div>
             <div className="flex items-start gap-2">
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-bold mt-0.5">2</span>
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold mt-0.5">2</span>
               <p>Enter the goal name (e.g., "Europe Trip"), target amount, and initial saved amount.</p>
             </div>
             <div className="flex items-start gap-2">
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-bold mt-0.5">3</span>
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold mt-0.5">3</span>
               <p>Save to view your new goal progress bar with target percentages.</p>
             </div>
           </div>
@@ -57,15 +57,15 @@ export default function HelpPage() {
           <p>If you've saved more money or need to modify your goal details, you can edit it at any time:</p>
           <div className="space-y-2">
             <div className="flex items-start gap-2">
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-bold mt-0.5">1</span>
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold mt-0.5">1</span>
               <p>Hover your cursor over the goal card inside the <strong className="text-white font-medium">Savings</strong> widget on the dashboard.</p>
             </div>
             <div className="flex items-start gap-2">
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-bold mt-0.5">2</span>
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold mt-0.5">2</span>
               <p>Click the <strong className="text-white font-medium">Pencil (Edit)</strong> icon to update details, or the <strong className="text-white font-medium">Trash (Delete)</strong> icon to delete the goal.</p>
             </div>
             <div className="flex items-start gap-2">
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-bold mt-0.5">3</span>
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold mt-0.5">3</span>
               <p>Inside the edit modal, modify the amounts and click <strong className="text-white font-medium">Save Changes</strong>.</p>
             </div>
           </div>
@@ -154,7 +154,7 @@ export default function HelpPage() {
       {/* Header */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-400">
+          <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400">
             <HelpCircle className="h-6 w-6" />
           </div>
           <div>
@@ -178,7 +178,7 @@ export default function HelpPage() {
             placeholder="Search guides..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-xl border border-white/10 bg-white/5 py-2 pl-10 pr-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition"
+            className="w-full rounded-xl border border-white/10 bg-white/5 py-2 pl-10 pr-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
           />
         </div>
 
@@ -190,7 +190,7 @@ export default function HelpPage() {
               onClick={() => setActiveTab(tab)}
               className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold capitalize transition-all ${
                 activeTab === tab
-                  ? "bg-cyan-500 text-slate-900 shadow-lg shadow-cyan-500/15 font-bold"
+                  ? "bg-indigo-500 text-slate-900 shadow-lg shadow-indigo-500/15 font-bold"
                   : "text-slate-400 hover:text-slate-200"
               }`}
             >
@@ -208,13 +208,13 @@ export default function HelpPage() {
             return (
               <div
                 key={article.id}
-                className="group rounded-2xl border border-white/5 bg-[#1E293B] p-6 shadow-xl transition-all duration-300 hover:border-white/10 hover:shadow-2xl"
+                className="group rounded-2xl border border-white/5 bg-[#1A1333] p-6 shadow-xl transition-all duration-300 hover:border-white/10 hover:shadow-2xl"
               >
                 <div className="flex items-center gap-3.5 mb-4">
-                  <div className="p-2 rounded-xl bg-white/5 text-cyan-400 group-hover:scale-110 transition duration-300">
+                  <div className="p-2 rounded-xl bg-white/5 text-indigo-400 group-hover:scale-110 transition duration-300">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <h2 className="text-lg font-bold text-white group-hover:text-cyan-400 transition" style={{ fontFamily: "var(--font-outfit)" }}>
+                  <h2 className="text-lg font-bold text-white group-hover:text-indigo-400 transition" style={{ fontFamily: "var(--font-outfit)" }}>
                     {article.title}
                   </h2>
                 </div>
@@ -225,7 +225,7 @@ export default function HelpPage() {
             );
           })
         ) : (
-          <div className="flex flex-col items-center justify-center py-16 rounded-2xl border border-white/5 bg-[#1E293B]/40 text-slate-600">
+          <div className="flex flex-col items-center justify-center py-16 rounded-2xl border border-white/5 bg-[#1A1333]/40 text-slate-600">
             <BookOpen className="h-12 w-12 mb-3 opacity-30 animate-pulse" />
             <p className="text-sm font-semibold">No guides found</p>
             <p className="text-xs mt-1">Try searching for a different keyword or category.</p>
@@ -234,10 +234,10 @@ export default function HelpPage() {
       </div>
 
       {/* FAQs or Fast Help banner */}
-      <div className="rounded-2xl bg-gradient-to-r from-cyan-500/10 to-purple-600/10 border border-cyan-500/10 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="rounded-2xl bg-gradient-to-r from-indigo-500/10 to-purple-600/10 border border-indigo-500/10 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <h3 className="font-bold text-white flex items-center gap-2" style={{ fontFamily: "var(--font-outfit)" }}>
-            <Sparkles className="h-4 w-4 text-cyan-400" /> Need personalized help?
+            <Sparkles className="h-4 w-4 text-indigo-400" /> Need personalized help?
           </h3>
           <p className="text-sm text-slate-400 mt-1 max-w-xl">
             You can always ask our AI assistant to guide you through budgeting details or analyze specific transactions for you.
@@ -245,7 +245,7 @@ export default function HelpPage() {
         </div>
         <a
           href="/ai-assistant"
-          className="flex items-center gap-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 px-4 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-cyan-500/20 transition-all duration-200 shrink-0"
+          className="flex items-center gap-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 px-4 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-indigo-500/20 transition-all duration-200 shrink-0"
         >
           Ask AI Assistant <ArrowRight className="h-4 w-4" />
         </a>

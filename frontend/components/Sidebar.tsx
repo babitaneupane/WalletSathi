@@ -36,7 +36,7 @@ export default function Sidebar() {
   const { logout } = useAuth();
 
   return (
-    <aside className="w-60 flex flex-col h-screen shrink-0 sticky top-0 border-r border-white/5 bg-[#0F172A]">
+    <aside className="w-60 flex flex-col h-screen shrink-0 sticky top-0 border-r border-white/5 bg-[#0F0B1E]">
       {/* Logo */}
       <div className="px-4 py-4">
         <Link href="/dashboard" className="flex items-center gap-4">
@@ -60,20 +60,20 @@ export default function Sidebar() {
               className={clsx(
                 "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
                 isActive
-                  ? "bg-cyan-500/15 text-cyan-400 shadow-sm"
+                  ? "bg-indigo-500/15 text-indigo-400 shadow-sm"
                   : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
               )}
             >
               <Icon
                 className={clsx(
                   "h-4.5 w-4.5 shrink-0 transition-colors",
-                  isActive ? "text-cyan-400" : "text-slate-500 group-hover:text-slate-300"
+                  isActive ? "text-indigo-400" : "text-slate-500 group-hover:text-slate-300"
                 )}
                 size={18}
               />
               {item.name}
               {isActive && (
-                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-indigo-400" />
               )}
             </Link>
           );
@@ -86,11 +86,11 @@ export default function Sidebar() {
             className={clsx(
               "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-200",
               pathname === "/ai-assistant"
-                ? "bg-gradient-to-r from-cyan-500/20 to-purple-600/20 text-cyan-300 shadow-lg shadow-cyan-500/10 border border-cyan-500/20"
-                : "bg-gradient-to-r from-cyan-500/10 to-purple-600/10 text-cyan-400 hover:from-cyan-500/20 hover:to-purple-600/20 border border-cyan-500/10 hover:border-cyan-500/25"
+                ? "bg-gradient-to-r from-indigo-500/20 to-purple-600/20 text-indigo-300 shadow-lg shadow-indigo-500/10 border border-indigo-500/20"
+                : "bg-gradient-to-r from-indigo-500/10 to-purple-600/10 text-indigo-400 hover:from-indigo-500/20 hover:to-purple-600/20 border border-indigo-500/10 hover:border-indigo-500/25"
             )}
           >
-            <Sparkles className="h-4 w-4 shrink-0 text-cyan-400" />
+            <Sparkles className="h-4 w-4 shrink-0 text-indigo-400" />
             AI Assistant
           </Link>
         </div>

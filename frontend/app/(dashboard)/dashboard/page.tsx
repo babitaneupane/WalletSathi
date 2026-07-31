@@ -37,7 +37,7 @@ import {
 import api from "../../../lib/api";
 import TransactionModal from "../../../components/TransactionModal";
 
-const CHART_COLORS = ["#06B6D4", "#8B5CF6", "#10B981", "#F59E0B", "#EF4444"];
+const CHART_COLORS = ["#6366F1", "#8B5CF6", "#10B981", "#F59E0B", "#EF4444"];
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -98,18 +98,18 @@ const ThreeDBarChart = ({ data }: { data: { name: string; income: number; expens
       <defs>
         {/* Income – front face gradient (cyan → blue) */}
         <linearGradient id={incomeGradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#22D3EE" />
-          <stop offset="100%" stopColor="#0369A1" />
+          <stop offset="0%" stopColor="#818CF8" />
+          <stop offset="100%" stopColor="#4338CA" />
         </linearGradient>
         {/* Income – right side face (darker) */}
         <linearGradient id={incSideId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#0E7490" />
-          <stop offset="100%" stopColor="#075985" />
+          <stop offset="0%" stopColor="#3730A3" />
+          <stop offset="100%" stopColor="#312E81" />
         </linearGradient>
         {/* Income – top face */}
         <linearGradient id={incTopId} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#67E8F9" />
-          <stop offset="100%" stopColor="#22D3EE" />
+          <stop offset="0%" stopColor="#A5B4FC" />
+          <stop offset="100%" stopColor="#818CF8" />
         </linearGradient>
 
         {/* Expense – front face gradient (purple → magenta) */}
@@ -300,7 +300,7 @@ const ThreeDBarChart = ({ data }: { data: { name: string; income: number; expens
                   y={padT - 4}
                   textAnchor="middle"
                   fontSize={9}
-                  fill={isHovInc ? "#22D3EE" : "#C084FC"}
+                  fill={isHovInc ? "#818CF8" : "#C084FC"}
                   fontWeight="600"
                 >
                   {isHovInc ? "Income" : "Expense"}: NPR{" "}
@@ -480,7 +480,7 @@ export default function DashboardPage() {
             Financial Overview
           </h1>
           {isFiltered && appliedRange[0] && appliedRange[1] && (
-            <p className="text-xs text-cyan-400 mt-1 flex items-center gap-1">
+            <p className="text-xs text-indigo-400 mt-1 flex items-center gap-1">
               <CalendarDays className="h-3 w-3" />
               {appliedRange[0].toLocaleDateString()} → {appliedRange[1].toLocaleDateString()}
             </p>
@@ -499,7 +499,7 @@ export default function DashboardPage() {
           <button
             onClick={() => setIsFilterOpen(prev => !prev)}
             className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium transition ${isFiltered
-                ? "bg-cyan-500 text-slate-900 hover:bg-cyan-400"
+                ? "bg-indigo-500 text-slate-900 hover:bg-indigo-400"
                 : "bg-gray-700 hover:bg-gray-600 text-slate-200"
               }`}
           >
@@ -508,7 +508,7 @@ export default function DashboardPage() {
           </button>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-cyan-500/30 transition-all duration-200 hover:scale-105 active:scale-95"
+            className="flex items-center gap-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:scale-105 active:scale-95"
           >
             <Plus className="h-4 w-4" />
             Add Transaction
@@ -521,7 +521,7 @@ export default function DashboardPage() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
           onClick={e => e.target === e.currentTarget && setIsFilterOpen(false)}
         >
-          <div className="bg-[#1E293B] p-5 rounded-2xl border border-white/10 shadow-2xl w-auto">
+          <div className="bg-[#1A1333] p-5 rounded-2xl border border-white/10 shadow-2xl w-auto">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-base font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Filter by Date Range</h2>
               <button onClick={() => setIsFilterOpen(false)} className="text-slate-500 hover:text-slate-300 transition">
@@ -531,7 +531,7 @@ export default function DashboardPage() {
 
             {/* Selected range label */}
             <div className="mb-3 flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 text-xs text-slate-400">
-              <CalendarDays className="h-3.5 w-3.5 shrink-0 text-cyan-400" />
+              <CalendarDays className="h-3.5 w-3.5 shrink-0 text-indigo-400" />
               {pendingRange[0] && pendingRange[1]
                 ? `${pendingRange[0].toLocaleDateString()} → ${pendingRange[1].toLocaleDateString()}`
                 : pendingRange[0]
@@ -561,7 +561,7 @@ export default function DashboardPage() {
               <button
                 onClick={applyDateFilter}
                 disabled={!pendingRange[0] || !pendingRange[1]}
-                className="flex-1 rounded-xl bg-cyan-500 hover:bg-cyan-400 disabled:opacity-40 disabled:cursor-not-allowed py-2 text-sm font-bold text-slate-900 transition"
+                className="flex-1 rounded-xl bg-indigo-500 hover:bg-indigo-400 disabled:opacity-40 disabled:cursor-not-allowed py-2 text-sm font-bold text-slate-900 transition"
               >
                 Apply Filter
               </button>
@@ -573,7 +573,7 @@ export default function DashboardPage() {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Balance Card */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-500/80 to-purple-600/80 p-5 border border-white/10">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-500/80 to-purple-600/80 p-5 border border-white/10">
           <div className="absolute -right-4 -top-4 h-28 w-28 rounded-full bg-white/10 blur-xl" />
           <div className="flex items-center justify-between mb-4">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 backdrop-blur">
@@ -590,7 +590,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Income Card */}
-        <div className="relative overflow-hidden rounded-2xl border border-white/5 bg-[#1E293B] p-5">
+        <div className="relative overflow-hidden rounded-2xl border border-white/5 bg-[#1A1333] p-5">
           <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-emerald-500/10 blur-xl" />
           <div className="flex items-center justify-between mb-4">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10">
@@ -607,7 +607,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Expense Card */}
-        <div className="relative overflow-hidden rounded-2xl border border-white/5 bg-[#1E293B] p-5">
+        <div className="relative overflow-hidden rounded-2xl border border-white/5 bg-[#1A1333] p-5">
           <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-red-500/10 blur-xl" />
           <div className="flex items-center justify-between mb-4">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10">
@@ -627,7 +627,7 @@ export default function DashboardPage() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Chart Panel */}
-        <div className="lg:col-span-2 rounded-2xl border border-white/5 bg-[#1E293B] p-5">
+        <div className="lg:col-span-2 rounded-2xl border border-white/5 bg-[#1A1333] p-5">
           <div className="flex items-center justify-between mb-5">
             <div>
               <h2 className="font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Monthly Trend</h2>
@@ -636,7 +636,7 @@ export default function DashboardPage() {
             <div className="flex items-center gap-3">
               {/* Legend */}
               <span className="flex items-center gap-1.5 text-xs text-slate-400">
-                <span className="h-2 w-2 rounded-full bg-cyan-400 inline-block" />Income
+                <span className="h-2 w-2 rounded-full bg-indigo-400 inline-block" />Income
               </span>
               <span className="flex items-center gap-1.5 text-xs text-slate-400">
                 <span className="h-2 w-2 rounded-full bg-purple-400 inline-block" />Expense
@@ -646,7 +646,7 @@ export default function DashboardPage() {
                 <button
                   onClick={() => setChartType("bar")}
                   className={`px-3 py-1.5 font-medium transition-all ${chartType === "bar"
-                      ? "bg-cyan-500 text-slate-900"
+                      ? "bg-indigo-500 text-slate-900"
                       : "bg-transparent text-slate-400 hover:text-slate-200"
                     }`}
                 >
@@ -655,7 +655,7 @@ export default function DashboardPage() {
                 <button
                   onClick={() => setChartType("area")}
                   className={`px-3 py-1.5 font-medium transition-all ${chartType === "area"
-                      ? "bg-cyan-500 text-slate-900"
+                      ? "bg-indigo-500 text-slate-900"
                       : "bg-transparent text-slate-400 hover:text-slate-200"
                     }`}
                 >
@@ -673,8 +673,8 @@ export default function DashboardPage() {
                   <AreaChart data={areaData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
                     <defs>
                       <linearGradient id="incomeGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#06B6D4" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#06B6D4" stopOpacity={0} />
+                        <stop offset="5%" stopColor="#6366F1" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#6366F1" stopOpacity={0} />
                       </linearGradient>
                       <linearGradient id="expenseGrad" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.3} />
@@ -694,10 +694,10 @@ export default function DashboardPage() {
                       type="monotone"
                       dataKey="income"
                       name="Income"
-                      stroke="#06B6D4"
+                      stroke="#6366F1"
                       strokeWidth={2}
                       fill="url(#incomeGrad)"
-                      dot={{ fill: "#06B6D4", r: 3, strokeWidth: 0 }}
+                      dot={{ fill: "#6366F1", r: 3, strokeWidth: 0 }}
                     />
                     <Area
                       type="monotone"
@@ -722,7 +722,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Pie Chart */}
-        <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-5">
+        <div className="rounded-2xl border border-white/5 bg-[#1A1333] p-5">
           <h2 className="font-bold text-white mb-1" style={{ fontFamily: "var(--font-outfit)" }}>Breakdown</h2>
           <p className="text-xs text-slate-500 mb-4">By category</p>
           {pieData.length > 0 ? (
@@ -791,7 +791,7 @@ export default function DashboardPage() {
       {/* Bottom Row: Recent Transactions + Savings Goals */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Recent Transactions */}
-        <div className="lg:col-span-2 rounded-2xl border border-white/5 bg-[#1E293B] p-5">
+        <div className="lg:col-span-2 rounded-2xl border border-white/5 bg-[#1A1333] p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Recent Transactions</h2>
@@ -839,7 +839,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Savings Goals */}
-        <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-5">
+        <div className="rounded-2xl border border-white/5 bg-[#1A1333] p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Savings</h2>
@@ -860,7 +860,7 @@ export default function DashboardPage() {
             <div className="space-y-4">
               {savingsGoals.map((goal, idx) => {
                 const pct = Math.min(100, (goal.currentAmount / goal.targetAmount) * 100);
-                const colors = ["from-cyan-500 to-cyan-400", "from-purple-500 to-purple-400", "from-emerald-500 to-emerald-400"];
+                const colors = ["from-indigo-500 to-indigo-400", "from-purple-500 to-purple-400", "from-emerald-500 to-emerald-400"];
                 return (
                   <div key={goal.id}>
                     <div className="flex items-center justify-between mb-1.5 group/goal">
@@ -878,7 +878,7 @@ export default function DashboardPage() {
                               });
                               setIsSavingsModalOpen(true);
                             }}
-                            className="text-slate-500 hover:text-cyan-400 transition"
+                            className="text-slate-500 hover:text-indigo-400 transition"
                             title="Edit Goal"
                           >
                             <Edit2 className="h-3 w-3" />
@@ -930,7 +930,7 @@ export default function DashboardPage() {
               setSavingsForm({ name: "", targetAmount: "", currentAmount: "" });
             }
           }}>
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1E293B] p-6 shadow-2xl">
+          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1A1333] p-6 shadow-2xl">
             <div className="flex justify-between items-center mb-5">
               <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
                 {editingGoal ? "Edit Savings Goal" : "New Savings Goal"}
@@ -951,19 +951,19 @@ export default function DashboardPage() {
                 <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Goal Name</label>
                 <input type="text" required value={savingsForm.name} onChange={e => setSavingsForm({ ...savingsForm, name: e.target.value })}
                   placeholder="e.g. Europe Trip, Emergency Fund"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition" />
+                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition" />
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Target Amount (NPR)</label>
                 <input type="number" required min="1" value={savingsForm.targetAmount} onChange={e => setSavingsForm({ ...savingsForm, targetAmount: e.target.value })}
                   placeholder="0.00"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition" />
+                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition" />
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Already Saved (NPR)</label>
                 <input type="number" min="0" value={savingsForm.currentAmount} onChange={e => setSavingsForm({ ...savingsForm, currentAmount: e.target.value })}
                   placeholder="0.00 (optional)"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition" />
+                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition" />
               </div>
               <div className="flex gap-3 pt-1">
                 <button
@@ -977,7 +977,7 @@ export default function DashboardPage() {
                 >
                   Cancel
                 </button>
-                <button type="submit" disabled={savingSavings} className="flex-1 rounded-xl bg-cyan-500 hover:bg-cyan-400 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-cyan-500/20 transition">
+                <button type="submit" disabled={savingSavings} className="flex-1 rounded-xl bg-indigo-500 hover:bg-indigo-400 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-indigo-500/20 transition">
                   {savingSavings ? "Saving..." : editingGoal ? "Save Changes" : "Create Goal"}
                 </button>
               </div>

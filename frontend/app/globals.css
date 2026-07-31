@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-primary: #06B6D4;
-  --color-primary-hover: #0891b2;
-  --color-secondary: #8B5CF6;
-  --color-tertiary: #10B981;
+  --color-primary: #6366F1;
+  --color-primary-hover: #818CF8;
+  --color-secondary: #A5B4FC;
+  --color-tertiary: #F0ABFC;
   --color-success: #10B981;
   --color-danger: #EF4444;
   --color-warning: #F59E0B;
   --color-info: #3B82F6;
-  --color-background: #0F172A;
-  --color-surface: #1E293B;
+  --color-background: #0F0B1E;
+  --color-surface: #1A1333;
   --font-sans: var(--font-inter);
   --font-heading: var(--font-outfit);
 }
@@ -22,7 +22,7 @@ body {
 
 /* Glassmorphism utilities for dark mode */
 .glass {
-  background: rgba(30, 41, 59, 0.6);
+  background: rgba(38, 85, 119, 0.6);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -53,6 +53,7 @@ body {
   display: flex;
   margin-bottom: 8px;
 }
+
 .wallet-calendar .react-calendar__navigation button {
   background: transparent;
   color: #CBD5E1;
@@ -63,10 +64,12 @@ body {
   padding: 4px 8px;
   transition: background 0.15s;
 }
+
 .wallet-calendar .react-calendar__navigation button:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.06);
   color: #F1F5F9;
 }
+
 .wallet-calendar .react-calendar__navigation button:disabled {
   color: #475569;
   cursor: default;
@@ -82,6 +85,7 @@ body {
   letter-spacing: 0.05em;
   margin-bottom: 4px;
 }
+
 .wallet-calendar .react-calendar__month-view__weekdays abbr {
   text-decoration: none;
   cursor: default;
@@ -105,6 +109,7 @@ body {
   text-align: center;
   line-height: 1;
 }
+
 /* Kill abbr styling inside tiles — this was causing the white boxes */
 .wallet-calendar .react-calendar__tile abbr {
   text-decoration: none;
@@ -114,10 +119,12 @@ body {
   font: inherit;
   color: inherit;
 }
+
 .wallet-calendar .react-calendar__tile:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.06) !important;
   color: #F1F5F9;
 }
+
 .wallet-calendar .react-calendar__tile:focus {
   outline: none;
   box-shadow: none;
@@ -125,38 +132,42 @@ body {
 
 /* Today */
 .wallet-calendar .react-calendar__tile--now {
-  background: rgba(6, 182, 212, 0.12) !important;
-  color: #22D3EE !important;
+  background: rgba(99, 102, 241, 0.12) !important;
+  color: #818CF8 !important;
   font-weight: 700;
 }
+
 .wallet-calendar .react-calendar__tile--now:hover:not(:disabled) {
-  background: rgba(6, 182, 212, 0.22) !important;
+  background: rgba(99, 102, 241, 0.22) !important;
 }
 
 /* Selected / range start & end */
 .wallet-calendar .react-calendar__tile--active,
 .wallet-calendar .react-calendar__tile--rangeStart,
 .wallet-calendar .react-calendar__tile--rangeEnd {
-  background: #06B6D4 !important;
-  color: #0F172A !important;
+  background: #6366F1 !important;
+  color: #0F0B1E !important;
   font-weight: 700;
   border-radius: 8px !important;
 }
+
 .wallet-calendar .react-calendar__tile--active:hover,
 .wallet-calendar .react-calendar__tile--rangeStart:hover,
 .wallet-calendar .react-calendar__tile--rangeEnd:hover {
-  background: #22D3EE !important;
+  background: #818CF8 !important;
 }
 
 /* Range in between */
 .wallet-calendar .react-calendar__tile--range {
-  background: rgba(6, 182, 212, 0.15) !important;
+  background: rgba(99, 102, 241, 0.15) !important;
   color: #E2E8F0 !important;
   border-radius: 0 !important;
 }
+
 .wallet-calendar .react-calendar__tile--rangeStart {
   border-radius: 8px 0 0 8px !important;
 }
+
 .wallet-calendar .react-calendar__tile--rangeEnd {
   border-radius: 0 8px 8px 0 !important;
 }
@@ -170,4 +181,4 @@ body {
 .wallet-calendar .react-calendar__tile:disabled {
   color: #334155;
   cursor: not-allowed;
-}
+}

@@ -126,7 +126,7 @@ export default function TransactionsPage() {
           <button onClick={handleExportPDF} className="flex items-center gap-2 text-sm font-medium text-slate-400 border border-white/10 rounded-xl px-3 py-2 bg-white/5 hover:bg-white/10 transition">
             <Download className="h-4 w-4" /> Export
           </button>
-          <button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 px-4 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-cyan-500/25 transition">
+          <button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 px-4 py-2.5 text-sm font-bold text-slate-900 shadow-lg shadow-indigo-500/25 transition">
             <Plus className="h-4 w-4" /> New Transaction
           </button>
         </div>
@@ -149,23 +149,23 @@ export default function TransactionsPage() {
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
           <input type="text" placeholder="Search by description..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-            className="w-full rounded-xl border border-white/10 bg-white/5 pl-10 pr-4 py-2.5 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none" />
+            className="w-full rounded-xl border border-white/10 bg-white/5 pl-10 pr-4 py-2.5 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none" />
         </div>
         <select value={typeFilter} onChange={e => setTypeFilter(e.target.value)}
-          className="bg-[#0F172A] border border-white/10 text-slate-300 text-sm rounded-xl px-3 py-2.5 focus:outline-none">
+          className="bg-[#0F0B1E] border border-white/10 text-slate-300 text-sm rounded-xl px-3 py-2.5 focus:outline-none">
           <option>All Types</option>
           <option>Income</option>
           <option>Expense</option>
         </select>
         <select value={dateFilter} onChange={e => setDateFilter(e.target.value as DateFilter)}
-          className="bg-[#0F172A] border border-white/10 text-slate-300 text-sm rounded-xl px-3 py-2.5 focus:outline-none">
+          className="bg-[#0F0B1E] border border-white/10 text-slate-300 text-sm rounded-xl px-3 py-2.5 focus:outline-none">
           {DATE_FILTERS.map(d => <option key={d}>{d}</option>)}
         </select>
         <span className="text-xs text-slate-600 ml-auto">{filtered.length} of {transactions.length} records</span>
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl border border-white/5 bg-[#1E293B] flex-1 overflow-hidden flex flex-col">
+      <div className="rounded-2xl border border-white/5 bg-[#1A1333] flex-1 overflow-hidden flex flex-col">
         <div className="flex-1 overflow-auto">
           <table className="w-full text-left text-sm">
             <thead className="text-xs uppercase text-slate-500 font-semibold border-b border-white/5 bg-white/3 sticky top-0">
@@ -197,7 +197,7 @@ export default function TransactionsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex gap-2 justify-center">
-                        <button onClick={() => openEdit(tx)} className="p-2 text-slate-500 hover:text-cyan-400 hover:bg-cyan-500/10 rounded-lg transition"><Pencil className="h-4 w-4" /></button>
+                        <button onClick={() => openEdit(tx)} className="p-2 text-slate-500 hover:text-indigo-400 hover:bg-indigo-500/10 rounded-lg transition"><Pencil className="h-4 w-4" /></button>
                         <button onClick={() => confirmDelete(tx.id)} className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition"><Trash2 className="h-4 w-4" /></button>
                       </div>
                     </td>
@@ -221,7 +221,7 @@ export default function TransactionsPage() {
       {/* Edit Modal */}
       {editingTx && (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}>
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1E293B] p-6 shadow-2xl">
+          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1A1333] p-6 shadow-2xl">
             <div className="flex justify-between items-center mb-5">
               <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Edit Transaction</h2>
               <button onClick={() => setEditingTx(null)} className="text-slate-500 hover:text-slate-300 transition"><X className="h-5 w-5" /></button>
@@ -230,18 +230,18 @@ export default function TransactionsPage() {
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Description</label>
                 <input type="text" value={editForm.description} onChange={e => setEditForm({ ...editForm, description: e.target.value })}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 focus:border-cyan-500/50 focus:outline-none" />
+                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 focus:border-indigo-500/50 focus:outline-none" />
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Amount (NPR)</label>
                 <input type="number" value={editForm.amount} onChange={e => setEditForm({ ...editForm, amount: e.target.value })}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 focus:border-cyan-500/50 focus:outline-none" />
+                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 focus:border-indigo-500/50 focus:outline-none" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Type</label>
                   <select value={editForm.type} onChange={e => setEditForm({ ...editForm, type: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-[#0F172A] py-3 px-4 text-sm text-slate-200 focus:outline-none">
+                    className="w-full rounded-xl border border-white/10 bg-[#0F0B1E] py-3 px-4 text-sm text-slate-200 focus:outline-none">
                     <option value="INCOME">Income</option>
                     <option value="EXPENSE">Expense</option>
                   </select>
@@ -249,14 +249,14 @@ export default function TransactionsPage() {
                 <div>
                   <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Category</label>
                   <select value={editForm.categoryName} onChange={e => setEditForm({ ...editForm, categoryName: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-[#0F172A] py-3 px-4 text-sm text-slate-200 focus:outline-none">
+                    className="w-full rounded-xl border border-white/10 bg-[#0F0B1E] py-3 px-4 text-sm text-slate-200 focus:outline-none">
                     {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
               </div>
               <div className="flex gap-3 pt-1">
                 <button onClick={() => setEditingTx(null)} className="flex-1 rounded-xl border border-white/10 py-2.5 text-sm font-medium text-slate-400 hover:bg-white/5 transition">Cancel</button>
-                <button onClick={handleEditSave} className="flex-1 rounded-xl bg-cyan-500 py-2.5 text-sm font-semibold text-slate-900 hover:bg-cyan-400 shadow-lg shadow-cyan-500/20 transition flex items-center justify-center gap-2">
+                <button onClick={handleEditSave} className="flex-1 rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-slate-900 hover:bg-indigo-400 shadow-lg shadow-indigo-500/20 transition flex items-center justify-center gap-2">
                   <Check className="h-4 w-4" /> Save Changes
                 </button>
               </div>
@@ -269,7 +269,7 @@ export default function TransactionsPage() {
       {deleteModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}
           onClick={(e) => e.target === e.currentTarget && !isDeleting && setDeleteModalOpen(false)}>
-          <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#1E293B] p-6 shadow-2xl">
+          <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#1A1333] p-6 shadow-2xl">
             <div className="flex justify-between items-start mb-4">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">

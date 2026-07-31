@@ -78,7 +78,7 @@ export default function BudgetsPage() {
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-cyan-500/25 transition-all hover:scale-105 active:scale-95 shrink-0"
+          className="flex items-center gap-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-indigo-500/25 transition-all hover:scale-105 active:scale-95 shrink-0"
         >
           <Plus className="h-4 w-4" />
           Add Budget
@@ -90,15 +90,15 @@ export default function BudgetsPage() {
           {[1, 2, 3].map(i => <div key={i} className="h-48 bg-white/5 rounded-2xl" />)}
         </div>
       ) : budgets.length === 0 ? (
-        <div className="rounded-2xl border border-white/5 bg-[#1E293B] p-16 flex flex-col items-center justify-center text-center gap-4">
-          <div className="rounded-full bg-cyan-500/10 p-4">
-            <Plus className="h-8 w-8 text-cyan-400" />
+        <div className="rounded-2xl border border-white/5 bg-[#1A1333] p-16 flex flex-col items-center justify-center text-center gap-4">
+          <div className="rounded-full bg-indigo-500/10 p-4">
+            <Plus className="h-8 w-8 text-indigo-400" />
           </div>
           <h3 className="text-lg font-bold text-slate-200" style={{ fontFamily: "var(--font-outfit)" }}>No budgets yet</h3>
           <p className="text-slate-500 text-sm max-w-xs">Set spending limits for each category to track where your money goes.</p>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="rounded-xl bg-cyan-500 hover:bg-cyan-400 px-5 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-cyan-500/25 transition"
+            className="rounded-xl bg-indigo-500 hover:bg-indigo-400 px-5 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-indigo-500/25 transition"
           >
             Create your first budget
           </button>
@@ -114,10 +114,10 @@ export default function BudgetsPage() {
             const isNearLimit = percentage > 85;
 
             return (
-              <div key={budget.id} className="rounded-2xl border border-white/5 bg-[#1E293B] p-5 flex flex-col hover:border-white/10 transition">
+              <div key={budget.id} className="rounded-2xl border border-white/5 bg-[#1A1333] p-5 flex flex-col hover:border-white/10 transition">
                 <div className="flex justify-between items-start mb-5">
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400">
+                    <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-400">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
@@ -138,7 +138,7 @@ export default function BudgetsPage() {
                         <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="3" fill="transparent"
                           strokeDasharray={20 * 2 * Math.PI}
                           strokeDashoffset={20 * 2 * Math.PI - (percentage / 100) * 20 * 2 * Math.PI}
-                          className={isNearLimit ? "text-red-400" : "text-cyan-400"}
+                          className={isNearLimit ? "text-red-400" : "text-indigo-400"}
                           style={{ transition: "stroke-dashoffset 0.5s ease" }}
                         />
                       </svg>
@@ -156,7 +156,7 @@ export default function BudgetsPage() {
                   </div>
                   <div className="h-1.5 w-full rounded-full bg-white/5 overflow-hidden">
                     <div
-                      className={`h-full rounded-full transition-all duration-700 ${isNearLimit ? "bg-red-400" : "bg-gradient-to-r from-cyan-500 to-cyan-400"}`}
+                      className={`h-full rounded-full transition-all duration-700 ${isNearLimit ? "bg-red-400" : "bg-gradient-to-r from-indigo-500 to-indigo-400"}`}
                       style={{ width: `${percentage}%` }}
                     />
                   </div>
@@ -177,7 +177,7 @@ export default function BudgetsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}
           onClick={(e) => e.target === e.currentTarget && setIsModalOpen(false)}
         >
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1E293B] p-6 shadow-2xl">
+          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1A1333] p-6 shadow-2xl">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>Add New Budget</h2>
               <button onClick={() => setIsModalOpen(false)} className="text-slate-500 hover:text-slate-300 transition">
@@ -189,7 +189,7 @@ export default function BudgetsPage() {
                 <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Amount (NPR)</label>
                 <input type="number" required value={formData.amount}
                   onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none transition"
+                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none transition"
                   placeholder="0.00"
                 />
               </div>
@@ -197,7 +197,7 @@ export default function BudgetsPage() {
                 <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Category</label>
                 <select required value={formData.categoryName}
                   onChange={(e) => setFormData({ ...formData, categoryName: e.target.value })}
-                  className="w-full rounded-xl border border-white/10 bg-[#0F172A] py-3 px-4 text-sm text-slate-200 focus:outline-none"
+                  className="w-full rounded-xl border border-white/10 bg-[#0F0B1E] py-3 px-4 text-sm text-slate-200 focus:outline-none"
                 >
                   {Object.keys(CATEGORY_ICONS).map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
@@ -207,19 +207,19 @@ export default function BudgetsPage() {
                   <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Month</label>
                   <input type="number" min="1" max="12" required value={formData.month}
                     onChange={(e) => setFormData({ ...formData, month: parseInt(e.target.value) })}
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 focus:border-cyan-500/50 focus:outline-none"
+                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 focus:border-indigo-500/50 focus:outline-none"
                   />
                 </div>
                 <div>
                   <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Year</label>
                   <input type="number" required value={formData.year}
                     onChange={(e) => setFormData({ ...formData, year: parseInt(e.target.value) })}
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 focus:border-cyan-500/50 focus:outline-none"
+                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 focus:border-indigo-500/50 focus:outline-none"
                   />
                 </div>
               </div>
               <button type="submit"
-                className="w-full rounded-xl bg-cyan-500 hover:bg-cyan-400 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-cyan-500/25 transition-all mt-2 hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full rounded-xl bg-indigo-500 hover:bg-indigo-400 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-indigo-500/25 transition-all mt-2 hover:scale-[1.02] active:scale-[0.98]"
               >
                 Save Budget
               </button>

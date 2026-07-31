@@ -54,7 +54,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-white/5 bg-[#0F172A]/90 px-6 backdrop-blur-md">
+    <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-white/5 bg-[#0F0B1E]/90 px-6 backdrop-blur-md">
       <div>
         <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-outfit)" }}>
           {pageTitle()}
@@ -74,7 +74,7 @@ export default function Header() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleSearch}
-            className="h-9 w-56 rounded-xl border border-white/10 bg-white/5 pl-9 pr-4 text-sm text-slate-300 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition"
+            className="h-9 w-56 rounded-xl border border-white/10 bg-white/5 pl-9 pr-4 text-sm text-slate-300 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
           />
         </div>
 
@@ -89,11 +89,11 @@ export default function Header() {
           </button>
 
           {isNotifOpen && (
-            <div className="absolute right-0 mt-2 w-64 rounded-xl border border-white/10 bg-[#1E293B] shadow-lg shadow-black/50 p-4 z-50">
+            <div className="absolute right-0 mt-2 w-64 rounded-xl border border-white/10 bg-[#1A1333] shadow-lg shadow-black/50 p-4 z-50">
               <h4 className="text-sm font-semibold text-white mb-2">Notifications</h4>
               <div className="flex flex-col gap-2">
                 <div className="rounded-lg bg-white/5 p-2 text-xs text-slate-300 border border-white/5">
-                  <p className="font-medium text-cyan-400 mb-0.5">Welcome!</p>
+                  <p className="font-medium text-indigo-400 mb-0.5">Welcome!</p>
                   <p>Your WalletSathi account is ready.</p>
                 </div>
               </div>
@@ -107,7 +107,7 @@ export default function Header() {
             onClick={() => setIsProfileOpen(!isProfileOpen)}
             className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 pl-1 pr-3 py-1 cursor-pointer hover:bg-white/10 transition"
           >
-            <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs shadow">
+            <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs shadow">
               {user?.name?.charAt(0).toUpperCase() || "U"}
             </div>
             <div className="hidden sm:block">
@@ -117,7 +117,7 @@ export default function Header() {
           </div>
 
           {isProfileOpen && (
-            <div className="absolute right-0 mt-2 w-48 rounded-xl border border-white/10 bg-[#1E293B] shadow-lg shadow-black/50 py-1 z-50">
+            <div className="absolute right-0 mt-2 w-48 rounded-xl border border-white/10 bg-[#1A1333] shadow-lg shadow-black/50 py-1 z-50">
               <div className="px-4 py-3 border-b border-white/5 mb-1 bg-white/5 rounded-t-xl mx-1 mt-1">
                 <p className="text-sm font-semibold text-white">{user?.name || "User"}</p>
                 <p className="text-[10px] text-slate-400 truncate mt-0.5">{user?.email || "user@example.com"}</p>

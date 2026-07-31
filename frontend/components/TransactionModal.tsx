@@ -79,7 +79,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
       style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1E293B] p-6 shadow-2xl shadow-black/50 animate-in fade-in slide-in-from-bottom-4 duration-200">
+      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#1A1333] p-6 shadow-2xl shadow-black/50 animate-in fade-in slide-in-from-bottom-4 duration-200">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -151,7 +151,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
               required
               value={formData.amount}
               onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-              className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition"
+              className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
               placeholder="0.00"
             />
           </div>
@@ -168,14 +168,14 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
                   autoFocus
                   value={newCategoryName}
                   onChange={(e) => setNewCategoryName(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition"
+                  className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
                   placeholder="e.g. Groceries"
                   onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleCreateCategory())}
                 />
                 <button
                   type="button"
                   onClick={handleCreateCategory}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-500 text-slate-900 hover:bg-cyan-400 transition"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-500 text-slate-900 hover:bg-indigo-400 transition"
                 >
                   <Check className="h-4 w-4" />
                 </button>
@@ -193,10 +193,10 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
                   required
                   value={formData.categoryName}
                   onChange={(e) => setFormData({ ...formData, categoryName: e.target.value })}
-                  className="w-full rounded-xl border border-white/10 bg-[#0F172A] py-3 px-4 text-sm text-slate-200 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition"
+                  className="w-full rounded-xl border border-white/10 bg-[#0F0B1E] py-3 px-4 text-sm text-slate-200 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
                 >
                   {categories.map((c) => (
-                    <option key={c.id} value={c.name} className="bg-[#1E293B]">
+                    <option key={c.id} value={c.name} className="bg-[#1A1333]">
                       {c.name}
                     </option>
                   ))}
@@ -204,7 +204,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
                 <button
                   type="button"
                   onClick={() => setIsAddingCategory(true)}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 transition"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 transition"
                   title="Add new category"
                 >
                   <Plus className="h-4 w-4" />
@@ -223,7 +223,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
               required
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition"
+              className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-slate-200 placeholder:text-slate-600 focus:border-indigo-500/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition"
               placeholder="e.g. Grocery shopping"
             />
           </div>
@@ -231,7 +231,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
           <button
             type="submit"
             disabled={saving}
-            className="w-full rounded-xl bg-cyan-500 hover:bg-cyan-400 py-3 text-sm font-bold text-slate-900 shadow-lg shadow-cyan-500/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] mt-2 disabled:opacity-60"
+            className="w-full rounded-xl bg-indigo-500 hover:bg-indigo-400 py-3 text-sm font-bold text-slate-900 shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] mt-2 disabled:opacity-60"
           >
             {saving ? "Saving..." : "Save Transaction"}
           </button>
