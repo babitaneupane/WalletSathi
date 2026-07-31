@@ -51,7 +51,7 @@ async function getTransporter(): Promise<nodemailer.Transporter> {
     return transporter!;
 }
 
-export async function sendOtpEmail(email: string, code: string, type: "REGISTER" | "RESET_PASSWORD"): Promise<void> {
+export async function sendOtpEmail(email: string, code: string, type: "REGISTER" | "RESET_PASSWORD"): Promise<string | null> {
     const isRegister = type === "REGISTER";
     const subject = isRegister 
         ? "Verify Your Email - WalletSathi" 
@@ -97,10 +97,11 @@ export async function sendOtpEmail(email: string, code: string, type: "REGISTER"
     };
 
     const info = await transport.sendMail(mailOptions);
+    let previewUrl: string | null = null;
     
     // Ethereal helper to show link
     if (nodemailer.getTestMessageUrl && info) {
-        const previewUrl = nodemailer.getTestMessageUrl(info);
+        previewUrl = nodemailer.getTestMessageUrl(info) || null;
         if (previewUrl) {
             console.log("-----------------------------------------");
             console.log(`[Ethereal Email Sent] Preview URL: ${previewUrl}`);
@@ -108,4 +109,5 @@ export async function sendOtpEmail(email: string, code: string, type: "REGISTER"
             console.log("-----------------------------------------");
         }
     }
+    return previewUrl;
 }

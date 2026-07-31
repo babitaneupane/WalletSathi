@@ -173,9 +173,9 @@ model VerificationCode {
   id        String   @id @default(cuid())
   email     String
   code      String
-  type      String   // "REGISTER" | "RESET_PASSWORD"
+  type      String   // | "RESET_PASSWORD"
   expiresAt DateTime
   createdAt DateTime @default(now())
 
-  @@unique([email, type])
+  @@unique([email, type],name:"email_type")
 }

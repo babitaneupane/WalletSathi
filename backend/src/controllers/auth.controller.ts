@@ -13,10 +13,16 @@ const generateToken = (id: string, email: string) => {
 
 export const register = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { name, email, password, code } = req.body;
+        const { name, email, password } = req.body;
 
-        if (!name || !email || !password || !code) {
+        if (!name || !email || !password) {
             res.status(400).json({ message: "Please provide all required fields" });
+            return;
+        }
+
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+        if (!passwordRegex.test(password)) {
+            res.status(400).json({ message: "Password must be at least 6 characters long and contain both letters and numbers" });
             return;
         }
 
@@ -26,30 +32,8 @@ export const register = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        // Verify registration code
-        const verification = await prisma.verificationCode.findUnique({
-            where: {
-                email_type: {
-                    email,
-                    type: "REGISTER",
-                },
-            },
-        });
-
-        if (!verification || verification.code !== code || verification.expiresAt < new Date()) {
-            res.status(400).json({ message: "Invalid or expired verification code" });
-            return;
-        }
-
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-
-        // Delete the verification code before creating user
-        await prisma.verificationCode.delete({
-            where: {
-                id: verification.id,
-            },
-        });
 
         const user = await prisma.user.create({
             data: {
@@ -95,7 +79,7 @@ export const getMe = async (req: Request, res: Response): Promise<void> => {
     try {
         // req.user is set in the auth middleware
         const userId = req.user?.id;
-        
+
         if (!userId) {
             res.status(401).json({ message: "Not authenticated" });
             return;
@@ -188,7 +172,7 @@ export const sendOtp = async (req: Request, res: Response): Promise<void> => {
 
         // Check if user exists
         const userExists = await prisma.user.findUnique({ where: { email } });
-        
+
         if (type === "REGISTER" && userExists) {
             res.status(400).json({ message: "User already exists with this email" });
             return;
@@ -239,6 +223,12 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
 
         if (!email || !code || !newPassword) {
             res.status(400).json({ message: "Email, verification code, and new password are required" });
+            return;
+        }
+
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+        if (!passwordRegex.test(newPassword)) {
+            res.status(400).json({ message: "Password must be at least 6 characters long and contain both letters and numbers" });
             return;
         }
 

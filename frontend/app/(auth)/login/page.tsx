@@ -41,7 +41,7 @@ export default function LoginPage() {
     }
   };
 
-  const handleForgotSubmit = async (e: React.FormEvent) => {
+  const handleForgotPasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess("");
@@ -68,6 +68,11 @@ export default function LoginPage() {
     setSuccess("");
     if (!code || !newPassword) {
       setError("Please fill in all fields.");
+      return;
+    }
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      setError("Password must be at least 6 characters long and contain both letters and numbers.");
       return;
     }
     setLoading(true);
@@ -104,7 +109,7 @@ export default function LoginPage() {
 
       {/* Card */}
       <div className="w-full max-w-md rounded-2xl border border-white/5 bg-[#1E293B] p-8 shadow-2xl">
-        
+
         {view === "login" && (
           <>
             <div className="mb-7">
@@ -153,7 +158,7 @@ export default function LoginPage() {
                     onClick={() => { setView("forgot"); setError(""); setSuccess(""); }}
                     className="text-xs text-cyan-400 hover:text-cyan-300 transition"
                   >
-                    Forgot?
+                    Forgot Password?
                   </button>
                 </div>
                 <div className="relative">
@@ -209,7 +214,7 @@ export default function LoginPage() {
               </div>
             )}
 
-            <form onSubmit={handleForgotSubmit} className="space-y-4">
+            <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-slate-400 uppercase tracking-wider">
                   Email Address
@@ -326,7 +331,7 @@ export default function LoginPage() {
             <div className="mt-5 text-center">
               <button
                 type="button"
-                onClick={handleForgotSubmit}
+                onClick={handleForgotPasswordSubmit}
                 disabled={loading || cooldown > 0}
                 className="text-sm font-medium text-cyan-400 hover:text-cyan-300 disabled:text-slate-600 transition"
               >
