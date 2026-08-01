@@ -14,7 +14,7 @@ async function getTransporter(): Promise<nodemailer.Transporter> {
         transporter = nodemailer.createTransport({
             host: ENV.SMTP_HOST,
             port: ENV.SMTP_PORT,
-            secure: ENV.SMTP_PORT === 587, // true for port 465, false for other ports (like 587)
+            secure: ENV.SMTP_PORT === 465, // true for port 465, false for other ports (like 587)
             auth: {
                 user: ENV.SMTP_USER,
                 pass: ENV.SMTP_PASS,
