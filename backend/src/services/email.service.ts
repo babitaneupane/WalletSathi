@@ -1,5 +1,9 @@
 import nodemailer from "nodemailer";
+import dns from "dns";
 import { ENV } from "../config/env";
+
+// Force Node.js to use IPv4 first. Render sometimes fails to route IPv6 connections (ENETUNREACH).
+dns.setDefaultResultOrder("ipv4first");
 
 let transporter: nodemailer.Transporter | null = null;
 
