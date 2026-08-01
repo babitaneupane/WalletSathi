@@ -14,3 +14,26 @@ export const protect = (req: Request, res: Response, next: NextFunction) => {
         res.status(401).json({ message: "Invalid token" });
     }
 };
+
+import { prisma } from "../config/prisma";
+
+export const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user?.id) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: req.user.id },
+            select: { role: true },
+        });
+
+        if (!user || user.role !== "ADMIN") {
+            return res.status(403).json({ message: "Forbidden: Admin access required" });
+        }
+
+        next();
+    } catch (error) {
+        res.status(500).json({ message: "Server error checking admin privileges" });
+    }
+};

@@ -17,6 +17,7 @@ import rentRoutes from "./routes/rent.routes";
 import splitRoutes from "./routes/split.routes";
 import categoryRoutes from "./routes/category.routes";
 import savingsRoutes from "./routes/savings.routes";
+import adminRoutes from "./routes/admin.routes";
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use("/api/rent", rentRoutes);
 app.use("/api/split", splitRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/savings", savingsRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Error handler (must be last)
 app.use(errorHandler);

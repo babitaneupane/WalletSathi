@@ -189,18 +189,37 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
               </div>
             ) : (
               <div className="flex gap-2">
-                <select
-                  required
-                  value={formData.categoryName}
-                  onChange={(e) => setFormData({ ...formData, categoryName: e.target.value })}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 px-4 text-sm text-slate-800 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
-                >
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.name} className="bg-white">
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative w-full">
+                  <select
+                    required
+                    value={formData.categoryName}
+                    onChange={(e) => setFormData({ ...formData, categoryName: e.target.value })}
+                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50 py-3 pl-4 pr-10 text-sm text-slate-800 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
+                  >
+                    <option value="" disabled>Select a category</option>
+                    {(formData.type === "INCOME" 
+                      ? ["Salary", "Initial balance", "Freelance", "Investment"] 
+                      : ["Food & Dining", "Transport", "Utilities", "Shopping", "Entertainment"]
+                    ).map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                    {categories.filter(c => 
+                      !(formData.type === "INCOME" 
+                        ? ["Salary", "Initial balance", "Freelance", "Investment"] 
+                        : ["Food & Dining", "Transport", "Utilities", "Shopping", "Entertainment"]
+                      ).includes(c.name)
+                    ).map((c) => (
+                      <option key={c.id} value={c.name} className="bg-white">
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                    <svg className="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                      <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                    </svg>
+                  </div>
+                </div>
                 <button
                   type="button"
                   onClick={() => setIsAddingCategory(true)}

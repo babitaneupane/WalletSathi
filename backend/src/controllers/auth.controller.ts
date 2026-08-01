@@ -47,6 +47,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
             id: user.id,
             name: user.name,
             email: user.email,
+            role: user.role,
             token: generateToken(user.id, user.email),
         });
     } catch (error: any) {
@@ -65,6 +66,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
                 id: user.id,
                 name: user.name,
                 email: user.email,
+                role: user.role,
                 token: generateToken(user.id, user.email),
             });
         } else {
@@ -87,7 +89,7 @@ export const getMe = async (req: Request, res: Response): Promise<void> => {
 
         const user = await prisma.user.findUnique({
             where: { id: userId },
-            select: { id: true, name: true, email: true, createdAt: true },
+            select: { id: true, name: true, email: true, role: true, createdAt: true },
         });
 
         if (!user) {

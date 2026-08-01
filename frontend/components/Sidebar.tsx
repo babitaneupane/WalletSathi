@@ -17,6 +17,7 @@ import {
   Tag,
   Target,
   Sparkles,
+  ShieldAlert,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import clsx from "clsx";
@@ -33,7 +34,7 @@ const navItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <aside className="w-60 flex flex-col h-screen shrink-0 sticky top-0 border-r border-slate-200 bg-white">
@@ -78,6 +79,24 @@ export default function Sidebar() {
             </Link>
           );
         })}
+
+        {/* Admin Dashboard - conditional */}
+        {user?.role === "ADMIN" && (
+          <div className="pt-3 mt-3 border-t border-slate-200">
+            <Link
+              href="/admin"
+              className={clsx(
+                "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-200",
+                pathname === "/admin"
+                  ? "bg-purple-500/15 text-purple-600 shadow-sm"
+                  : "text-purple-500 hover:bg-purple-50 hover:text-purple-700"
+              )}
+            >
+              <ShieldAlert className="h-4.5 w-4.5 shrink-0" size={18} />
+              Admin Area
+            </Link>
+          </div>
+        )}
 
         {/* AI Assistant - highlighted */}
         <div className="pt-3 mt-3 border-t border-slate-200">

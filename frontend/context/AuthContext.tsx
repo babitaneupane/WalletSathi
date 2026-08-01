@@ -8,6 +8,7 @@ interface User {
   id: string;
   name: string;
   email: string;
+  role?: string;
 }
 
 interface AuthContextType {
@@ -67,7 +68,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = (token: string, userData: User) => {
     localStorage.setItem("token", token);
     setUser(userData);
-    router.push("/dashboard");
+    if (userData.role === "ADMIN") {
+      router.push("/admin");
+    } else {
+      router.push("/dashboard");
+    }
   };
 
   const logout = () => {

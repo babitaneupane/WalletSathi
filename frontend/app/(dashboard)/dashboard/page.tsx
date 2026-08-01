@@ -573,20 +573,20 @@ export default function DashboardPage() {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Balance Card */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500/80 to-purple-600/80 p-5 border border-slate-200">
-          <div className="absolute -right-4 -top-4 h-28 w-28 rounded-full bg-slate-100 blur-xl" />
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 to-purple-600 p-5 shadow-lg">
+          <div className="absolute -right-4 -top-4 h-28 w-28 rounded-full bg-white/20 blur-2xl" />
           <div className="flex items-center justify-between mb-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-200 backdrop-blur">
-              <Wallet className="h-5 w-5 text-slate-900" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm border border-white/20">
+              <Wallet className="h-5 w-5 text-white" />
             </div>
-            <span className="text-xs font-semibold text-slate-900/80 bg-slate-200 px-2 py-1 rounded-full">
+            <span className="text-xs font-semibold text-white bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10">
               Balance
             </span>
           </div>
-          <p className="text-2xl font-bold text-slate-900" style={{ fontFamily: "var(--font-outfit)" }}>
+          <p className="text-2xl font-bold text-white drop-shadow-sm" style={{ fontFamily: "var(--font-outfit)" }}>
             NPR {(stats?.totalSavings || 0).toLocaleString()}
           </p>
-          <p className="mt-1 text-xs text-slate-900/60">{isFiltered ? "Period balance" : "Total balance"}</p>
+          <p className="mt-1 text-xs text-white/80 font-medium">{isFiltered ? "Period balance" : "Total balance"}</p>
         </div>
 
         {/* Income Card */}

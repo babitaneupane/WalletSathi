@@ -13,6 +13,14 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true
   },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS",
+      "types": [
+        "node"
+      ]
+    }
+  },
   "include": [
     "src/**/*"
   ],
