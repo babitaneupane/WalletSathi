@@ -46,7 +46,6 @@ export default function Header() {
       "/groups": "Team & Groups",
       "/rent": "Rent Dashboard",
       "/split": "Split Expenses",
-      "/categories": "Categories",
       "/ai-assistant": "AI Assistant",
       "/settings": "Settings",
     };

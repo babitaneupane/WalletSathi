@@ -18,13 +18,13 @@ import {
   Target,
   Sparkles,
   ShieldAlert,
+  TrendingUp,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import clsx from "clsx";
 
 const navItems = [
   { name: "Home", href: "/dashboard", icon: Home },
-  { name: "Categories", href: "/categories", icon: Tag },
   { name: "Transactions", href: "/transactions", icon: CreditCard },
   { name: "Analytics", href: "/budgets", icon: PieChart },
   { name: "Rent Dashboard", href: "/rent", icon: Building },
@@ -111,6 +111,18 @@ export default function Sidebar() {
           >
             <Sparkles className="h-4 w-4 shrink-0 text-emerald-500" />
             AI Assistant
+          </Link>
+          <Link
+            href="/forecast"
+            className={clsx(
+              "group flex items-center gap-3 rounded-xl px-3 py-2.5 mt-2 text-sm font-semibold transition-all duration-200",
+              pathname === "/forecast"
+                ? "bg-gradient-to-r from-emerald-500/20 to-purple-600/20 text-teal-500 shadow-lg shadow-emerald-500/10 border border-emerald-500/20"
+                : "bg-gradient-to-r from-emerald-500/10 to-purple-600/10 text-emerald-500 hover:from-emerald-500/20 hover:to-purple-600/20 border border-emerald-500/10 hover:border-emerald-500/25"
+            )}
+          >
+            <TrendingUp className="h-4 w-4 shrink-0 text-emerald-500" />
+            AI Forecast
           </Link>
         </div>
       </div>

@@ -157,3 +157,105 @@ Instructions:
         res.status(500).json({ message: error.message || "Server error" });
     }
 };
+
+export const predictCategory = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { description, type } = req.body;
+        if (!description) {
+            res.json({ category: "Other" });
+            return;
+        }
+
+        const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+        const systemPrompt = `You are a transaction categorizer for a personal finance app.
+Classify the following transaction description into exactly ONE category name.
+The transaction type is: ${type || 'EXPENSE'}
+Output ONLY the category name. Do not output any other text, reasoning, or markdown.
+Examples for EXPENSE: Food & Dining, Transport, Utilities, Shopping, Entertainment, Rent, Bills, Groceries, Healthcare.
+Examples for INCOME: Salary, Freelance, Investment, Initial balance, Bonus, Rent Income.
+
+Transaction description: "${description}"`;
+
+        let category = type === "INCOME" ? "Salary" : "Food & Dining";
+
+        if (ENV.GEMINI_API_KEY) {
+            const result = await model.generateContent(systemPrompt);
+            const text = result.response.text().trim();
+            // Clean up common AI responses if it adds extra text
+            category = text.split('\n')[0].replace(/["']/g, '');
+        }
+
+        res.json({ category });
+    } catch (error: any) {
+        console.error("AI Categorization error:", error.message);
+        res.json({ category: "Other" });
+    }
+};
+
+export const getForecast = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) return;
+
+        // Fetch user's transactions from the last 30 days
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+        const transactions = await prisma.transaction.findMany({ 
+            where: { 
+                userId,
+                createdAt: {
+                    gte: thirtyDaysAgo
+                }
+            },
+            include: { category: true }
+        });
+
+        const totalIncome = transactions
+            .filter(t => t.type === "INCOME")
+            .reduce((sum, t) => sum + Number(t.amount), 0);
+        
+        const totalExpense = transactions
+            .filter(t => t.type === "EXPENSE")
+            .reduce((sum, t) => sum + Number(t.amount), 0);
+
+        const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+        
+        let forecastData = {
+            projectedIncome: totalIncome,
+            projectedExpense: totalExpense,
+            explanation: "I am currently running without a Gemini API key. Please add it to your .env to see actual AI forecasts based on your data. The figures shown are simply your totals from the last 30 days."
+        };
+
+        if (ENV.GEMINI_API_KEY) {
+            const systemPrompt = `You are a financial AI forecaster.
+Analyze the user's spending from the last 30 days and predict next month's income and expenses.
+Last 30 days total income: ${totalIncome}
+Last 30 days total expenses: ${totalExpense}
+Transactions: ${JSON.stringify(transactions.map(t => ({ amount: Number(t.amount), type: t.type, category: t.category?.name, date: t.createdAt })))}
+
+Respond with ONLY a JSON object in this exact format:
+{
+  "projectedIncome": 1000,
+  "projectedExpense": 500,
+  "explanation": "A short, helpful explanation of why you predicted these numbers based on their spending trends."
+}
+Do not include markdown blocks, just the JSON string.`;
+
+            const result = await model.generateContent(systemPrompt);
+            const text = result.response.text().trim();
+            
+            try {
+                const cleanedText = text.replace(/```json/g, "").replace(/```/g, "").trim();
+                forecastData = JSON.parse(cleanedText);
+            } catch (err) {
+                console.error("Failed to parse forecast JSON", err, text);
+                forecastData.explanation = "AI generated a forecast but failed to format it correctly.";
+            }
+        }
+
+        res.json(forecastData);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message || "Server error" });
+    }
+};

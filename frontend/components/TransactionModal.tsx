@@ -20,48 +20,39 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
     type: "EXPENSE",
     categoryName: ""
   });
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [isAddingCategory, setIsAddingCategory] = useState(false);
-  const [newCategoryName, setNewCategoryName] = useState("");
+  const [isPredicting, setIsPredicting] = useState(false);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (isOpen) {
-      fetchCategories();
-    }
-  }, [isOpen]);
-
-  const fetchCategories = async () => {
-    try {
-      const res = await api.get("/categories");
-      setCategories(res.data);
-      if (res.data.length > 0 && !formData.categoryName) {
-        setFormData(prev => ({ ...prev, categoryName: res.data[0].name }));
+    const delayDebounceFn = setTimeout(async () => {
+      if (formData.description.trim().length > 2) {
+        setIsPredicting(true);
+        try {
+          const res = await api.post("/ai/predict-category", {
+            description: formData.description,
+            type: formData.type
+          });
+          setFormData(prev => ({ ...prev, categoryName: res.data.category || "Other" }));
+        } catch (err) {
+          console.error("AI Category prediction failed", err);
+          setFormData(prev => ({ ...prev, categoryName: "Other" }));
+        } finally {
+          setIsPredicting(false);
+        }
+      } else {
+        setFormData(prev => ({ ...prev, categoryName: "" }));
       }
-    } catch (err) {
-      console.error("Failed to fetch categories", err);
-    }
-  };
+    }, 600);
 
-  const handleCreateCategory = async () => {
-    if (!newCategoryName.trim()) return;
-    try {
-      const res = await api.post("/categories", { name: newCategoryName });
-      setCategories(prev => [...prev, res.data]);
-      setFormData(prev => ({ ...prev, categoryName: res.data.name }));
-      setIsAddingCategory(false);
-      setNewCategoryName("");
-    } catch (err) {
-      console.error("Failed to create category", err);
-    }
-  };
+    return () => clearTimeout(delayDebounceFn);
+  }, [formData.description, formData.type]);
 
   const handleCreateTransaction = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     try {
-      await api.post("/transactions", formData);
-      setFormData({ amount: "", description: "", type: "EXPENSE", categoryName: categories[0]?.name || "" });
+      await api.post("/transactions", { ...formData, categoryName: formData.categoryName || "Other" });
+      setFormData({ amount: "", description: "", type: "EXPENSE", categoryName: "" });
       onSuccess();
       onClose();
     } catch (err) {
@@ -156,82 +147,6 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
             />
           </div>
 
-          {/* Category */}
-          <div>
-            <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              Category
-            </label>
-            {isAddingCategory ? (
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  autoFocus
-                  value={newCategoryName}
-                  onChange={(e) => setNewCategoryName(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 px-4 text-sm text-slate-800 placeholder:text-slate-600 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
-                  placeholder="e.g. Groceries"
-                  onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleCreateCategory())}
-                />
-                <button
-                  type="button"
-                  onClick={handleCreateCategory}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500 text-slate-900 hover:bg-emerald-500 transition"
-                >
-                  <Check className="h-4 w-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsAddingCategory(false)}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100 transition"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex gap-2">
-                <div className="relative w-full">
-                  <select
-                    required
-                    value={formData.categoryName}
-                    onChange={(e) => setFormData({ ...formData, categoryName: e.target.value })}
-                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50 py-3 pl-4 pr-10 text-sm text-slate-800 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
-                  >
-                    <option value="" disabled>Select a category</option>
-                    {(formData.type === "INCOME" 
-                      ? ["Salary", "Initial balance", "Freelance", "Investment"] 
-                      : ["Food & Dining", "Transport", "Utilities", "Shopping", "Entertainment"]
-                    ).map(cat => (
-                      <option key={cat} value={cat}>{cat}</option>
-                    ))}
-                    {categories.filter(c => 
-                      !(formData.type === "INCOME" 
-                        ? ["Salary", "Initial balance", "Freelance", "Investment"] 
-                        : ["Food & Dining", "Transport", "Utilities", "Shopping", "Entertainment"]
-                      ).includes(c.name)
-                    ).map((c) => (
-                      <option key={c.id} value={c.name} className="bg-white">
-                        {c.name}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
-                    <svg className="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                      <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                    </svg>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setIsAddingCategory(true)}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 transition"
-                  title="Add new category"
-                >
-                  <Plus className="h-4 w-4" />
-                </button>
-              </div>
-            )}
-          </div>
-
           {/* Description */}
           <div>
             <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">
@@ -245,6 +160,16 @@ export default function TransactionModal({ isOpen, onClose, onSuccess }: Transac
               className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 px-4 text-sm text-slate-800 placeholder:text-slate-600 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition"
               placeholder="e.g. Grocery shopping"
             />
+            {isPredicting ? (
+               <div className="mt-2 text-xs text-slate-500 flex items-center gap-2">
+                 <div className="animate-spin h-3 w-3 border-2 border-emerald-500 border-t-transparent rounded-full"></div>
+                 AI is determining category...
+               </div>
+            ) : formData.categoryName ? (
+               <div className="mt-2 text-xs font-medium text-emerald-600 flex items-center gap-1.5 bg-emerald-50 w-fit px-2.5 py-1 rounded-md border border-emerald-100">
+                 ✨ AI Predicted: {formData.categoryName}
+               </div>
+            ) : null}
           </div>
 
           <button
