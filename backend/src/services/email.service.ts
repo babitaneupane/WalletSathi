@@ -53,8 +53,8 @@ async function getTransporter(): Promise<nodemailer.Transporter> {
 
 export async function sendOtpEmail(email: string, code: string, type: "REGISTER" | "RESET_PASSWORD"): Promise<string | null> {
     const isRegister = type === "REGISTER";
-    const subject = isRegister 
-        ? "Verify Your Email - WalletSathi" 
+    const subject = isRegister
+        ? "Verify Your Email - WalletSathi"
         : "Reset Your Password - WalletSathi";
 
     const htmlContent = `
@@ -66,9 +66,9 @@ export async function sendOtpEmail(email: string, code: string, type: "REGISTER"
             <div style="background-color: #1E293B; border-radius: 8px; padding: 30px; border: 1px solid rgba(255,255,255,0.05); text-align: center;">
                 <h2 style="color: #FFFFFF; font-size: 20px; margin-top: 0; font-weight: 700;">${isRegister ? 'Confirm Email Address' : 'Reset Your Password'}</h2>
                 <p style="color: #94A3B8; font-size: 15px; line-height: 1.5; margin-bottom: 25px;">
-                    ${isRegister 
-                        ? 'Thank you for choosing WalletSathi! Please use the verification code below to complete your registration.' 
-                        : 'You requested to reset your password. Use the verification code below to choose a new password.'}
+                    ${isRegister
+            ? 'Thank you for choosing WalletSathi! Please use the verification code below to complete your registration.'
+            : 'You requested to reset your password. Use the verification code below to choose a new password.'}
                 </p>
                 <div style="background-color: #0F172A; border: 1px solid #06B6D4; border-radius: 8px; padding: 15px 30px; display: inline-block; letter-spacing: 6px; font-size: 32px; font-weight: 800; color: #06B6D4; margin-bottom: 25px;">
                     ${code}
@@ -83,8 +83,8 @@ export async function sendOtpEmail(email: string, code: string, type: "REGISTER"
         </div>
     `;
 
-    const textContent = isRegister 
-        ? `Welcome to WalletSathi! Use verification code ${code} to verify your email address. It is valid for 10 minutes.` 
+    const textContent = isRegister
+        ? `Welcome to WalletSathi! Use verification code ${code} to verify your email address. It is valid for 10 minutes.`
         : `We received a request to reset your password on WalletSathi. Use verification code ${code} to reset it. It is valid for 10 minutes.`;
 
     const transport = await getTransporter();
@@ -98,7 +98,7 @@ export async function sendOtpEmail(email: string, code: string, type: "REGISTER"
 
     const info = await transport.sendMail(mailOptions);
     let previewUrl: string | null = null;
-    
+
     // Ethereal helper to show link
     if (nodemailer.getTestMessageUrl && info) {
         previewUrl = nodemailer.getTestMessageUrl(info) || null;
