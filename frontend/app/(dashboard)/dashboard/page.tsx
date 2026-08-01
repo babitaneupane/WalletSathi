@@ -498,9 +498,9 @@ export default function DashboardPage() {
           )}
           <button
             onClick={() => setIsFilterOpen(prev => !prev)}
-            className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium transition ${isFiltered
-              ? "bg-emerald-500 text-slate-900 hover:bg-emerald-500"
-              : "bg-gray-700 hover:bg-gray-600 text-slate-800"
+            className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium transition hover:bg-green-500 ${isFiltered
+              ? "bg-red-500 text-slate-900 hover:bg-emerald-500"
+              : "bg-emerald-500 hover:bg-gray-600 text-slate-800"
               }`}
           >
             <CalendarDays className="h-4 w-4" />
@@ -508,7 +508,7 @@ export default function DashboardPage() {
           </button>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-emerald-500/30 transition-all duration-200 hover:scale-105 active:scale-95"
+            className="flex items-center gap-2 rounded-xl bg-emerald-500 hover:bg-green-500 px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-emerald-500/30 transition-all duration-200 hover:scale-105 active:scale-95"
           >
             <Plus className="h-4 w-4" />
             Add Transaction
