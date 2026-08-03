@@ -84,26 +84,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <AuthContext.Provider value={{ user, loading, login, logout }}>
       {loading ? (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0F172A]">
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-100">
           <div className="relative flex flex-col items-center">
             {/* Pulsing background glow */}
-            <div className="absolute inset-0 -m-4 rounded-full bg-cyan-500/20 blur-2xl animate-pulse"></div>
+            <div className="absolute inset-0 -m-4 rounded-full bg-emerald-500/20 blur-2xl animate-pulse"></div>
             
             {/* Logo Image */}
             <img 
               src="/logo.png" 
               alt="WalletSathi Logo" 
-              className="relative z-10 w-28 h-28 sm:w-36 sm:h-36 object-contain animate-pulse drop-shadow-[0_0_20px_rgba(34,211,238,0.6)]" 
+              className="relative z-10 w-28 h-28 sm:w-36 sm:h-36 object-contain animate-pulse drop-shadow-[0_0_20px_rgba(16,185,129,0.4)]" 
             />
             
             <div className="mt-8 flex flex-col items-center">
-              <h1 className="text-2xl font-bold text-white tracking-tight" style={{ fontFamily: "var(--font-outfit)" }}>
-                WalletSathi <span className="text-cyan-400">AI</span>
+              <h1 className="text-2xl font-bold text-slate-900 tracking-tight" style={{ fontFamily: "var(--font-outfit)" }}>
+                WalletSathi <span className="text-emerald-500">AI</span>
               </h1>
               <div className="mt-4 flex items-center gap-1.5">
-                <div className="h-1.5 w-1.5 rounded-full bg-cyan-500 animate-bounce" style={{ animationDelay: "0ms" }}></div>
-                <div className="h-1.5 w-1.5 rounded-full bg-cyan-500 animate-bounce" style={{ animationDelay: "150ms" }}></div>
-                <div className="h-1.5 w-1.5 rounded-full bg-cyan-500 animate-bounce" style={{ animationDelay: "300ms" }}></div>
+                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: "0ms" }}></div>
+                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: "150ms" }}></div>
+                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: "300ms" }}></div>
               </div>
             </div>
           </div>
