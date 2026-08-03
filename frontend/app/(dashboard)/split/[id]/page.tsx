@@ -50,6 +50,8 @@ export default function GroupDetailsPage() {
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const [formData, setFormData] = useState({ title: "", amount: "" });
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
+  const [splitMode, setSplitMode] = useState<"equal" | "exact">("equal");
+  const [customAmounts, setCustomAmounts] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
 
   const fetchData = async () => {
@@ -88,14 +90,43 @@ export default function GroupDetailsPage() {
     setSaving(true);
 
     const totalAmount = Number(formData.amount);
-    const memberIds = selectedMembers.length > 0 ? selectedMembers : (group.members || []).map((m: any) => m.userId);
-    const participantCount = memberIds.length || 1;
-    const splitAmount = totalAmount / participantCount;
+    let splits: any[] = [];
+    
+    if (splitMode === "equal") {
+      const memberIds = selectedMembers.length > 0 ? selectedMembers : (group.members || []).map((m: any) => m.userId);
+      const participantCount = memberIds.length || 1;
+      const splitAmount = totalAmount / participantCount;
 
-    const splits = memberIds.map((userId: string) => ({
-      userId,
-      amount: splitAmount
-    }));
+      splits = memberIds.map((userId: string) => ({
+        userId,
+        amount: splitAmount
+      }));
+    } else {
+      let sum = 0;
+      const exactSplits = [];
+      for (const member of group.members || []) {
+        const amtStr = customAmounts[member.userId] || "0";
+        const amt = Number(amtStr);
+        if (amt > 0) {
+          sum += amt;
+          exactSplits.push({ userId: member.userId, amount: amt });
+        }
+      }
+      
+      if (Math.abs(sum - totalAmount) > 0.01) {
+        showAlert(`Total custom amounts (${sum.toFixed(2)}) must equal the expense amount (${totalAmount.toFixed(2)}).`, "error");
+        setSaving(false);
+        return;
+      }
+      
+      if (exactSplits.length === 0) {
+        showAlert("You must assign amounts to split the expense.", "error");
+        setSaving(false);
+        return;
+      }
+      
+      splits = exactSplits;
+    }
 
     try {
       await api.post("/group-expenses", {
@@ -107,6 +138,8 @@ export default function GroupDetailsPage() {
       setIsAddExpenseOpen(false);
       setFormData({ title: "", amount: "" });
       setSelectedMembers((group.members || []).map((member: any) => member.userId));
+      setCustomAmounts({});
+      setSplitMode("equal");
       fetchData();
       showAlert("Expense added successfully!", "success");
     } catch (err: any) {
@@ -416,24 +449,80 @@ export default function GroupDetailsPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-3">
-                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-emerald-500">Add members to this split</p>
-                <div className="space-y-2">
-                  {(group.members || []).map((member: any) => (
-                    <label key={member.userId} className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">
-                      <span>{member.user?.name || "Unknown"}</span>
-                      <input type="checkbox" checked={selectedMembers.includes(member.userId)} onChange={() => toggleMemberSelection(member.userId)} className="h-4 w-4 rounded border-slate-600 bg-transparent text-emerald-500 focus:ring-emerald-500" />
-                    </label>
-                  ))}
-                </div>
+              <div className="flex gap-2 p-1 bg-slate-100 rounded-xl mb-4">
+                <button
+                  type="button"
+                  onClick={() => setSplitMode("equal")}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition ${splitMode === "equal" ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+                >
+                  Split Equally
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSplitMode("exact")}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition ${splitMode === "exact" ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+                >
+                  Exact Amounts
+                </button>
               </div>
 
-              <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-3 flex items-start gap-2 mt-2">
-                <SplitSquareHorizontal className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
-                <p className="text-xs text-emerald-500/90 leading-relaxed">
-                  This expense will be split equally among the selected members. You paid for it.
-                </p>
-              </div>
+              {splitMode === "equal" ? (
+                <>
+                  <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-3">
+                    <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-emerald-500">Select members to split with</p>
+                    <div className="space-y-2 max-h-48 overflow-y-auto">
+                      {(group.members || []).map((member: any) => (
+                        <label key={member.userId} className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 cursor-pointer hover:bg-slate-100 transition">
+                          <span>{member.user?.name || "Unknown"}</span>
+                          <input type="checkbox" checked={selectedMembers.includes(member.userId)} onChange={() => toggleMemberSelection(member.userId)} className="h-4 w-4 rounded border-slate-300 text-emerald-500 focus:ring-emerald-500" />
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-3 flex items-start gap-2 mt-2">
+                    <SplitSquareHorizontal className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
+                    <p className="text-xs text-emerald-500/90 leading-relaxed">
+                      This expense will be split equally among the selected members. You paid for it.
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="rounded-lg bg-blue-500/10 border border-blue-500/20 p-3">
+                    <div className="flex justify-between items-center mb-2">
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-blue-500">Enter exact amounts</p>
+                      <p className="text-[11px] font-bold text-slate-600">
+                        Total: {Object.values(customAmounts).reduce((a, b) => a + Number(b || 0), 0).toFixed(2)} / {Number(formData.amount || 0).toFixed(2)}
+                      </p>
+                    </div>
+                    <div className="space-y-2 max-h-48 overflow-y-auto">
+                      {(group.members || []).map((member: any) => (
+                        <div key={member.userId} className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">
+                          <span className="truncate">{member.user?.name || "Unknown"}</span>
+                          <div className="relative w-24 shrink-0">
+                            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-500">NPR</span>
+                            <input
+                              type="number"
+                              step="0.01"
+                              min="0"
+                              value={customAmounts[member.userId] || ""}
+                              onChange={(e) => setCustomAmounts(prev => ({ ...prev, [member.userId]: e.target.value }))}
+                              className="w-full rounded-md border border-slate-200 py-1.5 pl-8 pr-2 text-xs text-slate-800 focus:border-blue-500/50 focus:outline-none"
+                              placeholder="0.00"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="rounded-lg bg-blue-500/10 border border-blue-500/20 p-3 flex items-start gap-2 mt-2">
+                    <SplitSquareHorizontal className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
+                    <p className="text-xs text-blue-500/90 leading-relaxed">
+                      Enter the exact amount each person owes. The sum must equal the total expense amount. You paid for it.
+                    </p>
+                  </div>
+                </>
+              )}
 
               <div className="flex gap-3 pt-4">
                 <button type="button" onClick={() => setIsAddExpenseOpen(false)} className="flex-1 rounded-xl border border-slate-200 py-2.5 text-sm font-medium text-slate-500 hover:bg-slate-50 transition">Cancel</button>
