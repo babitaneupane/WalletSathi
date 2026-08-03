@@ -28,6 +28,7 @@ export default function RentDashboard() {
   const [isTenantListModalOpen, setIsTenantListModalOpen] = useState(false);
   const [isDateRangeModalOpen, setIsDateRangeModalOpen] = useState(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [collectionTimeFilter, setCollectionTimeFilter] = useState("This Year");
   const [selectedBillForAction, setSelectedBillForAction] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [dateRange, setDateRange] = useState({ start: "", end: "" });
@@ -276,23 +277,52 @@ export default function RentDashboard() {
 
   const totalUnits = tenants.length; // Active tenants is total units
 
-  const monthlyData: Record<string, number> = {};
+  const timeFilteredData: Record<string, number> = {};
+  
+  const processBillForChart = (dateStr: string, amount: number) => {
+    const d = new Date(dateStr);
+    const now = new Date();
+    
+    if (collectionTimeFilter === "Today") {
+      if (d.toDateString() !== now.toDateString()) return;
+      const hour = d.getHours() + ":00";
+      timeFilteredData[hour] = (timeFilteredData[hour] || 0) + amount;
+    } else if (collectionTimeFilter === "Yesterday") {
+      const yesterday = new Date(now);
+      yesterday.setDate(yesterday.getDate() - 1);
+      if (d.toDateString() !== yesterday.toDateString()) return;
+      const hour = d.getHours() + ":00";
+      timeFilteredData[hour] = (timeFilteredData[hour] || 0) + amount;
+    } else if (collectionTimeFilter === "This Month") {
+      if (d.getMonth() !== now.getMonth() || d.getFullYear() !== now.getFullYear()) return;
+      const day = d.getDate().toString();
+      timeFilteredData[day] = (timeFilteredData[day] || 0) + amount;
+    } else if (collectionTimeFilter === "This Year") {
+      if (d.getFullYear() !== now.getFullYear()) return;
+      const month = d.toLocaleString('default', { month: 'short' });
+      timeFilteredData[month] = (timeFilteredData[month] || 0) + amount;
+    } else {
+      // All time
+      const month = d.toLocaleString('default', { month: 'short', year: '2-digit' });
+      timeFilteredData[month] = (timeFilteredData[month] || 0) + amount;
+    }
+  };
+
   // include paid bills
   filteredBills.forEach((bill: any) => {
     if (bill.status === "PAID") {
-      const d = new Date(bill.updatedAt || bill.createdAt || new Date());
-      const month = d.toLocaleString('default', { month: 'short' });
-      monthlyData[month] = (monthlyData[month] || 0) + bill.amount;
+      processBillForChart(bill.updatedAt || bill.createdAt || new Date().toISOString(), bill.amount);
     }
   });
   // include general rent transactions
   rentTransactions.forEach(tx => {
-    const d = new Date(tx.createdAt || tx.date || new Date());
-    const month = d.toLocaleString('default', { month: 'short' });
-    monthlyData[month] = (monthlyData[month] || 0) + tx.amount;
+    processBillForChart(tx.createdAt || tx.date || new Date().toISOString(), tx.amount);
   });
   
-  const collectionData = Object.entries(monthlyData).map(([name, amount]) => ({ name, amount }));
+  // Sort data properly if possible
+  const collectionData = Object.entries(timeFilteredData)
+    .map(([name, amount]) => ({ name, amount }));
+  
   if (collectionData.length === 0) collectionData.push({ name: 'No Data', amount: 0 });
 
   const getActiveDateRangeLabel = () => {
@@ -388,8 +418,15 @@ export default function RentDashboard() {
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm lg:col-span-1 xl:col-span-1">
            <div className="flex justify-between items-center mb-6">
             <h2 className="text-md font-bold text-slate-900">Collection Overview</h2>
-            <select className="text-xs border border-slate-200 rounded px-2 py-1 bg-slate-50 text-slate-600 outline-none">
-              <option>This Year</option>
+            <select 
+              value={collectionTimeFilter}
+              onChange={(e) => setCollectionTimeFilter(e.target.value)}
+              className="text-xs border border-slate-200 rounded px-2 py-1 bg-slate-50 text-slate-600 outline-none">
+              <option value="Today">Today</option>
+              <option value="Yesterday">Yesterday</option>
+              <option value="This Month">This Month</option>
+              <option value="This Year">This Year</option>
+              <option value="All Time">All Time</option>
             </select>
           </div>
           <div className="h-[220px] w-full">
